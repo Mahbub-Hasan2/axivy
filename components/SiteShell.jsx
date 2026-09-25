@@ -1,10 +1,53 @@
 'use client';
+
 import Link from 'next/link';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { AXIVY_LOCATION, AXIVY_PHONE, whatsappUrl } from '../data/contact';
 
-const nav=[['Services','/services'],['Solutions','/solutions'],['Case Studies','/case-studies'],['Process','/process'],['About','/about'],['Insights','/insights']];
-export function Header(){const [open,setOpen]=useState(false);return <header className="sticky top-0 z-30 border-b border-slate-200/80 bg-slate-50/90 backdrop-blur"><div className="shell flex h-[72px] items-center justify-between"><Link href="/" className="text-xl font-extrabold tracking-[-.06em] text-[#0b1220]">Axivy<span className="text-blue-600">.</span></Link><nav className="hidden gap-7 text-sm font-semibold text-slate-600 lg:flex">{nav.map(([a,h])=><Link className="hover:text-blue-600" href={h} key={h}>{a}</Link>)}</nav><div className="hidden lg:block"><Link className="btn btn-primary" href="/contact">Let's Talk <span>→</span></Link></div><button aria-label="Open navigation" onClick={()=>setOpen(!open)} className="rounded-md border border-slate-300 p-2 lg:hidden">☰</button></div>{open&&<div className="border-t border-slate-200 bg-white px-5 py-5 lg:hidden">{nav.map(([a,h])=><Link onClick={()=>setOpen(false)} href={h} className="block py-3 text-base font-semibold" key={h}>{a}</Link>)}<Link href="/contact" className="btn btn-primary mt-3">Let's Talk →</Link></div>}</header>}
-export function Footer(){return <footer className="bg-[#0b1220] py-14 text-slate-300"><div className="shell grid gap-10 md:grid-cols-[1.4fr_1fr_1fr]"><div><p className="text-2xl font-extrabold text-white">Axivy<span className="text-cyan-400">.</span></p><p className="mt-4 max-w-xs leading-7">Digital Solutions &amp; Automation</p><p className="mt-4 text-sm">{AXIVY_LOCATION}</p><p className="mt-2 text-sm">WhatsApp: {AXIVY_PHONE}</p><a className="btn mt-5 border border-slate-600 text-white hover:bg-white/10" href={whatsappUrl("Hi Axivy, I'd like to discuss a business solution.")} target="_blank" rel="noreferrer">Chat on WhatsApp <span aria-hidden>↗</span></a></div><div><p className="mb-4 font-bold text-white">Navigate</p>{[...nav,['Contact','/contact']].map(([a,h])=><Link href={h} className="mb-2 block text-sm hover:text-white" key={h}>{a}</Link>)}</div><div><p className="mb-4 font-bold text-white">Based in Qatar</p><p className="text-sm leading-6">Supporting businesses in Qatar and working with teams remotely.</p><div className="mt-5 flex gap-4 text-sm"><Link href="/privacy">Privacy</Link><Link href="/terms">Terms</Link></div></div></div><div className="shell mt-12 border-t border-slate-700 pt-6 text-xs text-slate-500">© {new Date().getFullYear()} Axivy. All rights reserved.</div></footer>}
-export function WhatsAppFloat(){return <a href={whatsappUrl("Hi Axivy, I'd like to discuss a business solution.")} target="_blank" rel="noreferrer" aria-label="Chat with Axivy on WhatsApp" className="fixed bottom-5 right-4 z-40 flex items-center gap-2 rounded-full bg-emerald-600 px-4 py-3 text-sm font-bold text-white shadow-lg transition hover:bg-emerald-700 md:hidden"><span aria-hidden>◉</span><span>WhatsApp</span></a>}
-export function Layout({children}){return <><Header/>{children}<Footer/><WhatsAppFloat/></>}
+const nav = [['Services', '/services'], ['Solutions', '/solutions'], ['Work', '/case-studies'], ['Process', '/process'], ['About', '/about']];
+
+export function Header() {
+  const [open, setOpen] = useState(false);
+  return <header className="site-header">
+    <div className="shell header-inner">
+      <Link href="/" className="wordmark" aria-label="Axivy home">Axivy<span className="wordmark-mark">.</span></Link>
+      <nav className="desktop-nav" aria-label="Main navigation">{nav.map(([label, href]) => <Link href={href} key={href}>{label}</Link>)}<Link href="/insights">Insights</Link></nav>
+      <Link href="/contact" className="btn btn-primary header-cta">Let's Talk <span aria-hidden>↗</span></Link>
+      <button className="mobile-menu-button" type="button" aria-label={open ? 'Close navigation' : 'Open navigation'} aria-expanded={open} aria-controls="mobile-navigation" onClick={() => setOpen(value => !value)}>{open ? '×' : '☰'}</button>
+    </div>
+    {open && <nav className="mobile-nav" id="mobile-navigation" aria-label="Mobile navigation">
+      {nav.map(([label, href]) => <Link href={href} key={href} onClick={() => setOpen(false)}>{label}</Link>)}
+      <Link href="/insights" onClick={() => setOpen(false)}>Insights</Link>
+      <Link href="/contact" className="btn btn-primary" onClick={() => setOpen(false)}>Let's Talk <span aria-hidden>↗</span></Link>
+    </nav>}
+  </header>;
+}
+
+export function Footer() {
+  return <footer className="site-footer"><div className="shell">
+    <div className="footer-grid">
+      <div className="footer-brand-column"><Link href="/" className="footer-brand">Axivy<span className="wordmark-mark">.</span></Link><p className="footer-tagline">Digital Solutions &amp; Automation</p><p className="footer-detail">{AXIVY_LOCATION}</p><p className="footer-detail">WhatsApp: {AXIVY_PHONE}</p><a className="btn btn-primary footer-action" href={whatsappUrl("Hi Axivy, I'd like to discuss a business solution.")} target="_blank" rel="noreferrer">Chat on WhatsApp <span aria-hidden>↗</span></a></div>
+      <div><h2 className="footer-heading">Explore</h2><nav className="footer-links" aria-label="Footer navigation">
+        {[['Services', '/services'], ['Solutions', '/solutions'], ['Work', '/case-studies'], ['Process', '/process'], ['About', '/about'], ['Insights', '/insights'], ['Contact', '/contact']].map(([label, href]) => <Link href={href} key={href}>{label}</Link>)}
+      </nav></div>
+      <div><h2 className="footer-heading">Based in Qatar</h2><p className="footer-tagline">Supporting teams in Qatar and working with businesses remotely.</p><nav className="footer-legal" aria-label="Legal links"><Link href="/privacy">Privacy</Link><Link href="/terms">Terms</Link></nav></div>
+    </div>
+    <div className="footer-bottom"><span>© {new Date().getFullYear()} Axivy. All rights reserved.</span><span>{AXIVY_LOCATION}</span></div>
+  </div></footer>;
+}
+
+export function WhatsAppFloat() {
+  const [visible, setVisible] = useState(false);
+  useEffect(() => {
+    const hero = document.querySelector('.home-hero, .page-hero');
+    if (!hero) { setVisible(true); return; }
+    const observer = new IntersectionObserver(([entry]) => setVisible(!entry.isIntersecting), { threshold: 0 });
+    observer.observe(hero);
+    return () => observer.disconnect();
+  }, []);
+  return visible ? <a className="whatsapp-float" href={whatsappUrl("Hi Axivy, I'd like to discuss a business solution.")} target="_blank" rel="noreferrer" aria-label="Chat with Axivy on WhatsApp"><span aria-hidden>◉</span> WhatsApp</a> : null;
+}
+
+export function Layout({ children }) {
+  return <><Header />{children}<Footer /><WhatsAppFloat /></>;
+}
