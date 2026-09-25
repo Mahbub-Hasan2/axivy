@@ -1,0 +1,1 @@
+export default function sitemap(){return ['','services','solutions','case-studies','process','about','insights','contact','privacy','terms'].map((p)=>({url:`https://axivy.io/${p}`,lastModified:new Date()}))}

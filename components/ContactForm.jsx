@@ -1,0 +1,37 @@
+'use client';
+
+import { useState } from 'react';
+import { whatsappUrl } from '../data/contact';
+
+export default function ContactForm() {
+  const [status, setStatus] = useState('');
+
+  function handleSubmit(event) {
+    event.preventDefault();
+    const form = event.currentTarget;
+    const fields = new FormData(form);
+    const lines = [
+      "Hi Axivy, I'd like to discuss a business solution.",
+      '',
+      `Name: ${fields.get('name')}`,
+      `Business: ${fields.get('business') || 'Not provided'}`,
+      `My WhatsApp: ${fields.get('phone') || 'Not provided'}`,
+      `Email: ${fields.get('email') || 'Not provided'}`,
+      `Need help with: ${fields.get('service')}`,
+      `Message: ${fields.get('message') || 'Not provided'}`,
+    ];
+    window.open(whatsappUrl(lines.join('\n')), '_blank', 'noopener,noreferrer');
+    setStatus('Your enquiry is ready in WhatsApp. Review the message and tap Send to contact Axivy.');
+  }
+
+  return <form onSubmit={handleSubmit} className="card grid gap-5 p-6 md:grid-cols-2">
+    <label className="text-sm font-bold">Name<input name="name" required autoComplete="name" className="mt-2 w-full rounded-lg border border-slate-300 p-3 font-normal outline-none focus:border-blue-600" placeholder="Your name" /></label>
+    <label className="text-sm font-bold">Business Name<input name="business" autoComplete="organization" className="mt-2 w-full rounded-lg border border-slate-300 p-3 font-normal outline-none focus:border-blue-600" placeholder="Business name" /></label>
+    <label className="text-sm font-bold">WhatsApp Number<input name="phone" type="tel" autoComplete="tel" className="mt-2 w-full rounded-lg border border-slate-300 p-3 font-normal outline-none focus:border-blue-600" placeholder="Your number" /></label>
+    <label className="text-sm font-bold">Email<input name="email" type="email" autoComplete="email" className="mt-2 w-full rounded-lg border border-slate-300 p-3 font-normal outline-none focus:border-blue-600" placeholder="you@business.com" /></label>
+    <label className="text-sm font-bold md:col-span-2">What do you need help with?<select name="service" defaultValue="Not Sure" className="mt-2 w-full rounded-lg border border-slate-300 bg-white p-3 font-normal outline-none focus:border-blue-600">{['Website','Lead Management','CRM','WhatsApp','Automation','AI','Analytics','Custom Solution','Not Sure'].map(x=><option key={x}>{x}</option>)}</select></label>
+    <label className="text-sm font-bold md:col-span-2">Message<textarea name="message" className="mt-2 min-h-32 w-full rounded-lg border border-slate-300 p-3 font-normal outline-none focus:border-blue-600" placeholder="Tell us a little about your business and the challenge." /></label>
+    <button className="btn btn-primary w-fit md:col-span-2" type="submit">Send Enquiry <span aria-hidden>→</span></button>
+    {status && <p role="status" aria-live="polite" className="rounded-lg bg-emerald-50 p-4 text-sm leading-6 text-emerald-800 md:col-span-2">{status}</p>}
+  </form>;
+}
