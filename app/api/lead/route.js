@@ -9,6 +9,15 @@ const allowedServices = new Set([
   'WhatsApp Systems',
   'Business Automation',
   'AI Solutions',
+  'Website',
+  'CRM',
+  'WhatsApp',
+  'Automation',
+  'AI',
+  'Analytics',
+  'Custom Solution',
+  'Not Sure',
+  'General Enquiry',
 ]);
 
 const json = (body, status = 200) => Response.json(body, { status });
@@ -27,27 +36,30 @@ export async function POST(request) {
   const name = typeof payload.name === 'string' ? payload.name.trim() : '';
   const email = typeof payload.email === 'string' ? payload.email.trim() : '';
   const company = typeof payload.company === 'string' ? payload.company.trim() : '';
+  const business = typeof payload.business === 'string' ? payload.business.trim() : '';
+  const phone = typeof payload.phone === 'string' ? payload.phone.trim() : '';
   const message = typeof payload.message === 'string' ? payload.message.trim() : '';
   const service = typeof payload.service === 'string' ? payload.service : '';
 
   if (!name || name.length > 120 || !email || email.length > 254 || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
     return json({ error: 'Enter a valid name and email address, then try again.' }, 400);
   }
-  if (company.length > 160 || message.length > 2000 || !allowedServices.has(service)) {
+  if (company.length > 160 || business.length > 160 || phone.length > 40 || message.length > 2000 || !allowedServices.has(service)) {
     return json({ error: 'Please check the form details and try again.' }, 400);
   }
 
   const to = process.env.AXIVY_LEADS_TO;
   const from = process.env.AXIVY_EMAIL_FROM;
   if (!to || !from) {
-    return json({ error: 'Quote requests are not configured yet. Please contact Axivy on WhatsApp instead.' }, 503);
+    return json({ error: 'Enquiry delivery is not configured yet. Please contact Axivy on WhatsApp instead; your details are still in the form.' }, 503);
   }
 
   const text = [
     `Service: ${service}`,
     `Name: ${name}`,
     `Email: ${email}`,
-    `Company / business: ${company || 'Not provided'}`,
+    `Company / business: ${company || business || 'Not provided'}`,
+    `WhatsApp number: ${phone || 'Not provided'}`,
     '',
     'Message:',
     message || 'Not provided',
@@ -77,7 +89,7 @@ export async function POST(request) {
       });
       await transporter.sendMail({ from, to, replyTo: email, subject, text });
     } else {
-      return json({ error: 'Quote requests are not configured yet. Please contact Axivy on WhatsApp instead.' }, 503);
+      return json({ error: 'Enquiry delivery is not configured yet. Please contact Axivy on WhatsApp instead; your details are still in the form.' }, 503);
     }
 
     return json({ ok: true });

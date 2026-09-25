@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { Layout } from '../../components/SiteShell';
 import ContactForm from '../../components/ContactForm';
+import AuditRequestForm from '../../components/AuditRequestForm';
 import ServiceCardActions from '../../components/ServiceCardActions';
 import { AXIVY_LOCATION, AXIVY_PHONE, AXIVY_WHATSAPP, whatsappUrl } from '../../data/contact';
 import { articles, cases, services, solutions } from '../../data/content';
@@ -18,13 +19,20 @@ function PageHero({ eyebrow, title, copy }) {
   return <section className="page-hero"><div className="shell"><p className="eyebrow">{eyebrow}</p><h1>{title}</h1>{copy && <p>{copy}</p>}</div></section>;
 }
 
-function CardGrid({ items, solutionsMode = false }) {
+function CardGrid({ items }) {
   return <div className="plain-grid">{items.map((item, index) => {
-    const title = solutionsMode ? item[0] : item[1];
-    const description = solutionsMode ? item[1] : item[2];
-    const message = solutionsMode ? `a solution for my ${title.toLowerCase()} business` : `a ${title.toLowerCase()} project`;
-    return <article className="plain-card" key={title}>{solutionsMode ? <span className="service-number">{String(index + 1).padStart(2, '0')}</span> : <ServiceCardActions service={title} number={String(index + 1).padStart(2, '0')} whatsappHref={whatsappUrl(`Hi Axivy, I'd like to discuss ${message}.`)} />}<h2>{title}</h2><p>{description}</p>{solutionsMode && <a className="work-link" href={whatsappUrl(`Hi Axivy, I'd like to discuss ${message}.`)} target="_blank" rel="noreferrer">Discuss on WhatsApp <Arrow/></a>}</article>;
+    const title = item[1];
+    return <article className="plain-card" key={title}><ServiceCardActions service={title} number={String(index + 1).padStart(2, '0')} whatsappHref={whatsappUrl(`Hi Axivy, I'd like to discuss a ${title.toLowerCase()} project.`)} /><h2>{title}</h2><p>{item[2]}</p></article>;
   })}</div>;
+}
+
+function SolutionList() {
+  return <div className="plain-grid">{solutions.map((solution, index) => <Link className="plain-card solution-list-card" href={`/solutions/${solution.slug}`} key={solution.slug}>
+    <span className="service-number">{String(index + 1).padStart(2, '0')}</span>
+    <h2>{solution.name}</h2>
+    <p>{solution.summary}</p>
+    <span className="work-link">See how it works <span aria-hidden>→</span></span>
+  </Link>)}</div>;
 }
 
 function WorkList() {
@@ -41,11 +49,26 @@ function AboutContent() {
 }
 
 function CaseDetail({ item }) {
-  return <><PageHero eyebrow={item[3]} title={item[1]} copy={item[4]}/><section className="page-content"><div className="shell about-grid"><article><p className="eyebrow">Project overview</p><h2 className="section-heading">A considered digital customer journey.</h2><p className="section-copy">The project focuses on practical customer touchpoints and systems that support the way a business works. No unverified results or performance claims are included.</p><div className="feature-path" style={{marginTop:22}}>{['Website','Product discovery','WhatsApp','Order'].map((x,i)=><span key={x}>{i>0&&<i>→</i>}{x}</span>)}</div></article><aside className="plain-card"><span className="service-number">PROJECT DETAILS</span><h2>{item[2]}</h2><p>Status: {item[3]}</p><p style={{marginTop:12}}>Focus: online discovery, customer communication and a clear next step.</p></aside></div></section></>;
+  return <><PageHero eyebrow={item[3]} title={item[1]} copy={item[4]}/><section className="page-content"><div className="shell about-grid"><article><p className="eyebrow">Project overview</p><h2 className="section-heading">A considered digital customer journey.</h2><p className="section-copy">The project focuses on practical customer touchpoints and systems that support the way a business works. No unverified results or performance claims are included.</p><div className="feature-path" style={{marginTop:22}}>{(item[5] || []).map((x,i)=><span key={x}>{i>0&&<i>→</i>}{x}</span>)}</div></article><aside className="plain-card"><span className="service-number">PROJECT DETAILS</span><h2>{item[2]}</h2><p>Status: {item[3]}</p><p style={{marginTop:12}}>Focus: online discovery, customer communication and a clear next step.</p></aside></div></section></>;
 }
 
 function InsightDetail({ article }) {
-  return <><PageHero eyebrow="Axivy insights" title={article[1]} copy="Practical thinking for businesses improving the way they attract, manage and serve customers."/><article className="page-content"><div className="shell"><div style={{maxWidth:700,margin:'0 auto'}}><p className="eyebrow">A practical perspective</p><h2 className="section-heading">Better systems start with a clear view of the customer journey.</h2><div className="section-copy" style={{display:'grid',gap:16,marginTop:18}}><p>Growing businesses often do not need a complex platform on day one. They need a reliable way to make sure every customer enquiry is seen, understood and followed up.</p><p>Start by mapping what happens between the first message and a completed service. This highlights where information is repeated, follow-up slips or visibility is lost.</p><p>From there, the right combination of a website, customer records, communication and automation can make everyday work easier for customers and teams.</p></div><Link href="/contact" className="btn btn-primary" style={{marginTop:22}}>Discuss your workflow <Arrow/></Link></div></div></article></>;
+  return <><PageHero eyebrow="Axivy insights" title={article[1]} copy={article[2] || "Practical thinking for businesses improving the way they attract, manage and serve customers."}/><article className="page-content"><div className="shell"><div style={{maxWidth:700,margin:'0 auto'}}><p className="eyebrow">A practical perspective</p><h2 className="section-heading">Better systems start with a clear view of the customer journey.</h2><div className="section-copy" style={{display:'grid',gap:16,marginTop:18}}>{(article[3] || []).map((paragraph,index)=><p key={index}>{paragraph}</p>)}</div><Link href="/contact" className="btn btn-primary" style={{marginTop:22}}>Discuss your workflow <Arrow/></Link></div></div></article></>;
+}
+
+function SolutionDetail({ solution }) {
+  const message = `Hi Axivy, I'd like to discuss a solution for my ${solution.name.toLowerCase()} business.`;
+  return <>
+    <PageHero eyebrow="Solutions" title={solution.name} copy={solution.summary}/>
+    <section className="page-content"><div className="shell solution-detail-grid">
+      <article className="plain-card solution-detail-card"><p className="eyebrow">The Challenge</p><p className="section-copy">{solution.problem}</p></article>
+      <article className="plain-card solution-detail-card"><p className="eyebrow">What We Build For You</p><ul className="solution-bullets">{solution.whatWeBuild.map(item => <li key={item}>{item}</li>)}</ul></article>
+      <article className="plain-card solution-detail-card"><p className="eyebrow">Why Axivy</p><p className="section-copy">{solution.whyAxivy}</p></article>
+      <article className="plain-card solution-detail-card"><p className="eyebrow">What You Get</p><ul className="solution-bullets">{solution.benefits.map(item => <li key={item}>{item}</li>)}</ul></article>
+    </div></section>
+    <section className="page-content solution-cta-section"><div className="shell"><div className="solution-cta"><div><p className="eyebrow">Start a conversation</p><h2 className="section-heading">Discuss your {solution.name.toLowerCase()} business.</h2></div><a className="btn btn-primary" href={whatsappUrl(message)} target="_blank" rel="noreferrer">Discuss on WhatsApp <Arrow/></a></div></div></section>
+    <AuditRequestForm industry={solution.name}/>
+  </>;
 }
 
 function ContactPage() {
@@ -54,7 +77,7 @@ function ContactPage() {
 
 function LegalPage({ type }) {
   const privacy = type === 'privacy';
-  return <><PageHero eyebrow="Legal" title={privacy ? 'Privacy Policy' : 'Terms of Use'}/><section className="page-content"><div className="shell"><article style={{maxWidth:700,margin:'0 auto'}}><h2 className="section-heading" style={{fontSize:28}}>{privacy ? 'Your privacy matters' : 'Using this website'}</h2><p className="section-copy">{privacy ? 'The contact form prepares your details in a WhatsApp message for you to review and send. When service quote requests are configured, the name, email, company, message and selected service you submit are sent to Axivy’s configured inbox through its email provider. The site records WhatsApp clicks and successfully sent quote requests in Google Analytics when it is configured.' : 'This website provides general information about Axivy and its services. Content is provided in good faith and may change as our services evolve.'}</p><h3 style={{marginTop:30,fontSize:17}}>Contact</h3><p className="section-copy">For questions, contact Axivy in Doha, Qatar through WhatsApp at {AXIVY_PHONE}.</p></article></div></section></>;
+  return <><PageHero eyebrow="Legal" title={privacy ? 'Privacy Policy' : 'Terms of Use'}/><section className="page-content"><div className="shell"><article style={{maxWidth:700,margin:'0 auto'}}><h2 className="section-heading" style={{fontSize:28}}>{privacy ? 'Your privacy matters' : 'Using this website'}</h2><p className="section-copy">{privacy ? 'When contact and quote requests are configured, the name, email, business, phone number, message and selected service you submit are sent to Axivy’s configured inbox through its email provider. The WhatsApp action also prepares a message for you to review and send. The site records WhatsApp clicks and successfully sent quote requests in Google Analytics when it is configured.' : 'This website provides general information about Axivy and its services. Content is provided in good faith and may change as our services evolve.'}</p><h3 style={{marginTop:30,fontSize:17}}>Contact</h3><p className="section-copy">For questions, contact Axivy in Doha, Qatar through WhatsApp at {AXIVY_PHONE}.</p></article></div></section></>;
 }
 
 function NotFound() {
@@ -64,6 +87,10 @@ function NotFound() {
 export default async function Page({ params }) {
   const { slug = [] } = await params;
   const [page, id] = slug;
+  if (page === 'solutions' && id) {
+    const solution = solutions.find(entry => entry.slug === id);
+    return <Layout>{solution ? <SolutionDetail solution={solution}/> : <NotFound/>}</Layout>;
+  }
   if (page === 'case-studies' && id) {
     const item = cases.find(entry => entry[0] === id);
     return <Layout>{item ? <CaseDetail item={item}/> : <NotFound/>}</Layout>;
@@ -75,7 +102,7 @@ export default async function Page({ params }) {
 
   let content;
   if (page === 'services') content = <><PageHero eyebrow="Services" title="Digital tools that make everyday work easier." copy="From the first customer enquiry to the follow-up, build a system that fits your business."/><section className="page-content"><div className="shell"><CardGrid items={services}/></div></section></>;
-  else if (page === 'solutions') content = <><PageHero eyebrow="Solutions" title="Built around the way your business works." copy="Choose a practical starting point for clearer customer journeys and less repetitive work."/><section className="page-content"><div className="shell"><CardGrid items={solutions} solutionsMode/></div></section></>;
+  else if (page === 'solutions') content = <><PageHero eyebrow="Solutions" title="Built around the way your business works." copy="Choose a practical starting point for clearer customer journeys and less repetitive work."/><section className="page-content"><div className="shell"><SolutionList/></div></section></>;
   else if (page === 'case-studies') content = <><PageHero eyebrow="Selected work" title="Work with a practical point of view." copy="Real projects are labelled clearly. Concepts show possible workflows without making business claims."/><section className="page-content"><div className="shell"><WorkList/></div></section></>;
   else if (page === 'process') content = <><PageHero eyebrow="Our process" title="A clear path from idea to launch." copy="Thoughtful discovery, clear scope and a practical focus through each step."/><section className="page-content"><div className="shell"><ProcessList/></div></section></>;
   else if (page === 'about') content = <><PageHero eyebrow="About Axivy" title="Building practical technology for real businesses." copy="Axivy focuses on useful digital systems for businesses in Qatar and beyond."/><section className="page-content"><div className="shell"><AboutContent/></div></section></>;

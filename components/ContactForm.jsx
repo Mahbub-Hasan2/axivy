@@ -5,33 +5,62 @@ import { whatsappUrl } from '../data/contact';
 
 export default function ContactForm() {
   const [status, setStatus] = useState('');
+  const [statusType, setStatusType] = useState('success');
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSubmitted, setIsSubmitted] = useState(false);
 
-  function handleSubmit(event) {
+  async function handleSubmit(event) {
     event.preventDefault();
     const form = event.currentTarget;
     const fields = new FormData(form);
+    const name = String(fields.get('name') || '').trim();
+    const business = String(fields.get('business') || '').trim();
+    const phone = String(fields.get('phone') || '').trim();
+    const email = String(fields.get('email') || '').trim();
+    const service = String(fields.get('service') || 'General Enquiry');
+    const message = String(fields.get('message') || '').trim();
     const lines = [
       "Hi Axivy, I'd like to discuss a business solution.",
       '',
-      `Name: ${fields.get('name')}`,
-      `Business: ${fields.get('business') || 'Not provided'}`,
-      `My WhatsApp: ${fields.get('phone') || 'Not provided'}`,
-      `Email: ${fields.get('email') || 'Not provided'}`,
-      `Need help with: ${fields.get('service')}`,
-      `Message: ${fields.get('message') || 'Not provided'}`,
+      `Name: ${name}`,
+      `Business: ${business || 'Not provided'}`,
+      `My WhatsApp: ${phone || 'Not provided'}`,
+      `Email: ${email}`,
+      `Need help with: ${service}`,
+      `Message: ${message || 'Not provided'}`,
     ];
     window.open(whatsappUrl(lines.join('\n')), '_blank', 'noopener,noreferrer');
-    setStatus('Your enquiry is ready in WhatsApp. Review the message and tap Send to contact Axivy.');
+    setIsSubmitting(true);
+    setStatus('');
+
+    try {
+      const response = await fetch('/api/lead', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, business, company: business, phone, email, service, message }),
+      });
+      const result = await response.json();
+      if (!response.ok) throw new Error(result.error || 'We could not send your enquiry. Please try again.');
+
+      setStatusType('success');
+      setStatus('Your enquiry was sent to Axivy. You can also review and send the WhatsApp message that opened.');
+      setIsSubmitted(true);
+    } catch (error) {
+      setStatusType('error');
+      setStatus(error.message || 'We could not send your enquiry. Please try again; your details are still in the form.');
+    } finally {
+      setIsSubmitting(false);
+    }
   }
 
   return <form onSubmit={handleSubmit} className="contact-form">
-    <label>Name<input name="name" required autoComplete="name" placeholder="Your name" /></label>
-    <label>Business Name<input name="business" autoComplete="organization" placeholder="Business name" /></label>
-    <label>WhatsApp Number<input name="phone" type="tel" autoComplete="tel" placeholder="Your number" /></label>
-    <label>Email<input name="email" type="email" autoComplete="email" placeholder="you@business.com" /></label>
+    <label>Name<input name="name" required maxLength={120} autoComplete="name" placeholder="Your name" /></label>
+    <label>Business Name<input name="business" maxLength={160} autoComplete="organization" placeholder="Business name" /></label>
+    <label>WhatsApp Number<input name="phone" type="tel" maxLength={40} autoComplete="tel" placeholder="Your number" /></label>
+    <label>Email<input name="email" type="email" required maxLength={254} autoComplete="email" placeholder="you@business.com" /></label>
     <label className="span-two">What do you need help with?<select name="service" defaultValue="Not Sure">{['Website','Lead Management','CRM','WhatsApp','Automation','AI','Analytics','Custom Solution','Not Sure'].map(x=><option key={x}>{x}</option>)}</select></label>
-    <label className="span-two">Message<textarea name="message" placeholder="Tell us a little about your business and the challenge." /></label>
-    <button className="btn btn-primary span-two" type="submit" style={{justifySelf:'start'}}>Send Enquiry <span aria-hidden>→</span></button>
-    {status && <p role="status" aria-live="polite" className="status-message span-two">{status}</p>}
+    <label className="span-two">Message<textarea name="message" maxLength={2000} placeholder="Tell us a little about your business and the challenge." /></label>
+    <button className="btn btn-primary span-two" type="submit" disabled={isSubmitting || isSubmitted} style={{justifySelf:'start'}}>{isSubmitting ? 'Sending…' : 'Send Enquiry'} <span aria-hidden>→</span></button>
+    {status && <p role="status" aria-live="polite" className={`status-message span-two ${statusType === 'error' ? 'status-message-error' : ''}`}>{status}</p>}
   </form>;
 }
