@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { Layout } from '../../components/SiteShell';
 import ContactForm from '../../components/ContactForm';
+import ServiceCardActions from '../../components/ServiceCardActions';
 import { AXIVY_LOCATION, AXIVY_PHONE, AXIVY_WHATSAPP, whatsappUrl } from '../../data/contact';
 import { articles, cases, services, solutions } from '../../data/content';
 
@@ -22,7 +23,7 @@ function CardGrid({ items, solutionsMode = false }) {
     const title = solutionsMode ? item[0] : item[1];
     const description = solutionsMode ? item[1] : item[2];
     const message = solutionsMode ? `a solution for my ${title.toLowerCase()} business` : `a ${title.toLowerCase()} project`;
-    return <article className="plain-card" key={title}><span className="service-number">{String(index + 1).padStart(2, '0')}</span><h2>{title}</h2><p>{description}</p><a className="work-link" href={whatsappUrl(`Hi Axivy, I'd like to discuss ${message}.`)} target="_blank" rel="noreferrer">Discuss on WhatsApp <Arrow/></a></article>;
+    return <article className="plain-card" key={title}>{solutionsMode ? <span className="service-number">{String(index + 1).padStart(2, '0')}</span> : <ServiceCardActions service={title} number={String(index + 1).padStart(2, '0')} whatsappHref={whatsappUrl(`Hi Axivy, I'd like to discuss ${message}.`)} />}<h2>{title}</h2><p>{description}</p>{solutionsMode && <a className="work-link" href={whatsappUrl(`Hi Axivy, I'd like to discuss ${message}.`)} target="_blank" rel="noreferrer">Discuss on WhatsApp <Arrow/></a>}</article>;
   })}</div>;
 }
 
@@ -53,7 +54,7 @@ function ContactPage() {
 
 function LegalPage({ type }) {
   const privacy = type === 'privacy';
-  return <><PageHero eyebrow="Legal" title={privacy ? 'Privacy Policy' : 'Terms of Use'}/><section className="page-content"><div className="shell"><article style={{maxWidth:700,margin:'0 auto'}}><h2 className="section-heading" style={{fontSize:28}}>{privacy ? 'Your privacy matters' : 'Using this website'}</h2><p className="section-copy">{privacy ? 'Axivy only collects information you choose to provide through an enquiry. The contact form prepares your details in a WhatsApp message for you to review and send. This website does not transmit the form data to an email service.' : 'This website provides general information about Axivy and its services. Content is provided in good faith and may change as our services evolve.'}</p><h3 style={{marginTop:30,fontSize:17}}>Contact</h3><p className="section-copy">For questions, contact Axivy in Doha, Qatar through WhatsApp at {AXIVY_PHONE}.</p></article></div></section></>;
+  return <><PageHero eyebrow="Legal" title={privacy ? 'Privacy Policy' : 'Terms of Use'}/><section className="page-content"><div className="shell"><article style={{maxWidth:700,margin:'0 auto'}}><h2 className="section-heading" style={{fontSize:28}}>{privacy ? 'Your privacy matters' : 'Using this website'}</h2><p className="section-copy">{privacy ? 'The contact form prepares your details in a WhatsApp message for you to review and send. When service quote requests are configured, the name, email, company, message and selected service you submit are sent to Axivy’s configured inbox through its email provider. The site records WhatsApp clicks and successfully sent quote requests in Google Analytics when it is configured.' : 'This website provides general information about Axivy and its services. Content is provided in good faith and may change as our services evolve.'}</p><h3 style={{marginTop:30,fontSize:17}}>Contact</h3><p className="section-copy">For questions, contact Axivy in Doha, Qatar through WhatsApp at {AXIVY_PHONE}.</p></article></div></section></>;
 }
 
 function NotFound() {

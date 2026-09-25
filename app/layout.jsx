@@ -2,9 +2,9 @@ import './globals.css';
 
 export const metadata = {
   metadataBase: new URL('https://axivy.io'),
-  title: { default: 'Axivy | Digital Solutions & Automation Qatar', template: '%s | Axivy' },
-  description: 'Axivy builds websites, customer systems and practical automation for growing businesses in Qatar.',
-  openGraph: { title: 'Axivy | Digital Solutions & Automation', description: 'Practical systems for growing businesses.', url: 'https://axivy.io', siteName: 'Axivy', type: 'website' },
+  title: { default: 'Axivy | Digital Solutions & Automation for Qatar Businesses', template: '%s | Axivy' },
+  description: 'Axivy helps Qatar businesses build websites, CRM systems, WhatsApp workflows and practical automation to capture enquiries, improve customer management and reduce repetitive work.',
+  openGraph: { title: 'Axivy | Digital Solutions & Automation for Qatar Businesses', description: 'Axivy helps Qatar businesses build websites, CRM systems, WhatsApp workflows and practical automation to capture enquiries, improve customer management and reduce repetitive work.', url: 'https://axivy.io', siteName: 'Axivy', type: 'website' },
 };
 
 export default function RootLayout({ children }) {
