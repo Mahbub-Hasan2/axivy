@@ -1,6 +1,9 @@
 'use client';
 
 import { useState } from 'react';
+import { whatsappUrl } from '../data/contact';
+
+const schedulingLink = process.env.NEXT_PUBLIC_SCHEDULING_LINK || null;
 
 const initialFields = {
   name: '',
@@ -78,6 +81,12 @@ export default function AuditRequestForm({ industry }) {
         <label className="span-two">What's slowing you down right now?<textarea name="challenge" rows={4} maxLength={2000} value={fields.challenge} onChange={event => handleChange('challenge', event.target.value)} /></label>
         <button className="btn btn-primary span-two" type="submit" disabled={isSubmitting}>{isSubmitting ? 'Sending…' : isSubmitted ? 'Request Sent ✓' : 'Request My Free Audit'} <span aria-hidden>↗</span></button>
         {status && <p className={`status-message span-two ${statusType === 'error' ? 'status-message-error' : ''}`} role="status" aria-live="polite">{status}</p>}
+        {isSubmitted && (
+          <div className="span-two audit-success-actions">
+            {schedulingLink && <a className="btn btn-primary" href={schedulingLink} target="_blank" rel="noreferrer">Schedule a Call <span aria-hidden>↗</span></a>}
+            <a className="btn btn-secondary" href={whatsappUrl(`Hi Axivy, I just requested a free audit for my ${industry} business — let's find a time to talk.`)} target="_blank" rel="noreferrer">Message us on WhatsApp <span aria-hidden>↗</span></a>
+          </div>
+        )}
       </form>
     </div>
   </section>;

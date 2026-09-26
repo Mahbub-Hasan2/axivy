@@ -1,0 +1,162 @@
+diff --git a/.env.example b/.env.example
+index 4b4ff68..e402155 100644
+--- a/.env.example
++++ b/.env.example
+@@ -17,7 +17,11 @@ SMTP_SECURE=false
+ # Optional GA4 measurement ID (format: G-XXXXXXXXXX).
+ NEXT_PUBLIC_GA_MEASUREMENT_ID=
+ 
+-# Google Sheets Webhook URL for Free Audit form submissions (Google Apps Script Web App URL)
+-GOOGLE_SHEET_WEBHOOK_URL=https://script.google.com/macros/s/AKfycbxWn3F-4ITQWwrGWZiYDv7wHUIgte2qDYMbOTVvxc5rjGPWHUM4C0zc69PmhED2MsUN5Q/exec
+-
++# Google Apps Script Web App URL that receives lead/audit submissions and appends them to a
++# Google Sheet. Set the real value only in .env.local (already gitignored) or in your hosting
++# platform's environment variable settings — never commit a real URL here.
++GOOGLE_SHEET_WEBHOOK_URL=
+ 
++# Optional: a Calendly or Cal.com booking link. When set, the audit request success screen shows
++# a "Schedule a Call" button linking here; when empty, only the WhatsApp fallback is shown.
++NEXT_PUBLIC_SCHEDULING_LINK=
+diff --git a/app/api/audit/route.js b/app/api/audit/route.js
+index 61f447d..653393b 100644
+--- a/app/api/audit/route.js
++++ b/app/api/audit/route.js
+@@ -139,24 +139,11 @@ export async function POST(request) {
+     ].join('\n');
+ 
+     const clientHtml = `
+-      <div style="font-family: Arial, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 600px; margin: 0 auto; padding: 24px; color: #171717; line-height: 1.6;">
+-        <h2 style="color: #2b371b; margin-top: 0; font-size: 22px;">Thank you for requesting a Free Audit</h2>
+-        <p>Hi ${name},</p>
+-        <p>We have successfully received your audit request for <strong>${business}</strong>. Our team will review how your business handles enquiries and workflows, and we'll reach out to you shortly via WhatsApp or email.</p>
+-        <div style="background: #f7f7f5; border-left: 4px solid #788e4c; padding: 14px 18px; margin: 20px 0; border-radius: 4px;">
+-          <p style="margin: 4px 0;"><strong>Business:</strong> ${business}</p>
+-          <p style="margin: 4px 0;"><strong>WhatsApp:</strong> ${whatsapp}</p>
+-          <p style="margin: 4px 0;"><strong>Industry / Solution:</strong> ${industry || 'Not specified'}</p>
+       <div style="font-family: Arial, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 600px; margin: 0 auto; padding: 28px 24px; color: #171717; line-height: 1.6; background: #ffffff; border: 1px solid #e8e8e3; border-radius: 12px;">
+         <div style="margin-bottom: 22px;">
+           <span style="font-size: 19px; font-weight: 700; color: #1e2614; letter-spacing: -0.02em;">Axivy</span>
+-          <span style="font-size: 12px; color: #6b7754; margin-left: 8px;">• Digital Solutions & Automation</span>
++          <span style="font-size: 12px; color: #6b7754; margin-left: 8px;">• Digital Solutions &amp; Automation</span>
+         </div>
+-        <p>If you have any questions in the meantime, feel free to reply directly to this email or message us on WhatsApp.</p>
+-        <p style="margin-top: 24px; font-size: 13px; color: #666; border-top: 1px solid #e5e5e0; padding-top: 16px;">
+-          Best regards,<br />
+-          <strong>Axivy Digital Solutions</strong><br />
+-          <a href="https://axivy.io" style="color: #788e4c; text-decoration: none;">axivy.io</a>
+ 
+         <h2 style="color: #2b371b; margin: 0 0 16px; font-size: 21px; line-height: 1.25;">We have received your Free Audit request</h2>
+         <p style="margin: 0 0 14px; font-size: 15px;">Hi ${name},</p>
+@@ -264,12 +251,12 @@ export async function POST(request) {
+     }
+   }
+ 
+-  // If webhook was provided but saving failed, and no email was sent
+-  if (sheetWebhookUrl && !sheetSaved && !emailSent) {
++  // Only report success if at least one delivery channel (sheet or email) actually succeeded.
++  if (!sheetSaved && !emailSent) {
+     return json(
+       {
+         error:
+-          'Could not save your audit request to Google Sheets right now. Please try again or reach out on WhatsApp.',
++          'We could not send your audit request right now. Please try again or reach out on WhatsApp.',
+       },
+       502
+     );
+diff --git a/app/api/lead/route.js b/app/api/lead/route.js
+index 2d95ac3..195dab5 100644
+--- a/app/api/lead/route.js
++++ b/app/api/lead/route.js
+@@ -160,25 +160,12 @@ export async function POST(request) {
+     ].join('\n');
+ 
+     const clientHtml = `
+-      <div style="font-family: Arial, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 600px; margin: 0 auto; padding: 24px; color: #171717; line-height: 1.6;">
+-        <h2 style="color: #2b371b; margin-top: 0; font-size: 22px;">Thank you for contacting Axivy</h2>
+-        <p>Hi ${name},</p>
+-        <p>We have successfully received your quote request for <strong>${service}</strong>. Our team is currently reviewing your details and will get in touch with you shortly via WhatsApp or email.</p>
+-        <div style="background: #f7f7f5; border-left: 4px solid #788e4c; padding: 14px 18px; margin: 20px 0; border-radius: 4px;">
+-          <p style="margin: 4px 0;"><strong>Service:</strong> ${service}</p>
+-          <p style="margin: 4px 0;"><strong>Company / Business:</strong> ${company || business || 'Not specified'}</p>
+-          ${phone ? `<p style="margin: 4px 0;"><strong>WhatsApp / Phone:</strong> ${phone}</p>` : ''}
+       <div style="font-family: Arial, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 600px; margin: 0 auto; padding: 28px 24px; color: #171717; line-height: 1.6; background: #ffffff; border: 1px solid #e8e8e3; border-radius: 12px;">
+         <div style="margin-bottom: 22px;">
+           <span style="font-size: 19px; font-weight: 700; color: #1e2614; letter-spacing: -0.02em;">Axivy</span>
+-          <span style="font-size: 12px; color: #6b7754; margin-left: 8px;">• Digital Solutions & Automation</span>
++          <span style="font-size: 12px; color: #6b7754; margin-left: 8px;">• Digital Solutions &amp; Automation</span>
+         </div>
+-        <p>If you have any urgent questions or extra details to add, feel free to reply directly to this email or chat with us on WhatsApp.</p>
+-        <p style="margin-top: 24px; font-size: 13px; color: #666; border-top: 1px solid #e5e5e0; padding-top: 16px;">
+-          Best regards,<br />
+-          <strong>Axivy Digital Solutions</strong><br />
+-          <a href="https://axivy.io" style="color: #788e4c; text-decoration: none;">axivy.io</a>
+-        
++
+         <h2 style="color: #2b371b; margin: 0 0 16px; font-size: 21px; line-height: 1.25;">${clientHeadline}</h2>
+         <p style="margin: 0 0 14px; font-size: 15px;">Hi ${name},</p>
+         <p style="margin: 0 0 16px; font-size: 14px; color: #333; line-height: 1.65;">
+@@ -277,8 +264,8 @@ export async function POST(request) {
+     }
+   }
+ 
+-  // If webhook was provided but failed, and no email was sent
+-  if (sheetWebhookUrl && !sheetSaved && !emailSent) {
++  // Only report success if at least one delivery channel (sheet or email) actually succeeded.
++  if (!sheetSaved && !emailSent) {
+     return json({ error: 'We could not send your request right now. Please try again or reach out on WhatsApp.' }, 502);
+   }
+ 
+diff --git a/app/globals.css b/app/globals.css
+index 673e511..95526b0 100644
+--- a/app/globals.css
++++ b/app/globals.css
+@@ -91,6 +91,6 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
+ .work-example{position:relative;z-index:1;padding:10px 13px;border:1px solid rgba(23,23,23,.12);border-radius:8px;background:rgba(255,255,255,.65);font-size:12px;font-weight:700}
+ @media(max-width:600px){.workflow-step{grid-template-columns:30px 1fr}.workflow-step-detail{display:none}}
+ @media(max-width:360px){.hero-actions{display:grid;grid-template-columns:1fr}.hero-actions .btn{width:100%}}
+-.solution-list-card{display:block;transition:transform .2s ease,border-color .2s ease}.solution-list-card:hover{transform:translateY(-2px);border-color:#c6c8bd}.solution-list-card .work-link{display:inline-flex}.solution-detail-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.solution-detail-card .eyebrow{margin:0 0 14px}.solution-detail-card .section-copy{max-width:none;font-size:14px}.solution-bullets{display:grid;gap:11px;margin:0;padding-left:19px;color:var(--muted);font-size:14px;line-height:1.6}.solution-bullets li::marker{color:#788e4c}.solution-cta-section{padding-top:0}.solution-cta{display:flex;align-items:center;justify-content:space-between;gap:24px;padding:26px;border:1px solid var(--line);border-radius:16px;background:#fff}.solution-cta .section-heading{margin:0;font-size:clamp(24px,3vw,34px)}.solution-cta .eyebrow{margin:0 0 12px}.audit-form-layout{display:grid;grid-template-columns:.85fr 1.15fr;gap:60px;align-items:start}.audit-form-layout .section-heading{font-size:clamp(29px,3.2vw,40px)}.audit-form-layout .contact-form .btn:disabled{cursor:wait;opacity:.7}
++.solution-list-card{display:block;transition:transform .2s ease,border-color .2s ease}.solution-list-card:hover{transform:translateY(-2px);border-color:#c6c8bd}.solution-list-card .work-link{display:inline-flex}.solution-detail-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.solution-detail-card .eyebrow{margin:0 0 14px}.solution-detail-card .section-copy{max-width:none;font-size:14px}.solution-bullets{display:grid;gap:11px;margin:0;padding-left:19px;color:var(--muted);font-size:14px;line-height:1.6}.solution-bullets li::marker{color:#788e4c}.solution-cta-section{padding-top:0}.solution-cta{display:flex;align-items:center;justify-content:space-between;gap:24px;padding:26px;border:1px solid var(--line);border-radius:16px;background:#fff}.solution-cta .section-heading{margin:0;font-size:clamp(24px,3vw,34px)}.solution-cta .eyebrow{margin:0 0 12px}.audit-form-layout{display:grid;grid-template-columns:.85fr 1.15fr;gap:60px;align-items:start}.audit-form-layout .section-heading{font-size:clamp(29px,3.2vw,40px)}.audit-form-layout .contact-form .btn:disabled{cursor:wait;opacity:.7}.audit-success-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:2px}
+ @media(max-width:820px){.audit-form-layout{gap:32px}}
+ @media(max-width:600px){.solution-detail-grid{grid-template-columns:1fr;gap:10px}.solution-cta{align-items:stretch;flex-direction:column;padding:19px}.solution-cta .btn{width:100%}.audit-form-layout{grid-template-columns:1fr;gap:24px}}
+diff --git a/app/sitemap.js b/app/sitemap.js
+index f00ee15..ddf8b9c 100644
+--- a/app/sitemap.js
++++ b/app/sitemap.js
+@@ -1,8 +1,9 @@
+-import { articles, cases } from '../data/content';
++import { articles, cases, solutions } from '../data/content';
+ 
+ export default function sitemap() {
+   const staticRoutes = ['', 'services', 'solutions', 'case-studies', 'process', 'about', 'insights', 'contact', 'privacy', 'terms'];
+   const dynamicRoutes = [
++    ...solutions.map(({ slug }) => `solutions/${slug}`),
+     ...cases.map(([slug]) => `case-studies/${slug}`),
+     ...articles.map(([slug]) => `insights/${slug}`),
+   ];
+diff --git a/components/AuditRequestForm.jsx b/components/AuditRequestForm.jsx
+index ba669e6..1bd3ef7 100644
+--- a/components/AuditRequestForm.jsx
++++ b/components/AuditRequestForm.jsx
+@@ -1,6 +1,9 @@
+ 'use client';
+ 
+ import { useState } from 'react';
++import { whatsappUrl } from '../data/contact';
++
++const schedulingLink = process.env.NEXT_PUBLIC_SCHEDULING_LINK || null;
+ 
+ const initialFields = {
+   name: '',
+@@ -78,6 +81,12 @@ export default function AuditRequestForm({ industry }) {
+         <label className="span-two">What's slowing you down right now?<textarea name="challenge" rows={4} maxLength={2000} value={fields.challenge} onChange={event => handleChange('challenge', event.target.value)} /></label>
+         <button className="btn btn-primary span-two" type="submit" disabled={isSubmitting}>{isSubmitting ? 'Sending…' : isSubmitted ? 'Request Sent ✓' : 'Request My Free Audit'} <span aria-hidden>↗</span></button>
+         {status && <p className={`status-message span-two ${statusType === 'error' ? 'status-message-error' : ''}`} role="status" aria-live="polite">{status}</p>}
++        {isSubmitted && (
++          <div className="span-two audit-success-actions">
++            {schedulingLink && <a className="btn btn-primary" href={schedulingLink} target="_blank" rel="noreferrer">Schedule a Call <span aria-hidden>↗</span></a>}
++            <a className="btn btn-secondary" href={whatsappUrl(`Hi Axivy, I just requested a free audit for my ${industry} business — let's find a time to talk.`)} target="_blank" rel="noreferrer">Message us on WhatsApp <span aria-hidden>↗</span></a>
++          </div>
++        )}
+       </form>
+     </div>
+   </section>;

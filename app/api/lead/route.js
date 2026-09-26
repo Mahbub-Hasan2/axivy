@@ -160,25 +160,12 @@ export async function POST(request) {
     ].join('\n');
 
     const clientHtml = `
-      <div style="font-family: Arial, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 600px; margin: 0 auto; padding: 24px; color: #171717; line-height: 1.6;">
-        <h2 style="color: #2b371b; margin-top: 0; font-size: 22px;">Thank you for contacting Axivy</h2>
-        <p>Hi ${name},</p>
-        <p>We have successfully received your quote request for <strong>${service}</strong>. Our team is currently reviewing your details and will get in touch with you shortly via WhatsApp or email.</p>
-        <div style="background: #f7f7f5; border-left: 4px solid #788e4c; padding: 14px 18px; margin: 20px 0; border-radius: 4px;">
-          <p style="margin: 4px 0;"><strong>Service:</strong> ${service}</p>
-          <p style="margin: 4px 0;"><strong>Company / Business:</strong> ${company || business || 'Not specified'}</p>
-          ${phone ? `<p style="margin: 4px 0;"><strong>WhatsApp / Phone:</strong> ${phone}</p>` : ''}
       <div style="font-family: Arial, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 600px; margin: 0 auto; padding: 28px 24px; color: #171717; line-height: 1.6; background: #ffffff; border: 1px solid #e8e8e3; border-radius: 12px;">
         <div style="margin-bottom: 22px;">
           <span style="font-size: 19px; font-weight: 700; color: #1e2614; letter-spacing: -0.02em;">Axivy</span>
-          <span style="font-size: 12px; color: #6b7754; margin-left: 8px;">• Digital Solutions & Automation</span>
+          <span style="font-size: 12px; color: #6b7754; margin-left: 8px;">• Digital Solutions &amp; Automation</span>
         </div>
-        <p>If you have any urgent questions or extra details to add, feel free to reply directly to this email or chat with us on WhatsApp.</p>
-        <p style="margin-top: 24px; font-size: 13px; color: #666; border-top: 1px solid #e5e5e0; padding-top: 16px;">
-          Best regards,<br />
-          <strong>Axivy Digital Solutions</strong><br />
-          <a href="https://axivy.io" style="color: #788e4c; text-decoration: none;">axivy.io</a>
-        
+
         <h2 style="color: #2b371b; margin: 0 0 16px; font-size: 21px; line-height: 1.25;">${clientHeadline}</h2>
         <p style="margin: 0 0 14px; font-size: 15px;">Hi ${name},</p>
         <p style="margin: 0 0 16px; font-size: 14px; color: #333; line-height: 1.65;">
@@ -277,8 +264,8 @@ export async function POST(request) {
     }
   }
 
-  // If webhook was provided but failed, and no email was sent
-  if (sheetWebhookUrl && !sheetSaved && !emailSent) {
+  // Only report success if at least one delivery channel (sheet or email) actually succeeded.
+  if (!sheetSaved && !emailSent) {
     return json({ error: 'We could not send your request right now. Please try again or reach out on WhatsApp.' }, 502);
   }
 
