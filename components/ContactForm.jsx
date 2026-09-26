@@ -45,6 +45,10 @@ export default function ContactForm() {
       setStatusType('success');
       setStatus('Your enquiry was sent to Axivy. You can also review and send the WhatsApp message that opened.');
       setIsSubmitted(true);
+      form.reset();
+      setTimeout(() => {
+        setIsSubmitted(false);
+      }, 4000);
     } catch (error) {
       setStatusType('error');
       setStatus(error.message || 'We could not send your enquiry. Please try again; your details are still in the form.');
@@ -60,7 +64,7 @@ export default function ContactForm() {
     <label>Email<input name="email" type="email" required maxLength={254} autoComplete="email" placeholder="you@business.com" /></label>
     <label className="span-two">What do you need help with?<select name="service" defaultValue="Not Sure">{['Website','Lead Management','CRM','WhatsApp','Automation','AI','Analytics','Custom Solution','Not Sure'].map(x=><option key={x}>{x}</option>)}</select></label>
     <label className="span-two">Message<textarea name="message" maxLength={2000} placeholder="Tell us a little about your business and the challenge." /></label>
-    <button className="btn btn-primary span-two" type="submit" disabled={isSubmitting || isSubmitted} style={{justifySelf:'start'}}>{isSubmitting ? 'Sending…' : 'Send Enquiry'} <span aria-hidden>→</span></button>
+    <button className="btn btn-primary span-two" type="submit" disabled={isSubmitting} style={{justifySelf:'start'}}>{isSubmitting ? 'Sending…' : isSubmitted ? 'Enquiry Sent ✓' : 'Send Enquiry'} <span aria-hidden>→</span></button>
     {status && <p role="status" aria-live="polite" className={`status-message span-two ${statusType === 'error' ? 'status-message-error' : ''}`}>{status}</p>}
   </form>;
 }
