@@ -147,18 +147,18 @@ export default function ServiceCardActions({ service, number, whatsappHref }) {
               width: '56px',
               height: '56px',
               borderRadius: '50%',
-              background: '#eff6e9',
-              color: '#3d6325',
+              background: '#e8f7e3',
+              color: '#237c35',
               display: 'inline-flex',
               alignItems: 'center',
               justifyContent: 'center',
               marginBottom: '16px',
-              boxShadow: '0 0 0 8px #f5faef',
+              boxShadow: '0 0 0 8px #f5fdf2',
             }}>
               <CheckCircle2 size={32} strokeWidth={2.3} />
             </div>
-            <p className="eyebrow" style={{ color: '#4d6d32', marginBottom: '6px' }}>Request Received</p>
-            <h2 id="quote-dialog-title" style={{ fontSize: '23px', fontWeight: 700, margin: '0 0 10px', color: '#1a2312' }}>
+            <p className="eyebrow" style={{ color: '#237c35', marginBottom: '6px' }}>Request Received</p>
+            <h2 id="quote-dialog-title" style={{ fontSize: '23px', fontWeight: 700, margin: '0 0 10px', color: '#111a23' }}>
               Quote Request Sent!
             </h2>
             <p style={{ color: '#555', fontSize: '14px', lineHeight: 1.6, margin: '0 0 22px' }}>

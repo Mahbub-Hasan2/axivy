@@ -3,6 +3,12 @@ import nodemailer from 'nodemailer';
 export const runtime = 'nodejs';
 
 const json = (body, status = 200) => Response.json(body, { status });
+const allowedIndustries = new Set([
+  'Automotive',
+  'Restaurants & Cafés',
+  'Cleaning & Maintenance',
+  'Other SMEs',
+]);
 
 export async function POST(request) {
   let payload;
@@ -43,15 +49,25 @@ export async function POST(request) {
     return json({ error: 'Challenge description is too long (maximum 2,000 characters).' }, 400);
   }
 
+  if (!allowedIndustries.has(industry)) {
+    return json({ error: 'Please select a valid industry and try again.' }, 400);
+  }
+
   const sheetWebhookUrl = process.env.GOOGLE_SHEET_WEBHOOK_URL || process.env.GOOGLE_SHEETS_AUDIT_URL;
   const to = process.env.AXIVY_LEADS_TO;
   const from = process.env.AXIVY_EMAIL_FROM;
+  const emailConfigured = Boolean(
+    to &&
+      from &&
+      (process.env.RESEND_API_KEY ||
+        (process.env.SMTP_HOST && process.env.SMTP_USER && process.env.SMTP_PASSWORD))
+  );
 
-  if (!sheetWebhookUrl && !to) {
+  if (!sheetWebhookUrl && !emailConfigured) {
     return json(
       {
         error:
-          'Audit submission is not configured yet. Please configure GOOGLE_SHEET_WEBHOOK_URL in your .env.local file.',
+          'Audit delivery is not configured yet. Configure AXIVY_LEADS_TO, AXIVY_EMAIL_FROM and either RESEND_API_KEY or the SMTP settings.',
       },
       503
     );
@@ -108,7 +124,7 @@ export async function POST(request) {
       'What is slowing them down:',
       challenge || 'Not provided',
     ].join('\n');
-    const adminSubject = `Free Audit Request: ${business} (${name})`;
+    const adminSubject = `Free audit request: ${industry}`;
 
     const clientSubject = `Your Free Workflow Audit Request — Axivy`;
     const clientText = [
