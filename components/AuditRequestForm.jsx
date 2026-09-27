@@ -66,20 +66,31 @@ export default function AuditRequestForm({ industry }) {
     setFields(current => ({ ...current, [field]: value }));
   }
 
-  return <section className="page-content" id="request-audit">
+  return <section className="page-content solution-audit" id="request-audit">
     <div className="shell audit-form-layout">
-      <div>
-        <p className="eyebrow">A practical first step</p>
-        <h2 className="section-heading">Not sure where to start? Get a free audit.</h2>
-        <p className="section-copy">Tell us a bit about how your business currently handles enquiries, bookings and follow-ups. We'll review it and send you a short, honest breakdown of what's working, what's likely costing you leads, and where a system like this would help most. No obligation, no generic pitch.</p>
+      <div className="audit-intro">
+        <p className="eyebrow">A simple first step</p>
+        <h2 className="section-heading">Get a free {industry} workflow audit.</h2>
+        <p className="section-copy">Share just three details. We’ll review your current customer journey and send a practical next-step recommendation—no obligation or generic sales pitch.</p>
+        <ul className="audit-promises">
+          <li><strong>2 minutes</strong> to request</li>
+          <li><strong>WhatsApp-first</strong> follow-up</li>
+          <li><strong>Practical advice</strong> for your business</li>
+        </ul>
       </div>
-      <form className="contact-form" onSubmit={handleSubmit}>
+      <form className="contact-form audit-form" onSubmit={handleSubmit}>
         <label>Name<input name="name" autoComplete="name" required maxLength={120} value={fields.name} onChange={event => handleChange('name', event.target.value)} /></label>
         <label>Business name<input name="business" autoComplete="organization" required maxLength={160} value={fields.business} onChange={event => handleChange('business', event.target.value)} /></label>
-        <label>WhatsApp number<input name="whatsapp" type="tel" autoComplete="tel" required maxLength={40} value={fields.whatsapp} onChange={event => handleChange('whatsapp', event.target.value)} /></label>
-        <label>Email (optional)<input name="email" type="email" autoComplete="email" maxLength={254} value={fields.email} onChange={event => handleChange('email', event.target.value)} /></label>
-        <label className="span-two">What's slowing you down right now?<textarea name="challenge" rows={4} maxLength={2000} value={fields.challenge} onChange={event => handleChange('challenge', event.target.value)} /></label>
+        <label className="span-two">WhatsApp number<input name="whatsapp" type="tel" autoComplete="tel" required maxLength={40} placeholder="So we can send your next steps" value={fields.whatsapp} onChange={event => handleChange('whatsapp', event.target.value)} /></label>
+        <details className="audit-more-fields span-two">
+          <summary>Add more context (optional)</summary>
+          <div className="audit-more-fields-content">
+            <label>Email<input name="email" type="email" autoComplete="email" maxLength={254} value={fields.email} onChange={event => handleChange('email', event.target.value)} /></label>
+            <label>What is slowing you down?<textarea name="challenge" rows={3} maxLength={2000} placeholder="For example: missed follow-ups, bookings or customer messages" value={fields.challenge} onChange={event => handleChange('challenge', event.target.value)} /></label>
+          </div>
+        </details>
         <button className="btn btn-primary span-two" type="submit" disabled={isSubmitting}>{isSubmitting ? 'Sending…' : isSubmitted ? 'Request Sent ✓' : 'Request My Free Audit'} <span aria-hidden>↗</span></button>
+        <p className="audit-form-note span-two">No commitment required. We’ll only use your details to respond to this request.</p>
         {status && <p className={`status-message span-two ${statusType === 'error' ? 'status-message-error' : ''}`} role="status" aria-live="polite">{status}</p>}
         {isSubmitted && (
           <div className="span-two audit-success-actions">

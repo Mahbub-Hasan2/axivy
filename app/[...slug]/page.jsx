@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Image from 'next/image';
 import { Layout } from '../../components/SiteShell';
 import ContactForm from '../../components/ContactForm';
 import AuditRequestForm from '../../components/AuditRequestForm';
@@ -40,12 +41,36 @@ function WorkList() {
 }
 
 function ProcessList() {
-  const steps = [['01','Discover','Understand the business, customers and current workflow.'],['02','Plan','Agree the right scope, approach and priorities.'],['03','Build','Design and develop the solution around the needs.'],['04','Connect','Bring CRM, WhatsApp and other tools together where useful.'],['05','Launch','Test the system, deploy it and support the team.'],['06','Improve','Review the workflow and make considered improvements.']];
-  return <div className="process-grid">{steps.map(([number,title,copy])=><article className="process-step" key={number}><span className="process-number">{number}</span><h2 className="process-title">{title}</h2><p className="process-copy">{copy}</p></article>)}</div>;
+  const steps = [
+    ['01', 'Discover', 'We begin with the day-to-day reality: how customers find you, where enquiries arrive and what your team has to do manually.', 'A clear view of the customer journey and the bottlenecks worth solving.', 'You share the current process, goals and the tools your team already uses.'],
+    ['02', 'Plan', 'We turn that understanding into a focused plan. We prioritise the improvements that will make the biggest practical difference first.', 'A simple scope, clear priorities and a shared idea of what success looks like.', 'You review the approach before any build work begins.'],
+    ['03', 'Build', 'We design and develop the website, workflow or system around the agreed process—keeping the experience clear for both your team and customers.', 'A tailored solution that fits the way your business actually operates.', 'You see progress at meaningful checkpoints and can give feedback early.'],
+    ['04', 'Connect', 'Where it helps, we connect the points of the journey: lead capture, CRM, WhatsApp, bookings and the internal notifications your team relies on.', 'Fewer handoffs, less duplicate work and better visibility across the journey.', 'You confirm the people, information and tools that should work together.'],
+    ['05', 'Launch', 'Before going live, we test the key customer paths, refine the details and make sure the handover feels straightforward for your team.', 'A ready-to-use system with a clear next step for every important journey.', 'You receive a practical walkthrough of the finished setup.'],
+    ['06', 'Improve', 'Once the system is in real use, we look at what is working, what customers are doing and where small adjustments can have a useful impact.', 'A system that can keep getting more useful as your business grows.', 'You can bring new needs and improvement ideas as they emerge.'],
+  ];
+  return <>
+    <div className="process-page-intro"><p>Every project is tailored, but the working relationship stays simple: understand the problem, build the right next step, then improve it with real use.</p><span>From first conversation to ongoing improvement</span></div>
+    <div className="process-journey" aria-label="Axivy project process">{steps.map(([number, title, copy, outcome, involvement]) => <article className="process-journey-step" key={number}>
+      <div className="process-journey-marker"><span>{number}</span><i aria-hidden>↓</i></div>
+      <div className="process-journey-main"><p className="eyebrow">{title}</p><h2>{title}</h2><p>{copy}</p></div>
+      <div className="process-journey-detail"><p><strong>You get</strong>{outcome}</p><p><strong>Your part</strong>{involvement}</p></div>
+    </article>)}</div>
+    <section className="process-expectations"><div><p className="eyebrow">What to expect</p><h2>Clear communication, thoughtful scope and practical progress.</h2></div><div className="process-expectations-list"><p><span>01</span>No unnecessary complexity</p><p><span>02</span>Feedback at the moments that matter</p><p><span>03</span>A solution your team can actually use</p></div></section>
+    <div className="process-page-cta"><div><p className="eyebrow">Start with your workflow</p><h2>Tell us what you want to make easier.</h2></div><Link className="btn btn-primary" href="/contact">Start a conversation <Arrow/></Link></div>
+  </>;
 }
 
 function AboutContent() {
-  return <div className="about-grid"><div className="founder-mark"><span className="founder-initials" aria-hidden>MM</span><div className="founder-caption"><strong>Munir Uddin Mahbub</strong><span>Founder &amp; Full-Stack Developer</span></div></div><div><p className="eyebrow">The approach</p><h2 className="section-heading">Technology should make the next business day easier.</h2><p className="section-copy">Axivy brings a full-stack development background and practical problem solving to websites, business automation, AI and software systems. The focus is on understanding how a business works before deciding what to build.</p><p className="section-copy" style={{marginTop:14}}>That means thoughtful scope, connected tools where they help, and systems that support real teams and customers in Doha, Qatar and beyond.</p></div></div>;
+  return <div className="about-page">
+    <section className="about-intro-grid">
+      <div className="about-photo-wrap"><Image src="/images/munir-uddin-mahbub.jpeg" alt="Munir Uddin Mahbub, founder of Axivy" width={1101} height={1448} priority /><span>Founder-led, practical by design</span></div>
+      <div className="about-intro-copy"><p className="eyebrow">The person behind Axivy</p><h2>Technology should make the next business day easier.</h2><p>Axivy is led by Munir Uddin Mahbub, a full-stack developer focused on turning everyday business problems into useful digital systems.</p><p>Instead of beginning with a platform or a feature list, we begin with the customer journey, the work your team repeats and the point where important details are getting missed.</p><div className="about-founder-signoff"><strong>Munir Uddin Mahbub</strong><span>Founder &amp; Full-Stack Developer</span></div></div>
+    </section>
+    <section className="about-principles"><div><p className="eyebrow">How we think</p><h2>Good systems are clear for your customers and easy for your team.</h2></div><div className="about-principles-list"><article><span>01</span><div><h3>Start with the real workflow</h3><p>We map what already happens—from the first enquiry to the next follow-up—before recommending technology.</p></div></article><article><span>02</span><div><h3>Build only what helps</h3><p>Every website, automation and integration should remove friction, save time or make the customer experience clearer.</p></div></article><article><span>03</span><div><h3>Keep the next step visible</h3><p>Useful systems help your team know who needs a reply, what has happened and what should happen next.</p></div></article></div></section>
+    <section className="about-statement"><p>“The goal is not more technology. It is a better way to serve customers and run the business.”</p><span>Axivy · Doha, Qatar</span></section>
+    <section className="about-close"><div><p className="eyebrow">Let’s make work easier</p><h2>Tell us where your current process feels difficult.</h2></div><Link className="btn btn-primary" href="/contact">Start a conversation <Arrow/></Link></section>
+  </div>;
 }
 
 function CaseDetail({ item }) {
@@ -60,13 +85,13 @@ function SolutionDetail({ solution }) {
   const message = `Hi Axivy, I'd like to discuss a solution for my ${solution.name.toLowerCase()} business.`;
   return <>
     <PageHero eyebrow="Solutions" title={solution.name} copy={solution.summary}/>
-    <section className="page-content"><div className="shell solution-detail-grid">
-      <article className="plain-card solution-detail-card"><p className="eyebrow">The Challenge</p><p className="section-copy">{solution.problem}</p></article>
-      <article className="plain-card solution-detail-card"><p className="eyebrow">What We Build For You</p><ul className="solution-bullets">{solution.whatWeBuild.map(item => <li key={item}>{item}</li>)}</ul></article>
-      <article className="plain-card solution-detail-card"><p className="eyebrow">Why Axivy</p><p className="section-copy">{solution.whyAxivy}</p></article>
-      <article className="plain-card solution-detail-card"><p className="eyebrow">What You Get</p><ul className="solution-bullets">{solution.benefits.map(item => <li key={item}>{item}</li>)}</ul></article>
+    <section className="solution-quick-start"><div className="shell solution-quick-start-inner"><p>Not sure which system is right for you?</p><div><a className="work-link" href="#request-audit">Start with a free workflow audit <Arrow/></a><a className="work-link" href={whatsappUrl(message)} target="_blank" rel="noreferrer">Ask a question on WhatsApp <Arrow/></a></div></div></section>
+    <section className="page-content solution-story"><div className="shell">
+      <div className="solution-problem"><div><p className="eyebrow">The challenge</p><h2 className="section-heading">Your customer journey should not depend on memory.</h2></div><p className="solution-problem-copy">{solution.problem}</p></div>
+      <div className="solution-build-section"><div className="solution-build-heading"><span>01</span><div><p className="eyebrow">What we build</p><h2 className="section-heading">A system shaped around the way you already work.</h2></div></div><ol className="solution-build-list">{solution.whatWeBuild.map((item, index) => <li key={item}><span>{String(index + 1).padStart(2, '0')}</span><p>{item}</p></li>)}</ol></div>
     </div></section>
-    <section className="page-content solution-cta-section"><div className="shell"><div className="solution-cta"><div><p className="eyebrow">Start a conversation</p><h2 className="section-heading">Discuss your {solution.name.toLowerCase()} business.</h2></div><a className="btn btn-primary" href={whatsappUrl(message)} target="_blank" rel="noreferrer">Discuss on WhatsApp <Arrow/></a></div></div></section>
+    <section className="solution-why"><div className="shell solution-why-grid"><div><p className="eyebrow">Why Axivy</p><h2>Practical technology, built around real operations.</h2></div><p>{solution.whyAxivy}</p></div></section>
+    <section className="page-content solution-outcomes"><div className="shell"><p className="eyebrow">What this gives you</p><div className="solution-outcomes-grid">{solution.benefits.map((benefit, index) => <div key={benefit}><span>{String(index + 1).padStart(2, '0')}</span><p>{benefit}</p></div>)}</div></div></section>
     <AuditRequestForm industry={solution.name}/>
   </>;
 }
