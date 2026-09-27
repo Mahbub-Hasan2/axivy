@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="1200" height="1200" viewBox="0 0 1200 1200">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#08131d"/>
+      <stop offset="0.52" stop-color="#0d2430"/>
+      <stop offset="1" stop-color="#13372d"/>
+    </linearGradient>
+    <linearGradient id="lime" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#b8ec39"/>
+      <stop offset="1" stop-color="#49b84c"/>
+    </linearGradient>
+    <filter id="glow" x="-40%" y="-40%" width="180%" height="180%">
+      <feGaussianBlur stdDeviation="13" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <style>
+      .kicker{font-family:Arial,sans-serif;font-size:24px;font-weight:700;letter-spacing:4px;fill:#aeea43}
+      .headline{font-family:Arial,sans-serif;font-size:60px;font-weight:800;letter-spacing:-1.5px;fill:#f7fbf9}
+      .headline2{font-family:Arial,sans-serif;font-size:60px;font-weight:800;letter-spacing:-1.5px;fill:#aeea43}
+      .node{font-family:Arial,sans-serif;font-size:16px;font-weight:700;letter-spacing:1px;fill:#f8fcf8}
+      .micro{font-family:Arial,sans-serif;font-size:18px;font-weight:600;fill:#bbd1c9}
+    </style>
+  </defs>
+  <rect width="1200" height="1200" fill="url(#bg)"/>
+  <circle cx="1114" cy="65" r="340" fill="#87ce37" opacity=".06"/>
+  <circle cx="112" cy="1120" r="330" fill="#4bb54c" opacity=".05"/>
+  <path d="M-80 740 C150 625 200 740 390 654 S670 590 820 720 S1060 810 1270 664" fill="none" stroke="#9ee13e" stroke-width="2" opacity=".16"/>
+  <path d="M-80 780 C135 665 200 780 390 694 S670 630 820 760 S1060 850 1270 704" fill="none" stroke="#9ee13e" stroke-width="2" opacity=".09"/>
+  <rect x="67" y="57" width="218" height="78" rx="12" fill="#fff"/>
+  <image x="74" y="63" width="204" height="66" preserveAspectRatio="xMidYMid meet" xlink:href="axivy-logo-transparent.webp"/>
+  <text x="73" y="252" class="kicker">PRACTICAL BUSINESS AUTOMATION</text>
+  <text x="72" y="342" class="headline">BUSINESSES DON’T NEED</text>
+  <text x="72" y="418" class="headline">MORE TECHNOLOGY.</text>
+  <text x="72" y="510" class="headline2">THEY NEED BETTER SYSTEMS.</text>
+  <text x="74" y="568" class="micro">Connect what already matters. Let the right work flow.</text>
+  <g transform="translate(74 670)">
+    <path d="M76 71 H204 M270 71 H398 M464 71 H592 M658 71 H786 M852 71 H980" stroke="#9ee13e" stroke-width="3" opacity=".75"/>
+    <g filter="url(#glow)">
+      <circle cx="68" cy="71" r="12" fill="#aeea43"/><circle cx="262" cy="71" r="12" fill="#aeea43"/><circle cx="456" cy="71" r="12" fill="#aeea43"/><circle cx="650" cy="71" r="12" fill="#aeea43"/><circle cx="844" cy="71" r="12" fill="#aeea43"/><circle cx="1038" cy="71" r="12" fill="#aeea43"/>
+    </g>
+    <g fill="#10242a" stroke="#94d83f" stroke-width="2">
+      <rect x="0" y="0" width="136" height="142" rx="18"/><rect x="194" y="0" width="136" height="142" rx="18"/><rect x="388" y="0" width="136" height="142" rx="18"/><rect x="582" y="0" width="136" height="142" rx="18"/><rect x="776" y="0" width="136" height="142" rx="18"/><rect x="970" y="0" width="136" height="142" rx="18"/>
+    </g>
+    <g text-anchor="middle">
+      <text x="68" y="61" class="node">WEBSITE</text><text x="68" y="101" class="node" fill="#aeea43">LEADS</text>
+      <text x="262" y="61" class="node">CRM</text><text x="262" y="101" class="node" fill="#aeea43">ORGANIZED</text>
+      <text x="456" y="61" class="node">WHATSAPP</text><text x="456" y="101" class="node" fill="#aeea43">CONNECTED</text>
+      <text x="650" y="61" class="node">FOLLOW-UP</text><text x="650" y="101" class="node" fill="#aeea43">ON TIME</text>
+      <text x="844" y="61" class="node">BOOKING</text><text x="844" y="101" class="node" fill="#aeea43">CONFIRMED</text>
+      <text x="1038" y="61" class="node">ANALYTICS</text><text x="1038" y="101" class="node" fill="#aeea43">CLEAR</text>
+    </g>
+  </g>
+  <line x1="74" y1="1038" x2="1125" y2="1038" stroke="#7fb936" stroke-width="1" opacity=".35"/>
+  <text x="74" y="1100" font-family="Arial,sans-serif" font-size="28" font-weight="700" fill="#f7fbf9">Understand  →  Build  →  Connect  →  Automate  →  Improve</text>
+  <text x="75" y="1150" font-family="Arial,sans-serif" font-size="19" font-weight="700" letter-spacing="2" fill="#aeea43">DOHA, QATAR   •   AXIVY.IO</text>
+</svg>
