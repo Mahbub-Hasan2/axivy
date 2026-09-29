@@ -1,8 +1,9 @@
-import { articles, cases, solutions } from '../data/content';
+import { articles, cases, services, solutions } from '../data/content';
 
 export default function sitemap() {
   const staticRoutes = ['', 'services', 'solutions', 'case-studies', 'process', 'about', 'insights', 'contact', 'privacy', 'terms'];
   const dynamicRoutes = [
+    ...services.map(({ slug }) => `services/${slug}`),
     ...solutions.map(({ slug }) => `solutions/${slug}`),
     ...cases.map(([slug]) => `case-studies/${slug}`),
     ...articles.map(([slug]) => `insights/${slug}`),

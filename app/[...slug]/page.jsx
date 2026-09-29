@@ -13,7 +13,8 @@ const toTitle = value => value.replaceAll('-', ' ').replace(/\b\w/g, char => cha
 export async function generateMetadata({ params }) {
   const { slug = [] } = await params;
   const names = { services: 'Services', solutions: 'Solutions', 'case-studies': 'Selected Work', process: 'Our Process', about: 'About', insights: 'Insights', contact: 'Contact', privacy: 'Privacy Policy', terms: 'Terms' };
-  return { title: names[slug.join('/')] || toTitle(slug.at(-1) || 'Axivy'), description: 'Axivy builds practical digital solutions and business automation for growing companies in Qatar.' };
+  const service = slug[0] === 'services' && slug[1] ? services.find(item => item.slug === slug[1]) : null;
+  return { title: service?.title || names[slug.join('/')] || toTitle(slug.at(-1) || 'Axivy'), description: service?.description || 'Axivy builds practical digital solutions and business automation for growing companies in Qatar.' };
 }
 
 function PageHero({ eyebrow, title, copy }) {
@@ -21,10 +22,30 @@ function PageHero({ eyebrow, title, copy }) {
 }
 
 function CardGrid({ items }) {
-  return <div className="plain-grid">{items.map((item, index) => {
-    const title = item[1];
-    return <article className="plain-card" key={title}><ServiceCardActions service={title} number={String(index + 1).padStart(2, '0')} whatsappHref={whatsappUrl(`Hi Axivy, I'd like to discuss a ${title.toLowerCase()} project.`)} /><h2>{title}</h2><p>{item[2]}</p></article>;
-  })}</div>;
+  return <div className="service-offer-grid">{items.map((item, index) => <article className="service-offer-card" key={item.slug}>
+    <div className="service-offer-top"><ServiceCardActions service={item.title} number={String(index + 1).padStart(2, '0')} whatsappHref={whatsappUrl(`Hi Axivy, I'd like to discuss a ${item.title.toLowerCase()} project.`)} /><span className="service-offer-kicker">SERVICE {String(index + 1).padStart(2, '0')}</span></div>
+    <h2>{item.title}</h2>
+    <p className="service-offer-description">{item.description}</p>
+    <div className="service-offer-includes"><p>What’s included</p><ul className="service-included">{item.included.map(point => <li key={point}>{point}</li>)}</ul></div>
+    <div className="service-offer-bottom"><div><span className="service-price-label">Indicative project range</span><strong className="service-price-range">{item.priceRange}</strong><span className="service-price-start">Starting from {item.startingPrice}</span></div><Link className="service-details-link" href={`/services/${item.slug}`}>Explore details <Arrow/></Link></div>
+  </article>)}</div>;
+}
+
+function ServiceDetail({ service, index }) {
+  const whatsappHref = whatsappUrl(`Hi Axivy, I'd like to discuss a ${service.title.toLowerCase()} project for my business.`);
+  return <>
+    <PageHero eyebrow={`Service ${String(index + 1).padStart(2, '0')}`} title={service.title} copy={service.description}/>
+    <section className="service-detail-overview"><div className="shell service-detail-overview-grid">
+      <div><p className="eyebrow">A practical solution</p><h2 className="section-heading">Built around what your business needs next.</h2><p className="service-detail-copy">{service.detail}</p></div>
+      <aside className="service-fit-card"><span className="service-fit-label">A good fit if</span><p>{service.idealFor}</p><a href="#included" className="work-link">See what’s included <span aria-hidden>↓</span></a></aside>
+    </div></section>
+    <section className="page-content service-deliverables" id="included"><div className="shell service-deliverables-grid">
+      <div><p className="eyebrow">Clear scope</p><h2 className="section-heading">What you can expect to receive.</h2><p className="section-copy">We confirm the exact scope together before work begins. A typical {service.title.toLowerCase()} engagement can include:</p></div>
+      <ol className="service-deliverable-list">{service.included.map((item, itemIndex) => <li key={item}><span>{String(itemIndex + 1).padStart(2, '0')}</span><p>{item}</p></li>)}</ol>
+    </div></section>
+    <section className="service-pricing-section"><div className="shell service-pricing-panel"><div><p className="eyebrow">Planning estimate</p><h2>{service.priceRange}</h2><p>Projects start from {service.startingPrice}. This is an indicative QAR range, not a fixed quote. Final pricing depends on scope, integrations, content and any third-party subscriptions.</p></div><div className="service-pricing-actions"><ServiceCardActions service={service.title} number={String(index + 1).padStart(2, '0')} whatsappHref={whatsappHref}/></div></div></section>
+    <section className="service-next-step"><div className="shell service-next-step-inner"><div><p className="eyebrow">Start with a conversation</p><h2>Let’s scope the right next step.</h2><p>Tell us what you are trying to improve. We’ll discuss your workflow and help clarify a practical scope.</p></div><div className="service-next-step-actions"><a className="btn btn-primary" href={whatsappHref} target="_blank" rel="noreferrer">Discuss on WhatsApp <Arrow/></a><Link className="btn btn-secondary" href="/contact">Send an enquiry <Arrow/></Link></div></div></section>
+  </>;
 }
 
 function SolutionList() {
@@ -112,6 +133,11 @@ function NotFound() {
 export default async function Page({ params }) {
   const { slug = [] } = await params;
   const [page, id] = slug;
+  if (page === 'services' && id) {
+    const index = services.findIndex(service => service.slug === id);
+    const service = services[index];
+    return <Layout>{service ? <ServiceDetail service={service} index={index}/> : <NotFound/>}</Layout>;
+  }
   if (page === 'solutions' && id) {
     const solution = solutions.find(entry => entry.slug === id);
     return <Layout>{solution ? <SolutionDetail solution={solution}/> : <NotFound/>}</Layout>;
@@ -126,7 +152,7 @@ export default async function Page({ params }) {
   }
 
   let content;
-  if (page === 'services') content = <><PageHero eyebrow="Services" title="Digital tools that make everyday work easier." copy="From the first customer enquiry to the follow-up, build a system that fits your business."/><section className="page-content"><div className="shell"><CardGrid items={services}/></div></section></>;
+  if (page === 'services') content = <><PageHero eyebrow="Services · Doha, Qatar" title="The right digital system for your next stage." copy="Explore practical services for clearer customer journeys, better follow-up and less repetitive work. Compare typical deliverables and indicative QAR pricing before choosing a place to start."/><section className="service-index-intro"><div className="shell service-index-intro-inner"><span>01 — 06</span><p>Every engagement is scoped around your business. Choose a service to explore what’s included and how the estimate is structured.</p><span className="service-estimate-note">Planning estimates in QAR</span></div></section><section className="page-content service-index-content"><div className="shell"><CardGrid items={services}/><p className="service-pricing-disclaimer">Pricing shown is an indicative project range, not a fixed quotation. Third-party software, subscriptions, paid APIs and hosting are not included unless specifically stated in the final scope.</p></div></section></>;
   else if (page === 'solutions') content = <><PageHero eyebrow="Solutions" title="Built around the way your business works." copy="Choose a practical starting point for clearer customer journeys and less repetitive work."/><section className="page-content"><div className="shell"><SolutionList/></div></section></>;
   else if (page === 'case-studies') content = <><PageHero eyebrow="Selected work" title="Work with a practical point of view." copy="Real projects are labelled clearly. Concepts show possible workflows without making business claims."/><section className="page-content"><div className="shell"><WorkList/></div></section></>;
   else if (page === 'process') content = <><PageHero eyebrow="Our process" title="A clear path from idea to launch." copy="Thoughtful discovery, clear scope and a practical focus through each step."/><section className="page-content"><div className="shell"><ProcessList/></div></section></>;

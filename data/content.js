@@ -1,4 +1,101 @@
-export const services=[['↗','Website Development','Fast, modern websites designed to explain your services clearly and turn visitors into enquiries.'],['◎','Lead Management','Capture, organize and follow up with customer enquiries from your website, WhatsApp and other channels.'],['▤','CRM Systems','Keep leads, customer information, conversations and bookings organized in one place.'],['◌','WhatsApp Systems','Connect WhatsApp enquiries with notifications, follow-ups, bookings and internal workflows.'],['⌘','Business Automation','Reduce repetitive work by connecting the tools and processes your team uses every day.'],['✳','AI Solutions','Use AI for practical tasks such as FAQs, lead qualification, information collection and customer support.']];
+export const services = [
+  {
+    slug: 'website-development',
+    icon: '↗',
+    title: 'Website Development',
+    description: 'Fast, modern websites designed to explain your services clearly and turn visitors into enquiries.',
+    included: [
+      'Custom-built, mobile-friendly design — not a generic template',
+      'Clear service pages plus a working enquiry / contact form',
+      'Fast loading speed and basic on-page SEO',
+      'Analytics setup so you can see where visitors come from',
+    ],
+    startingPrice: 'QAR 2,500',
+    priceRange: 'QAR 2,500–12,000',
+    detail: 'A clear, fast website that helps customers understand what you offer and take the next step. We shape the pages, content structure and enquiry path around your business rather than dropping your information into a generic layout.',
+    idealFor: 'Businesses that need a credible online presence, clearer service information or a more useful path from website visits to enquiries.',
+  },
+  {
+    slug: 'lead-management',
+    icon: '◎',
+    title: 'Lead Management',
+    description: 'Capture, organize and follow up with customer enquiries from your website, WhatsApp and other channels.',
+    included: [
+      'One place to see every enquiry, from every channel',
+      'Automatic notifications when a new lead comes in',
+      'Follow-up reminders so no enquiry goes cold',
+      'Basic reporting on where your leads come from',
+    ],
+    startingPrice: 'QAR 1,500',
+    priceRange: 'QAR 1,500–7,500',
+    detail: 'A practical way to capture enquiries, assign ownership and make the next follow-up visible. The setup can connect website enquiries and the channels your team already uses, without making the process heavier than necessary.',
+    idealFor: 'Teams handling enquiries across multiple channels or finding it difficult to remember who needs a reply and when.',
+  },
+  {
+    slug: 'crm-systems',
+    icon: '▤',
+    title: 'CRM Systems',
+    description: 'Keep leads, customer information, conversations and bookings organized in one place.',
+    included: [
+      'Setup or customization of a CRM (HubSpot, Zoho, or a lightweight custom build)',
+      'Customer and contact records organized in one system',
+      'Booking / appointment tracking where relevant',
+      'Team access so everyone works from the same information',
+    ],
+    startingPrice: 'QAR 3,500',
+    priceRange: 'QAR 3,500–18,000',
+    detail: 'A CRM configured around the way your team actually manages prospects and customers. We organise the records, stages, ownership and reminders that help your team share context and move work forward.',
+    idealFor: 'Businesses that need one shared view of customer details, conversations, sales stages, bookings or service history.',
+  },
+  {
+    slug: 'whatsapp-systems',
+    icon: '◌',
+    title: 'WhatsApp Systems',
+    description: 'Connect WhatsApp enquiries with notifications, follow-ups, bookings and internal workflows.',
+    included: [
+      'WhatsApp-integrated lead capture from your website',
+      'Automatic notifications to your team for new messages',
+      'Quick-reply templates for common questions',
+      'Optional booking or order flow through WhatsApp',
+    ],
+    startingPrice: 'QAR 2,500',
+    priceRange: 'QAR 2,500–12,000',
+    detail: 'A more organised WhatsApp customer journey, from the first website enquiry to the team notification and follow-up. The exact setup depends on whether you need simple links and capture or a connected workflow using approved WhatsApp tools.',
+    idealFor: 'Businesses where customers already prefer WhatsApp and the team wants enquiries to arrive with better context and clearer next steps.',
+  },
+  {
+    slug: 'business-automation',
+    icon: '⌘',
+    title: 'Business Automation',
+    description: 'Reduce repetitive work by connecting the tools and processes your team uses every day.',
+    included: [
+      'A review of your current repetitive, manual tasks',
+      'Automated workflows connecting your existing tools',
+      'Less manual data entry between systems',
+      'Simple documentation so your team knows how it works',
+    ],
+    startingPrice: 'QAR 3,000',
+    priceRange: 'QAR 3,000–15,000',
+    detail: 'Focused automation for repetitive handoffs such as copying enquiry details, notifying a colleague or creating a follow-up task. We map the current process first and automate only the parts that are stable and useful.',
+    idealFor: 'Teams repeating the same admin steps across forms, spreadsheets, CRM, calendars or communication tools.',
+  },
+  {
+    slug: 'ai-solutions',
+    icon: '✳',
+    title: 'AI Solutions',
+    description: 'Use AI for practical tasks such as FAQs, lead qualification, information collection and customer support.',
+    included: [
+      'An AI assistant trained on your business information',
+      'Automatic FAQ answers and basic lead qualification',
+      'A clear hand-off to a person for complex questions',
+      'Simple monitoring so you can see what it is actually doing',
+    ],
+    startingPrice: 'QAR 4,500',
+    priceRange: 'QAR 4,500–20,000',
+    detail: 'A focused AI assistant or workflow for suitable tasks such as answering approved FAQs, collecting basic information or helping qualify enquiries. We define its knowledge and human hand-off boundaries before it is put in front of customers.',
+    idealFor: 'Businesses with repeatable enquiries or information tasks where an AI-assisted first step can help, while keeping people available for exceptions.',
+  },
+];
 export const solutions = [
   {
     slug: 'automotive',
@@ -114,4 +211,4 @@ export const articles=[
     'Start with a narrow task and review real interactions for accuracy, privacy and tone. Expand only when the system is reliably helping customers and the team can oversee it.',
   ]],
 ];
-export const faqs=[['What type of businesses does Axivy work with?','We work with small and growing businesses, particularly service-based businesses such as automotive, restaurants, cafés, cleaning, maintenance and other SMEs.'],['Can you connect our website with WhatsApp?','Yes. We can design customer journeys where website enquiries can move into WhatsApp conversations, lead management and follow-up workflows.'],['Can AI handle customer enquiries?','AI can handle suitable repetitive tasks such as FAQs, information collection and basic lead qualification. More complex conversations can be handed over to a person.'],['Do you work with businesses remotely?','Yes. Most digital projects can be planned, built and managed remotely. For businesses in Qatar, we can also structure solutions around local business workflows.'],['Can you connect our existing tools?','In many cases, yes. We first review the tools and workflow you already use, then determine what can be connected or automated.'],['Do you provide ongoing support?','Yes. Ongoing support, improvements, monitoring and automation maintenance can be arranged based on your business needs.'],['Can Axivy build a custom business system?','Yes. When existing tools are not enough, we can build custom web applications and internal systems around your specific workflow.'],['How do we get started?','Tell us about your business and the problem you want to solve. We’ll review the workflow and discuss a practical next step.']];
+export const faqs=[['What type of businesses does Axivy work with?','We work with small and growing businesses, particularly service-based businesses such as automotive, restaurants, cafés, cleaning, maintenance and other SMEs.'],['How much do your services cost?','Pricing depends on the scope and features you need — the Services page lists a starting price for each service as a general guide. We confirm the exact cost after understanding your specific requirements, with no hidden fees.'],['Can you connect our website with WhatsApp?','Yes. We can design customer journeys where website enquiries can move into WhatsApp conversations, lead management and follow-up workflows.'],['Can AI handle customer enquiries?','AI can handle suitable repetitive tasks such as FAQs, information collection and basic lead qualification. More complex conversations can be handed over to a person.'],['Do you work with businesses remotely?','Yes. Most digital projects can be planned, built and managed remotely. For businesses in Qatar, we can also structure solutions around local business workflows.'],['Can you connect our existing tools?','In many cases, yes. We first review the tools and workflow you already use, then determine what can be connected or automated.'],['Do you provide ongoing support?','Yes. Ongoing support, improvements, monitoring and automation maintenance can be arranged based on your business needs.'],['Can Axivy build a custom business system?','Yes. When existing tools are not enough, we can build custom web applications and internal systems around your specific workflow.'],['How do we get started?','Tell us about your business and the problem you want to solve. We’ll review the workflow and discuss a practical next step.']];

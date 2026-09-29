@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
+import { MessageCircle } from 'lucide-react';
 import { AXIVY_LOCATION, AXIVY_PHONE, whatsappUrl } from '../data/contact';
 
 const nav = [['Services', '/services'], ['Solutions', '/solutions'], ['Work', '/case-studies'], ['Process', '/process'], ['About', '/about']];
@@ -42,13 +43,28 @@ export function Footer() {
 export function WhatsAppFloat() {
   const [visible, setVisible] = useState(false);
   useEffect(() => {
-    const hero = document.querySelector('.home-hero, .page-hero');
+    const hero = document.querySelector('.home-hero, .ax-home-hero, .page-hero');
+    const serviceCards = document.querySelector('.home-services-section, .ax-home-services');
     if (!hero) { setVisible(true); return; }
-    const observer = new IntersectionObserver(([entry]) => setVisible(!entry.isIntersecting), { threshold: 0 });
-    observer.observe(hero);
-    return () => observer.disconnect();
+    let heroIsVisible = true;
+    let serviceCardsAreVisible = false;
+    const updateVisibility = () => setVisible(!heroIsVisible && !serviceCardsAreVisible);
+    const heroObserver = new IntersectionObserver(([entry]) => {
+      heroIsVisible = entry.isIntersecting;
+      updateVisibility();
+    }, { threshold: 0 });
+    heroObserver.observe(hero);
+    const serviceObserver = serviceCards ? new IntersectionObserver(([entry]) => {
+      serviceCardsAreVisible = entry.isIntersecting;
+      updateVisibility();
+    }, { threshold: 0 }) : null;
+    serviceObserver?.observe(serviceCards);
+    return () => {
+      heroObserver.disconnect();
+      serviceObserver?.disconnect();
+    };
   }, []);
-  return visible ? <a className="whatsapp-float" href={whatsappUrl("Hi Axivy, I'd like to discuss a business solution.")} target="_blank" rel="noreferrer" aria-label="Chat with Axivy on WhatsApp"><span aria-hidden>◉</span> WhatsApp</a> : null;
+  return visible ? <a className="whatsapp-float" href={whatsappUrl("Hi Axivy, I'd like to discuss a business solution.")} target="_blank" rel="noreferrer" aria-label="Chat with Axivy on WhatsApp"><span aria-hidden><MessageCircle size={22} strokeWidth={2}/></span><span className="whatsapp-float-label">WhatsApp</span></a> : null;
 }
 
 export function Layout({ children }) {
