@@ -1,103 +1,166 @@
 import Link from 'next/link';
-import CustomerJourneyPanel from '../components/CustomerJourneyPanel';
+import HomeExperience from '../components/HomeExperience';
 import { Layout } from '../components/SiteShell';
-import { articles, cases, faqs, services, solutions } from '../data/content';
+import { cases, services, solutions } from '../data/content';
 import { whatsappUrl } from '../data/contact';
 
 const problems = [
-  ['01', 'Missed enquiries', 'Potential customers contact you when your team is busy or unavailable.'],
-  ['02', 'Slow follow-ups', 'Good leads can lose interest when responses and next steps depend on memory.'],
-  ['03', 'Scattered information', 'Customer details and conversations end up across chats, spreadsheets and inboxes.'],
-  ['04', 'Limited visibility', 'Without the right data, it can be difficult to understand where enquiries come from and what happens next.'],
+  ['Missed enquiries', 'Busy teams can miss a message before anyone has a chance to respond.'],
+  ['Slow follow-ups', 'Without a clear next step, promising conversations can lose momentum.'],
+  ['Scattered details', 'Customer context gets split between chats, inboxes and spreadsheets.'],
+  ['Limited visibility', 'It is hard to see what needs attention when updates live in different places.'],
 ];
+
+const serviceDescriptions = {
+  'website-development': 'Clear, fast websites that help customers understand your business and take the next step.',
+  'lead-management': 'Capture enquiries from the channels you use and make ownership and follow-up easy to see.',
+  'crm-systems': 'Keep customer details, conversations and next actions organized in one shared place.',
+  'whatsapp-systems': 'Connect WhatsApp conversations with enquiry capture, team updates and timely follow-ups.',
+  'business-automation': 'Reduce repetitive admin by connecting the tools and steps your team uses every day.',
+  'ai-solutions': 'Apply AI to useful tasks like answering common questions and collecting enquiry details.',
+};
+
+const industrySlugs = ['automotive', 'restaurants-cafes', 'cleaning-maintenance', 'other-smes'];
 
 const process = [
-  ['01', 'Discover', 'Understand your business, customers and current workflow.'],
-  ['02', 'Define', 'Set the right scope, priorities and practical plan.'],
-  ['03', 'Design', 'Shape a clear experience around your customers and team.'],
-  ['04', 'Build', 'Develop and connect the systems your business needs.'],
-  ['05', 'Launch', 'Test, refine and prepare everything for real-world use.'],
-  ['06', 'Improve', 'Monitor, maintain and evolve the system as you grow.'],
+  ['Discover', 'Understand your business, customers and current workflow.'],
+  ['Define', 'Agree on a clear scope, priorities and practical plan.'],
+  ['Design', 'Shape the experience around your customers and team.'],
+  ['Build', 'Create and connect the digital tools your business needs.'],
+  ['Launch', 'Test the details and prepare the solution for real use.'],
+  ['Improve', 'Review how it works and make useful refinements over time.'],
 ];
 
-function WorkflowPreview() {
-  const steps = [
-    ['01', 'Website enquiry', 'A customer finds your business', '↗'],
-    ['02', 'Lead captured', 'Details are collected clearly', '◎'],
-    ['03', 'CRM', 'Your team sees the next step', '▤'],
-    ['04', 'WhatsApp follow-up', 'A timely, personal response', '◌'],
-    ['05', 'Booking', 'The enquiry moves forward', '✓'],
-  ];
+const faqs = [
+  ['What are the costs?', 'Pricing depends on the scope and features. We confirm the exact cost after understanding your requirements, with no hidden fees.'],
+  ['Can you connect our website with WhatsApp?', 'Yes. We can make it easier for customers to move from a website enquiry into a relevant WhatsApp conversation and a clear team follow-up.'],
+  ['Can you work with the tools we already use?', 'Often, yes. We first understand your current tools and workflow, then identify what can be connected or improved.'],
+  ['Do you provide ongoing support?', 'Ongoing support and improvements can be arranged around the solution and what your team needs.'],
+];
 
-  return <div className="refhome-workflow" aria-label="Example customer enquiry workflow">
-    <div className="refhome-workflow-head"><strong>Designed around your customer journey</strong><span>EXAMPLE WORKFLOW</span></div>
-    <div className="refhome-workflow-steps">{steps.map(([number, title, detail, icon]) => <div className={`refhome-workflow-step ${number === '04' ? 'active' : ''}`} key={number}><i>{icon}</i><strong>{title}</strong><span>{detail}</span></div>)}</div>
-    <div className="refhome-workflow-foot"><span>Website</span><b>→</b><span>Lead</span><b>→</b><span>CRM</span><b>→</b><span>WhatsApp</span><b>→</b><span>Booking</span></div>
+function SectionHeading({ eyebrow, title, copy, id }) {
+  return <div className="mb-6 grid gap-3 sm:mb-8 md:grid-cols-[1fr_.72fr] md:items-end md:gap-8">
+    <div>
+      {eyebrow && <p className="mb-3 text-xs font-bold uppercase tracking-[.16em] text-[var(--brand-green-dark)]">{eyebrow}</p>}
+      <h2 id={id} className="max-w-2xl text-3xl font-semibold leading-[1.08] tracking-[-.045em] text-[var(--ink)] sm:text-4xl">{title}</h2>
+    </div>
+    {copy && <p className="max-w-xl text-sm leading-7 text-[var(--muted)] sm:text-base">{copy}</p>}
   </div>;
-}
-
-function ProductMock() {
-  return <div className="product-mock" role="img" aria-label="Illustrative automotive product catalogue interface"><div className="product-bar"><span className="product-brand">AUTOMOTIVE PRODUCT CATALOGUE</span><span className="product-basket">Illustrative UI</span></div><div className="product-grid">{['◉', '◈', '◇'].map((icon, index) => <div className="product-tile" key={icon}><div className="product-picture">{icon}</div><div className="product-line"/><div className="product-line short"/></div>)}</div></div>;
 }
 
 function WorkCard({ item, featured = false }) {
   if (!item) return null;
-  const [slug, title, category, status, description] = item;
-  return <article className={`refhome-work-card ${featured ? 'featured' : ''}`}>
-    {featured ? <div className="refhome-work-art"><ProductMock/><span className="refhome-art-caption">ILLUSTRATIVE UI · NOT A LIVE PRODUCT SCREEN</span></div> : <div className={`refhome-work-art ${slug === 'sahara' ? 'sahara' : 'dark'}`}>{slug === 'sahara' ? <><strong className="refhome-sahara-mark">S</strong><span>Business website</span></> : <div className="refhome-work-demo"><span>CONCEPT / DEMO</span><strong>Workshop enquiries</strong><i>Booking flow →</i></div>}</div>}
-    <div className="refhome-work-info"><div className="refhome-work-meta"><span>{category}</span><span>{status}</span></div><h3>{title}</h3><p>{description}</p><Link href={`/case-studies/${slug}`} className="refhome-inline-link">{featured ? 'View case study' : status === 'Concept / Demo' ? 'View concept' : 'View project'} <span aria-hidden>↗</span></Link></div>
+  const [slug, title, category, status, description, journey = []] = item;
+  const isConcept = /concept/i.test(status);
+
+  return <article className={`group overflow-hidden rounded-2xl border border-[var(--line)] bg-white ${featured ? 'md:row-span-2' : ''}`}>
+    <Link href={`/case-studies/${slug}`} className="block h-full rounded-2xl focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[var(--brand-green-dark)]">
+      <div className={`relative flex min-h-44 flex-col justify-between overflow-hidden p-5 sm:min-h-52 sm:p-6 ${featured ? 'bg-[var(--sage)] md:min-h-[23rem]' : isConcept ? 'bg-[var(--dark)] text-white' : 'bg-white'}`}>
+        <div className="flex items-start justify-between gap-3">
+          <span className={`inline-flex rounded-full px-3 py-1.5 text-[11px] font-bold ${isConcept ? 'bg-[var(--lime)] text-[var(--ink)]' : 'bg-white/80 text-[var(--brand-green-dark)]'}`}>{status}</span>
+          <span aria-hidden className={`text-lg transition-transform group-hover:translate-x-1 ${isConcept ? 'text-[var(--lime)]' : 'text-[var(--brand-green-dark)]'}`}>↗</span>
+        </div>
+        <div>
+          <p className={`mb-2 text-xs font-semibold uppercase tracking-[.14em] ${isConcept ? 'text-white/65' : 'text-[var(--muted)]'}`}>{category}</p>
+          <h3 className={`text-2xl font-semibold tracking-[-.04em] ${isConcept ? 'text-white' : 'text-[var(--ink)]'}`}>{title}</h3>
+          {featured && <div className="mt-5 flex flex-wrap items-center gap-2" aria-label="Project journey">{journey.map((step, index) => <span key={step} className="inline-flex items-center gap-2 rounded-full border border-[var(--line)] bg-white/80 px-3 py-2 text-[11px] font-medium text-[var(--ink)]">{step}{index < journey.length - 1 && <span aria-hidden className="-mr-1 text-[var(--brand-green-dark)]">→</span>}</span>)}</div>}
+          {!featured && isConcept && <p className="mt-4 max-w-sm text-sm leading-6 text-white/75">Illustrative system concept — not a live product.</p>}
+        </div>
+      </div>
+      <div className="p-5 sm:p-6">
+        <p className="text-sm leading-6 text-[var(--muted)]">{description}</p>
+        <span className="mt-4 inline-flex items-center gap-2 text-sm font-bold text-[var(--brand-green-dark)]">{isConcept ? 'View concept' : 'View project'} <span aria-hidden>→</span></span>
+      </div>
+    </Link>
   </article>;
 }
 
 export default function Home() {
-  const featuredCases = cases.slice(0, 3);
-  return <Layout><main className="refhome">
-    <section className="home-hero refhome-hero">
-      <div className="shell hero-grid refhome-hero-grid">
-        <div className="hero-copy">
-          <p className="eyebrow">DIGITAL SOLUTIONS &amp; AUTOMATION</p>
-          <h1 className="hero-title">Better digital systems for businesses that want to move faster.</h1>
-          <p className="hero-description">Axivy helps Qatar businesses build better websites, manage customer enquiries, and automate repetitive work with practical digital systems.</p>
-          <div className="hero-actions"><Link className="btn btn-primary" href="/contact">Let’s Talk <span aria-hidden>↗</span></Link><Link className="btn btn-secondary" href="/case-studies">View Our Work <span aria-hidden>↗</span></Link></div>
-          <p className="hero-note"><span className="note-dot"/> Doha, Qatar · Available for remote projects</p>
+  const selectedCases = ['gari-qatar', 'sahara', 'auto-workshop-system'].map(slug => cases.find(item => item[0] === slug)).filter(Boolean);
+
+  return <Layout><main className="overflow-hidden">
+    <section className="relative isolate overflow-hidden bg-[var(--dark)] py-8 text-white sm:py-10 lg:py-14" aria-labelledby="home-title">
+      <div aria-hidden className="pointer-events-none absolute -right-32 -top-40 -z-10 h-[34rem] w-[34rem] rounded-full bg-[var(--brand-green-dark)] opacity-35 blur-[100px]" />
+      <div aria-hidden className="pointer-events-none absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[var(--brand-green)]/50 to-transparent" />
+      <div className="mx-auto grid w-[min(1200px,calc(100%-2rem))] items-center gap-5 sm:w-[min(1200px,calc(100%-3rem))] lg:grid-cols-[1.02fr_.98fr] lg:gap-12">
+        <div>
+          <p className="mb-4 flex items-center gap-2 text-xs font-bold uppercase tracking-[.16em] text-[var(--lime)]"><span aria-hidden className="h-px w-6 bg-[var(--lime)]"/> Digital solutions &amp; automation · Doha, Qatar</p>
+          <h1 id="home-title" className="max-w-3xl text-[clamp(2.35rem,5.25vw,4.6rem)] font-semibold leading-[1.01] tracking-[-.06em] text-white">Every enquiry deserves a <span className="text-[var(--lime)]">fast, personal reply.</span></h1>
+          <p className="mt-4 max-w-xl text-[15px] leading-6 text-white/75 sm:mt-5 sm:text-base sm:leading-7">Axivy builds the websites, CRM and WhatsApp workflows that help Qatar businesses answer customers sooner, keep every lead organized and stop repeating manual work.</p>
+          <div className="mt-5 flex flex-col gap-3 min-[420px]:flex-row sm:mt-6">
+            <Link href="/contact" className="inline-flex min-h-12 items-center justify-center gap-3 rounded-xl bg-[var(--lime)] px-5 text-sm font-bold text-[var(--ink)] transition-colors hover:bg-[var(--brand-green)] hover:text-white focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-white">Start a conversation <span aria-hidden>↗</span></Link>
+            <a href={whatsappUrl("Hi Axivy, I'd like to discuss a business solution.")} target="_blank" rel="noreferrer" className="inline-flex min-h-12 items-center justify-center gap-3 rounded-xl border border-white/25 bg-white/[.04] px-5 text-sm font-bold text-white transition-colors hover:border-white/60 hover:bg-white/[.08] focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-white">Chat on WhatsApp <span aria-hidden>↗</span></a>
+          </div>
+          <p className="mt-4 flex items-center gap-2 text-xs leading-5 text-white/65 sm:text-sm"><span aria-hidden className="h-1.5 w-1.5 rounded-full bg-[var(--lime)]"/>Based in Doha, working with businesses across Qatar and remotely.</p>
         </div>
-        <div className="refhome-hero-visual"><WorkflowPreview/></div>
+        <div className="hidden md:block"><HomeExperience mode="phone" /></div>
       </div>
     </section>
 
-    <div className="capability-strip"><div className="shell capability-inner"><div className="capability-list">{['Websites', 'CRM', 'WhatsApp', 'Automation', 'AI', 'Analytics'].map(label => <span className="capability-item" key={label}>{label}</span>)}</div></div></div>
+    <section className="bg-white py-9 sm:py-12 lg:py-14" aria-labelledby="problem-title">
+      <div className="mx-auto w-[min(1200px,calc(100%-2rem))] sm:w-[min(1200px,calc(100%-3rem))]">
+        <SectionHeading eyebrow="The everyday friction" title="Good businesses lose customers when their systems fall behind." id="problem-title" />
+        <div className="grid gap-px overflow-hidden rounded-2xl border border-[var(--line)] bg-[var(--line)] sm:grid-cols-2 lg:grid-cols-4">{problems.map(([title, description], index) => <article key={title} className="bg-[var(--paper)] p-5 sm:p-6"><span className="mb-5 block text-xs font-bold tracking-widest text-[var(--brand-green-dark)]">0{index + 1}</span><h3 className="text-lg font-semibold tracking-tight text-[var(--ink)]">{title}</h3><p className="mt-2 text-sm leading-6 text-[var(--muted)]">{description}</p></article>)}</div>
+      </div>
+    </section>
 
-    <section className="section refhome-problems"><div className="shell">
-      <div className="section-head"><div><p className="eyebrow">THE PROBLEM</p><h2 className="section-heading">Good businesses lose opportunities when their systems don’t keep up.</h2></div><p className="section-copy">Customers can reach you at any time. When enquiries, follow-ups and customer information are handled manually, opportunities can easily get missed.</p></div>
-      <div className="problem-grid">{problems.map(([number, title, copy]) => <article className="problem-card" key={number}><span className="problem-number">{number}</span><h3 className="problem-title">{title}</h3><p className="problem-description">{copy}</p></article>)}</div>
-    </div></section>
+    <section className="bg-white py-9 sm:py-12 lg:py-14" aria-labelledby="services-title">
+      <div className="mx-auto w-[min(1200px,calc(100%-2rem))] sm:w-[min(1200px,calc(100%-3rem))]">
+        <SectionHeading eyebrow="Practical digital systems" title="What we build for you" copy="Start with the part of your customer journey or daily workflow that needs to work better." id="services-title" />
+        <div className="divide-y divide-[var(--line)] border-y border-[var(--line)]">{services.map((service, index) => <article key={service.slug} className="group grid grid-cols-[2.25rem_1fr] items-start gap-x-3 gap-y-2 py-5 transition-colors hover:bg-[var(--paper)] sm:grid-cols-[3rem_2.75rem_1fr_auto] sm:items-center sm:gap-5 sm:px-3 sm:py-6">
+          <span className="hidden text-sm font-bold tabular-nums text-[var(--brand-green-dark)] sm:block">0{index + 1}</span>
+          <span aria-hidden className="grid h-9 w-9 place-items-center rounded-xl bg-[var(--sage)] text-base font-bold text-[var(--brand-green-dark)]">{service.icon}</span>
+          <div><h3 className="text-lg font-semibold tracking-tight text-[var(--ink)] transition-colors group-hover:text-[var(--brand-green-dark)] sm:text-xl">{service.title}</h3><p className="mt-1 max-w-3xl text-sm leading-6 text-[var(--muted)]">{serviceDescriptions[service.slug] || service.description}</p></div>
+          <Link href={`/services/${service.slug}`} className="col-start-2 inline-flex w-fit items-center gap-2 text-sm font-bold text-[var(--brand-green-dark)] underline-offset-4 hover:underline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[var(--brand-green-dark)] sm:col-auto">Learn more <span aria-hidden className="transition-transform group-hover:translate-x-1">↗</span></Link>
+        </article>)}</div>
+      </div>
+    </section>
 
-    <section className="section refhome-services home-services-section"><div className="shell">
-      <div className="section-head"><div><p className="eyebrow">WHAT WE BUILD</p><h2 className="section-heading">Digital systems built around your customer journey.</h2></div><div><p className="section-copy">From your first website visit to the final follow-up, Axivy connects the tools and workflows your business needs to operate more efficiently.</p><Link href="/services" className="refhome-inline-link">Explore all services <span aria-hidden>↗</span></Link></div></div>
-      <div className="service-grid refhome-service-grid">{services.map((service, index) => <Link className="service-card refhome-service-card" href={`/services/${service.slug}`} key={service.slug}>
-        <div className="service-card-top"><span className="service-number">{String(index + 1).padStart(2, '0')}</span><span className="service-icon" aria-hidden>{service.icon}</span></div>
-        <h3 className="service-title">{service.title}</h3><p className="service-description">{service.description}</p>
-        <div className="refhome-service-bottom"><span>Indicative: {service.priceRange}</span><span className="service-arrow" aria-hidden>Explore ↗</span></div>
-      </Link>)}</div>
-    </div></section>
+    <section className="bg-[var(--dark)] py-9 text-white sm:py-12 lg:py-14" aria-labelledby="journey-title">
+      <div className="mx-auto w-[min(1200px,calc(100%-2rem))] sm:w-[min(1200px,calc(100%-3rem))]">
+        <SectionHeading eyebrow="Connected customer journey" title="One customer journey, one connected system." copy="A customer should not have to repeat themselves at every step. Make the handoff clearer for them and your team." id="journey-title" />
+        <HomeExperience mode="journey" />
+      </div>
+    </section>
 
-    <section className="feature-section refhome-connected"><div className="shell feature-grid">
-      <div><p className="eyebrow">CONNECTED SYSTEMS</p><h2 className="feature-title">One customer journey.<br/>One connected system.</h2><p className="feature-copy">Bring your website, CRM, WhatsApp and follow-ups into a workflow shaped around how your business actually works.</p><div className="feature-path" aria-label="Example connected workflow">{['Website', 'Lead', 'CRM', 'WhatsApp', 'Follow-up', 'Booking', 'Analytics'].map(label => <span key={label}>{label}</span>)}</div><Link className="btn btn-primary" href="/solutions" style={{marginTop: 22}}>Explore Connected Solutions <span aria-hidden>→</span></Link></div>
-      <CustomerJourneyPanel/>
-    </div></section>
+    <section className="bg-white py-9 sm:py-12 lg:py-14" aria-labelledby="industries-title">
+      <div className="mx-auto w-[min(1200px,calc(100%-2rem))] sm:w-[min(1200px,calc(100%-3rem))]">
+        <SectionHeading eyebrow="Solutions for your sector" title="Built around how your business works" copy="Your industry has its own pace and customer expectations. The right systems should fit the way you operate." id="industries-title" />
+        <div className="grid border-y border-[var(--line)] sm:grid-cols-2 sm:gap-x-8">{industrySlugs.map(slug => { const industry = solutions.find(item => item.slug === slug); if (!industry) return null; return <Link key={slug} href={`/solutions/${slug}`} className="group flex min-h-24 items-center justify-between gap-5 border-b border-[var(--line)] py-5 last:border-b-0 sm:min-h-28 sm:even:border-b-0">
+          <span><span className="block text-lg font-semibold tracking-tight text-[var(--ink)] group-hover:text-[var(--brand-green-dark)]">{industry.name}</span><span className="mt-1 block max-w-lg text-sm leading-6 text-[var(--muted)]">{industry.summary}</span></span><span aria-hidden className="shrink-0 text-lg text-[var(--brand-green-dark)] transition-transform group-hover:translate-x-1">↗</span>
+        </Link>; })}</div>
+      </div>
+    </section>
 
-    <section className="section refhome-industries"><div className="shell"><div className="section-head"><div><p className="eyebrow">BUILT FOR BUSINESS</p><h2 className="section-heading">Built around the way your business works.</h2></div><div><p className="section-copy">We adapt the technology to your workflow—not the other way around.</p><Link href="/solutions" className="refhome-inline-link">Explore Solutions <span aria-hidden>↗</span></Link></div></div><div className="industry-grid">{solutions.map(({ slug, name, summary }) => <Link className="industry-item" href={`/solutions/${slug}`} key={slug}><span><h3 className="industry-name">{name}</h3><p className="industry-description">{summary}</p></span><span className="industry-arrow" aria-hidden>↗</span></Link>)}</div></div></section>
+    <section className="bg-[var(--paper)] py-9 sm:py-12 lg:py-14" aria-labelledby="work-title">
+      <div className="mx-auto w-[min(1200px,calc(100%-2rem))] sm:w-[min(1200px,calc(100%-3rem))]">
+        <SectionHeading eyebrow="Selected work" title="Made for real business needs" copy="Explore a completed business project, a website project and a clearly labelled system concept." id="work-title" />
+        <div className="grid gap-4 md:grid-cols-2"><WorkCard item={selectedCases[0]} featured/><WorkCard item={selectedCases[1]}/><WorkCard item={selectedCases[2]}/></div>
+      </div>
+    </section>
 
-    <section className="section refhome-work"><div className="shell"><div className="section-head"><div><p className="eyebrow">SELECTED WORK</p><h2 className="section-heading">Made to solve real business needs.</h2></div><div><p className="section-copy">A selection of real projects and clearly labelled concepts built around real business problems.</p><Link href="/case-studies" className="refhome-inline-link">All case studies <span aria-hidden>↗</span></Link></div></div><div className="refhome-work-grid"><WorkCard item={featuredCases[0]} featured/><WorkCard item={featuredCases[1]}/><WorkCard item={featuredCases[2]}/></div></div></section>
+    <section className="bg-white py-9 sm:py-12 lg:py-14" aria-labelledby="process-title">
+      <div className="mx-auto w-[min(1200px,calc(100%-2rem))] sm:w-[min(1200px,calc(100%-3rem))]">
+        <SectionHeading eyebrow="How we work" title="A clear path from idea to launch" copy="We start by understanding the business problem, then shape a solution your team can use." id="process-title" />
+        <ol className="grid gap-0 border-t border-[var(--line)] sm:grid-cols-2 lg:grid-cols-3">{process.map(([title, description], index) => <li key={title} className="relative border-b border-[var(--line)] py-5 pl-12 pr-4 sm:min-h-32 sm:py-6 lg:min-h-36"><span className="absolute left-0 top-5 text-sm font-bold tabular-nums text-[var(--brand-green-dark)] sm:top-6">0{index + 1}</span><h3 className="font-semibold text-[var(--ink)]">{title}</h3><p className="mt-2 text-sm leading-6 text-[var(--muted)]">{description}</p></li>)}</ol>
+      </div>
+    </section>
 
-    <section className="section refhome-process"><div className="shell"><div className="section-head"><div><p className="eyebrow">HOW WE WORK</p><h2 className="section-heading">A clear path from idea to launch.</h2></div><div><p className="section-copy">We start with the business problem, then build the right solution around your goals, workflow and customers.</p><Link href="/process" className="refhome-inline-link">Our process <span aria-hidden>↗</span></Link></div></div><div className="process-grid">{process.map(([number, title, copy]) => <article className="process-step" key={number}><span className="process-number">{number}</span><h3 className="process-title">{title}</h3><p className="process-copy">{copy}</p></article>)}</div></div></section>
+    <section className="bg-[var(--paper)] py-9 sm:py-12 lg:py-14" aria-labelledby="faq-title">
+      <div className="mx-auto w-[min(860px,calc(100%-2rem))] sm:w-[min(860px,calc(100%-3rem))]">
+        <SectionHeading eyebrow="Frequently asked" title="A few useful answers" id="faq-title" />
+        <div className="divide-y divide-[var(--line)] border-y border-[var(--line)]">{faqs.map(([question, answer]) => <details key={question} className="group py-5">
+          <summary className="flex cursor-pointer list-none items-center justify-between gap-4 text-base font-semibold text-[var(--ink)] marker:hidden focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[var(--brand-green-dark)] sm:text-lg"><span>{question}</span><span aria-hidden className="text-xl font-normal text-[var(--brand-green-dark)] transition-transform group-open:rotate-45">+</span></summary>
+          <p className="max-w-3xl pt-3 pr-8 text-sm leading-7 text-[var(--muted)]">{answer}</p>
+        </details>)}</div>
+      </div>
+    </section>
 
-    <section className="section refhome-about"><div className="shell about-grid"><div className="refhome-about-mark"><span className="refhome-about-monogram">A</span><span className="refhome-about-orbit orbit-a"/><span className="refhome-about-orbit orbit-b"/><div><strong>AXIVY</strong><span>DOHA, QATAR · REMOTE-READY</span></div></div><div><p className="eyebrow">ABOUT AXIVY</p><h2 className="section-heading">Technology built around real business problems.</h2><p className="section-copy">Axivy helps businesses use technology in a practical way—through websites, customer systems, automation and AI.</p><p className="section-copy">We focus on understanding how your business actually works before deciding what technology it needs.</p><Link href="/about" className="refhome-inline-link">More about Axivy <span aria-hidden>↗</span></Link></div></div></section>
-
-    <section className="section refhome-insights"><div className="shell"><div className="section-head"><div><p className="eyebrow">INSIGHTS</p><h2 className="section-heading">Ideas for better business systems.</h2></div><div><p className="section-copy">Practical guides on websites, customer management, WhatsApp, automation and AI for growing businesses.</p><Link href="/insights" className="refhome-inline-link">All insights <span aria-hidden>↗</span></Link></div></div><div className="insight-grid">{articles.slice(0, 3).map(([slug, title, description]) => <Link href={`/insights/${slug}`} className="insight-card" key={slug}><span className="insight-category">BUSINESS SYSTEMS</span><h3 className="insight-title">{title}</h3><p className="insight-description">{description}</p><span className="insight-read">Read insight <span aria-hidden>→</span></span></Link>)}</div></div></section>
-
-    <section className="section refhome-faq"><div className="shell"><p className="eyebrow">COMMON QUESTIONS</p><h2 className="section-heading">A few things businesses often ask.</h2><div className="faq-grid">{faqs.slice(0, 8).map(([question, answer]) => <details className="faq-item" key={question}><summary>{question}</summary><p>{answer}</p></details>)}</div></div></section>
-
-    <section className="final-cta refhome-final"><div className="shell cta-grid"><div><p className="eyebrow">START A CONVERSATION</p><h2 className="cta-title">Have a business problem worth solving?</h2><p className="cta-copy">Tell us what is slowing your business down. We’ll help you identify a practical digital or automation solution.</p></div><div className="cta-actions"><Link className="btn btn-primary" href="/contact">Let’s Talk <span aria-hidden>→</span></Link><a className="btn btn-secondary" href={whatsappUrl("Hi Axivy, I'd like to discuss a business solution.")} target="_blank" rel="noreferrer">Chat on WhatsApp <span aria-hidden>→</span></a><span className="cta-phone">+974 7108 3700 · Doha, Qatar</span></div></div></section>
+    <section className="bg-[var(--dark)] py-9 text-white sm:py-12 lg:py-14" aria-labelledby="contact-title">
+      <div className="mx-auto grid w-[min(1200px,calc(100%-2rem))] gap-6 sm:w-[min(1200px,calc(100%-3rem))] md:grid-cols-[1fr_auto] md:items-center md:gap-10">
+        <div><p className="mb-3 text-xs font-bold uppercase tracking-[.16em] text-[var(--lime)]">Start a conversation</p><h2 id="contact-title" className="max-w-3xl text-3xl font-semibold leading-tight tracking-[-.04em] sm:text-4xl">Have a business problem worth solving?</h2><p className="mt-3 max-w-2xl text-sm leading-7 text-white/75 sm:text-base">Tell us what is slowing your business down and we'll suggest a practical digital or automation solution.</p></div>
+        <div className="flex flex-col gap-3 min-[420px]:flex-row md:flex-col"><Link href="/contact" className="inline-flex min-h-12 items-center justify-center gap-3 rounded-xl bg-[var(--lime)] px-5 text-sm font-bold text-[var(--ink)] transition-colors hover:bg-[var(--brand-green)] hover:text-white focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-white">Let's talk <span aria-hidden>↗</span></Link><a href={whatsappUrl("Hi Axivy, I'd like to discuss a business solution.")} target="_blank" rel="noreferrer" className="inline-flex min-h-12 items-center justify-center gap-3 rounded-xl border border-white/30 px-5 text-sm font-bold text-white transition-colors hover:border-white focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-white">Chat on WhatsApp <span aria-hidden>↗</span></a></div>
+      </div>
+    </section>
   </main></Layout>;
 }
