@@ -11,6 +11,7 @@ const initialFields = {
   whatsapp: '',
   email: '',
   challenge: '',
+  website: '',
 };
 
 export default function AuditRequestForm({ industry }) {
@@ -89,6 +90,7 @@ export default function AuditRequestForm({ industry }) {
             <label>What is slowing you down?<textarea name="challenge" rows={3} maxLength={2000} placeholder="For example: missed follow-ups, bookings or customer messages" value={fields.challenge} onChange={event => handleChange('challenge', event.target.value)} /></label>
           </div>
         </details>
+        <input className="hp-field" type="text" name="website" tabIndex={-1} autoComplete="off" aria-hidden="true" value={fields.website} onChange={event => handleChange('website', event.target.value)} />
         <button className="btn btn-primary span-two" type="submit" disabled={isSubmitting}>{isSubmitting ? 'Sending…' : isSubmitted ? 'Request Sent ✓' : 'Request My Free Audit'} <span aria-hidden>↗</span></button>
         <p className="audit-form-note span-two">No commitment required. We’ll only use your details to respond to this request.</p>
         {status && <p className={`status-message span-two ${statusType === 'error' ? 'status-message-error' : ''}`} role="status" aria-live="polite">{status}</p>}

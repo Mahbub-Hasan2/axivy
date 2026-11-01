@@ -47,7 +47,7 @@ function PhoneChat() {
       <div className="overflow-hidden rounded-[1.45rem] bg-[var(--paper)]">
         <div className="flex items-center justify-between border-b border-[var(--line)] bg-white px-4 py-3">
           <div className="flex items-center gap-3">
-            <span className="grid h-9 w-9 place-items-center overflow-hidden rounded-full bg-[var(--sage)]"><Image src="/favicon.png" alt="" width={48} height={48} className="h-7 w-7 object-contain" /></span>
+            <span className="grid h-9 w-9 place-items-center overflow-hidden rounded-full bg-[var(--sage)]"><Image src="/favicon.png" alt="" width={48} height={48} sizes="32px" className="h-7 w-7 object-contain" /></span>
             <div><p className="text-sm font-bold text-[var(--ink)]">Axivy</p><p className="text-[11px] text-[var(--muted)]">Customer enquiry</p></div>
           </div>
           <span className="flex items-center gap-1.5 text-[10px] font-semibold text-[var(--brand-green-dark)]"><span className="h-2 w-2 rounded-full bg-[var(--brand-green)]"/>Connected flow</span>

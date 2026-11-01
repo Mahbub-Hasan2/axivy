@@ -19,6 +19,7 @@ export default function ContactForm() {
     const email = String(fields.get('email') || '').trim();
     const service = String(fields.get('service') || 'General Enquiry');
     const message = String(fields.get('message') || '').trim();
+    const website = String(fields.get('website') || '').trim();
     const lines = [
       "Hi Axivy, I'd like to discuss a business solution.",
       '',
@@ -37,7 +38,7 @@ export default function ContactForm() {
       const response = await fetch('/api/lead', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name, business, company: business, phone, email, service, message }),
+        body: JSON.stringify({ name, business, company: business, phone, email, service, message, website }),
       });
       const result = await response.json();
       if (!response.ok) throw new Error(result.error || 'We could not send your enquiry. Please try again.');
@@ -64,6 +65,7 @@ export default function ContactForm() {
     <label>Email<input name="email" type="email" required maxLength={254} autoComplete="email" placeholder="you@business.com" /></label>
     <label className="span-two">What do you need help with?<select name="service" defaultValue="Not Sure">{['Website','Lead Management','CRM','WhatsApp','Automation','AI','Analytics','Custom Solution','Not Sure'].map(x=><option key={x}>{x}</option>)}</select></label>
     <label className="span-two">Message<textarea name="message" maxLength={2000} placeholder="Tell us a little about your business and the challenge." /></label>
+    <input className="hp-field" type="text" name="website" tabIndex={-1} autoComplete="off" aria-hidden="true" />
     <button className="btn btn-primary span-two" type="submit" disabled={isSubmitting} style={{justifySelf:'start'}}>{isSubmitting ? 'Sending…' : isSubmitted ? 'Enquiry Sent ✓' : 'Send Enquiry'} <span aria-hidden>→</span></button>
     {status && <p role="status" aria-live="polite" className={`status-message span-two ${statusType === 'error' ? 'status-message-error' : ''}`}>{status}</p>}
   </form>;

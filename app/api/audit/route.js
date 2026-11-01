@@ -1,8 +1,11 @@
 import nodemailer from 'nodemailer';
+import { SITE_HOST, SITE_URL } from '../../../lib/site';
 
 export const runtime = 'nodejs';
 
 const json = (body, status = 200) => Response.json(body, { status });
+const escapeHtml = value =>
+  String(value).replace(/[&<>"']/g, character => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[character]));
 const allowedIndustries = new Set([
   'Automotive',
   'Restaurants & Cafés',
@@ -20,6 +23,12 @@ export async function POST(request) {
 
   if (!payload || typeof payload !== 'object' || Array.isArray(payload)) {
     return json({ error: 'Please check the form details and try again.' }, 400);
+  }
+
+  // Hidden field: real visitors never fill this in. Pretend success for bots.
+  const honeypot = typeof payload.website === 'string' ? payload.website.trim() : '';
+  if (honeypot) {
+    return json({ ok: true, message: 'Your audit request has been successfully submitted.' });
   }
 
   const name = typeof payload.name === 'string' ? payload.name.trim() : '';
@@ -52,6 +61,11 @@ export async function POST(request) {
   if (!allowedIndustries.has(industry)) {
     return json({ error: 'Please select a valid industry and try again.' }, 400);
   }
+
+  const safeName = escapeHtml(name);
+  const safeBusiness = escapeHtml(business);
+  const safeWhatsapp = escapeHtml(whatsapp);
+  const safeIndustry = escapeHtml(industry);
 
   const sheetWebhookUrl = process.env.GOOGLE_SHEET_WEBHOOK_URL || process.env.GOOGLE_SHEETS_AUDIT_URL;
   const to = process.env.AXIVY_LEADS_TO;
@@ -151,7 +165,7 @@ export async function POST(request) {
       'The Axivy Team',
       'Digital Solutions & Automation',
       'Doha, Qatar',
-      'https://axivy.io',
+      SITE_URL,
     ].join('\n');
 
     const clientHtml = `
@@ -162,18 +176,18 @@ export async function POST(request) {
         </div>
 
         <h2 style="color: #2b371b; margin: 0 0 16px; font-size: 21px; line-height: 1.25;">We have received your Free Audit request</h2>
-        <p style="margin: 0 0 14px; font-size: 15px;">Hi ${name},</p>
+        <p style="margin: 0 0 14px; font-size: 15px;">Hi ${safeName},</p>
         <p style="margin: 0 0 16px; font-size: 14px; color: #333; line-height: 1.65;">
-          Thank you for requesting a free systems and workflow audit for <strong>${business}</strong>.
+          Thank you for requesting a free systems and workflow audit for <strong>${safeBusiness}</strong>.
         </p>
         <p style="margin: 0 0 16px; font-size: 14px; color: #333; line-height: 1.65;">
           Our team is currently analyzing your current setup and challenges. We will prepare an honest, practical breakdown of what is working, where you might be losing potential leads, and where systems or automation will help you most.
         </p>
 
         <div style="background: #f7f8f4; border-left: 4px solid #788e4c; padding: 14px 18px; margin: 20px 0; border-radius: 6px;">
-          <p style="margin: 3px 0; font-size: 13px; color: #444;"><strong style="color: #171717;">Business:</strong> ${business}</p>
-          <p style="margin: 3px 0; font-size: 13px; color: #444;"><strong style="color: #171717;">WhatsApp:</strong> ${whatsapp}</p>
-          <p style="margin: 3px 0; font-size: 13px; color: #444;"><strong style="color: #171717;">Industry / Solution:</strong> ${industry || 'Not specified'}</p>
+          <p style="margin: 3px 0; font-size: 13px; color: #444;"><strong style="color: #171717;">Business:</strong> ${safeBusiness}</p>
+          <p style="margin: 3px 0; font-size: 13px; color: #444;"><strong style="color: #171717;">WhatsApp:</strong> ${safeWhatsapp}</p>
+          <p style="margin: 3px 0; font-size: 13px; color: #444;"><strong style="color: #171717;">Industry / Solution:</strong> ${safeIndustry}</p>
         </div>
 
         <div style="background: #f2f5ec; border: 1px solid #dbe4ce; border-radius: 8px; padding: 16px; margin: 22px 0;">
@@ -194,8 +208,8 @@ export async function POST(request) {
 
         <div style="margin-top: 28px; padding-top: 18px; border-top: 1px solid #e8e8e3; font-size: 12px; color: #777; line-height: 1.6;">
           <p style="margin: 0 0 4px;"><strong style="color: #333;">Axivy Digital Solutions</strong> — Doha, Qatar</p>
-          <p style="margin: 0 0 4px;">Phone / WhatsApp: <a href="https://wa.me/97471083700" style="color: #69784e; text-decoration: none;">+974 7108 3700</a> | Web: <a href="https://axivy.io" style="color: #69784e; text-decoration: none;">axivy.io</a></p>
-          <p style="margin: 6px 0 0; color: #999; font-size: 11px;">You received this confirmation because a free audit was requested on axivy.io.</p>
+          <p style="margin: 0 0 4px;">Phone / WhatsApp: <a href="https://wa.me/97471083700" style="color: #69784e; text-decoration: none;">+974 7108 3700</a> | Web: <a href="${SITE_URL}" style="color: #69784e; text-decoration: none;">${SITE_HOST}</a></p>
+          <p style="margin: 6px 0 0; color: #999; font-size: 11px;">You received this confirmation because a free audit was requested on ${SITE_HOST}.</p>
         </div>
       </div>
     `;

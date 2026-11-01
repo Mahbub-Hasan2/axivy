@@ -20,7 +20,7 @@ function trackEvent(eventName, service) {
 
 export default function ServiceCardActions({ service, number, whatsappHref }) {
   const [isOpen, setIsOpen] = useState(false);
-  const [fields, setFields] = useState({ name: '', email: '', company: '', message: '' });
+  const [fields, setFields] = useState({ name: '', email: '', company: '', message: '', website: '' });
   const [status, setStatus] = useState('');
   const [statusType, setStatusType] = useState('success');
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -75,7 +75,7 @@ export default function ServiceCardActions({ service, number, whatsappHref }) {
 
   function openQuoteForm() {
     if (autoCloseTimerRef.current) clearTimeout(autoCloseTimerRef.current);
-    setFields({ name: '', email: '', company: '', message: `I'm interested in ${service}` });
+    setFields({ name: '', email: '', company: '', message: `I'm interested in ${service}`, website: '' });
     setStatus('');
     setStatusType('success');
     setIsSubmitted(false);
@@ -112,7 +112,7 @@ export default function ServiceCardActions({ service, number, whatsappHref }) {
       trackEvent('quote_submitted', service);
       
       // Clear form inputs
-      setFields({ name: '', email: '', company: '', message: '' });
+      setFields({ name: '', email: '', company: '', message: '', website: '' });
 
       // Automatically close success modal after 4 seconds
       if (autoCloseTimerRef.current) clearTimeout(autoCloseTimerRef.current);
@@ -140,7 +140,7 @@ export default function ServiceCardActions({ service, number, whatsappHref }) {
     </div>
 
     {isOpen && <div className="quote-overlay" onMouseDown={event => { if (event.target === event.currentTarget) closeDialog(); }}>
-      <section ref={dialogRef} className="quote-dialog" role="dialog" aria-modal="true" aria-labelledby="quote-dialog-title">
+      <section ref={dialogRef} className="quote-dialog" role="dialog" aria-modal="true" aria-labelledby="quote-dialog-title" aria-describedby="quote-dialog-description">
         {isSubmitted ? (
           <div style={{ textAlign: 'center', padding: '16px 12px 10px' }}>
             <div style={{
@@ -191,6 +191,7 @@ export default function ServiceCardActions({ service, number, whatsappHref }) {
               <label>Email<input name="email" type="email" autoComplete="email" required maxLength={254} value={fields.email} onChange={event => setFields(current => ({ ...current, email: event.target.value }))} /></label>
               <label className="span-two">Company / Business name (optional)<input name="company" autoComplete="organization" maxLength={160} value={fields.company} onChange={event => setFields(current => ({ ...current, company: event.target.value }))} /></label>
               <label className="span-two">Message (optional)<textarea name="message" rows={3} maxLength={2000} value={fields.message} onChange={event => setFields(current => ({ ...current, message: event.target.value }))} /></label>
+              <input className="hp-field" type="text" name="website" tabIndex={-1} autoComplete="off" aria-hidden="true" value={fields.website} onChange={event => setFields(current => ({ ...current, website: event.target.value }))} />
               <button className="btn btn-primary span-two" type="submit" disabled={isSubmitting}>{isSubmitting ? 'Sending…' : 'Send Request'} <ArrowUpRight size={15} aria-hidden="true" /></button>
               {status && <p className={`status-message span-two ${statusType === 'error' ? 'status-message-error' : ''}`} role="status" aria-live="polite">{status}</p>}
             </form>
