@@ -259,6 +259,16 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
 .legal-contact h2{margin-bottom:8px}
 .legal-contact a{color:var(--brand-green-dark);font-weight:700;text-decoration:underline;text-underline-offset:3px}
 
+.mobile-sticky-bar{display:none}
+@media(max-width:700px){
+  main{padding-bottom:calc(57px + env(safe-area-inset-bottom))}
+  .whatsapp-float{display:none!important}
+  .mobile-sticky-bar{position:fixed;z-index:60;right:0;bottom:0;left:0;display:grid;grid-template-columns:1fr 1fr;padding-bottom:env(safe-area-inset-bottom);border-top:1px solid var(--line);background:rgba(246,251,244,.97);box-shadow:0 -6px 16px rgba(17,26,35,.08)}
+  .mobile-sticky-bar a{display:flex;min-height:57px;align-items:center;justify-content:center;color:var(--ink);font-size:14px;font-weight:750}
+  .mobile-sticky-bar a+a{border-left:1px solid var(--line)}
+  .mobile-sticky-bar a:first-child{background:var(--lime)}
+}
+
 .contact-next{display:grid;gap:10px;margin:10px 0 0;padding-left:20px;color:var(--muted);font-size:13px;line-height:1.6}
 .contact-next li::marker{color:var(--brand-green-dark);font-weight:800}
 .insight-meta{display:flex;flex-wrap:wrap;align-items:center;gap:7px;margin:auto 0 0;color:#5a7562;font-size:10px;font-weight:650;letter-spacing:.02em}

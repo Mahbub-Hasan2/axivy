@@ -82,6 +82,13 @@ export function WhatsAppFloat() {
   return visible ? <a className="whatsapp-float" href={whatsappUrl("Hi Axivy, I'd like to discuss a business solution.")} target="_blank" rel="noreferrer" aria-label="Chat with Axivy on WhatsApp"><span aria-hidden><MessageCircle size={22} strokeWidth={2}/></span><span className="whatsapp-float-label">WhatsApp</span></a> : null;
 }
 
+export function MobileStickyBar() {
+  return <nav className="mobile-sticky-bar" aria-label="Quick actions">
+    <Link href="/services#request-audit">Free audit</Link>
+    <a href={whatsappUrl("Hi Axivy, I'd like to discuss a business solution.")} target="_blank" rel="noreferrer">WhatsApp</a>
+  </nav>;
+}
+
 export function Layout({ children }) {
   return <>
     <a href="#main-content" className="skip-link">Skip to main content</a>
@@ -89,5 +96,6 @@ export function Layout({ children }) {
     <main id="main-content" tabIndex={-1}>{children}</main>
     <Footer />
     <WhatsAppFloat />
+    <MobileStickyBar />
   </>;
 }
