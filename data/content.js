@@ -175,7 +175,7 @@ export const solutions = [
 ];
 export const cases=[
   ['gari-qatar','Gari Qatar','Automotive commerce','Real Business Project','An online car accessories business built around product discovery, WhatsApp-based ordering and delivery.',['Browse products','Choose an item','Ask on WhatsApp','Arrange delivery']],
-  ['sahara','Sahara','Business website','Web Development Project','A professional business website focused on clear communication, modern presentation and a better digital experience.',['Discover the business','Explore services','Review key information','Make an enquiry']],
+  ['sahara','Sahara','Business website','Concept / Demo','A concept for a business website focused on clear communication, modern presentation and an easy enquiry path.',['Discover the business','Explore services','Review key information','Make an enquiry']],
   ['auto-workshop-system','Auto Workshop System','Business automation','Concept / Demo','A concept for managing customer enquiries, service bookings, vehicle information and workshop follow-ups in one system.',['Enquiry','Booking','Vehicle information','Service update','Follow-up']],
   ['restaurant-management-system','Restaurant Management System','Operations','Concept / Demo','A demo concept for managing customer communication and day-to-day restaurant operations.',['Customer request','Order details','Kitchen coordination','Customer update','Feedback']],
 ];
@@ -218,7 +218,7 @@ export const caseDetails={
     focus:'A professional website should answer the first questions quickly, then make the next step obvious. The design keeps the business information in front and the contact action easy to find.',
     timeframe:'Web development project',
     role:'Website design and build',
-    note:'This page describes the project scope and approach. It does not claim traffic, ranking or revenue results.'
+    note:'This concept / demo describes a possible project scope and approach. It does not claim traffic, ranking or revenue results.'
   },
   'auto-workshop-system':{
     heading:'One place to keep enquiries, bookings and vehicle details connected.',
