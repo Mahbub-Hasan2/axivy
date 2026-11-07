@@ -8,6 +8,7 @@ export default function ContactForm() {
   const [statusType, setStatusType] = useState('success');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [whatsAppMessage, setWhatsAppMessage] = useState('');
 
   async function handleSubmit(event) {
     event.preventDefault();
@@ -30,7 +31,6 @@ export default function ContactForm() {
       `Need help with: ${service}`,
       `Message: ${message || 'Not provided'}`,
     ];
-    window.open(whatsappUrl(lines.join('\n')), '_blank', 'noopener,noreferrer');
     setIsSubmitting(true);
     setStatus('');
 
@@ -44,7 +44,8 @@ export default function ContactForm() {
       if (!response.ok) throw new Error(result.error || 'We could not send your enquiry. Please try again.');
 
       setStatusType('success');
-      setStatus('Your enquiry was sent to Axivy. You can also review and send the WhatsApp message that opened.');
+      setStatus('Your enquiry was sent to Axivy.');
+      setWhatsAppMessage(lines.join('\n'));
       setIsSubmitted(true);
       form.reset();
       setTimeout(() => {
@@ -67,6 +68,8 @@ export default function ContactForm() {
     <label className="span-two">Message<textarea name="message" maxLength={2000} placeholder="Tell us a little about your business and the challenge." /></label>
     <input className="hp-field" type="text" name="website" tabIndex={-1} autoComplete="off" aria-hidden="true" />
     <button className="btn btn-primary span-two" type="submit" disabled={isSubmitting} style={{justifySelf:'start'}}>{isSubmitting ? 'Sending…' : isSubmitted ? 'Enquiry Sent ✓' : 'Send Enquiry'} <span aria-hidden>→</span></button>
+    <p className="audit-form-note span-two">We only use your details to reply to this request.</p>
     {status && <p role="status" aria-live="polite" className={`status-message span-two ${statusType === 'error' ? 'status-message-error' : ''}`}>{status}</p>}
+    {isSubmitted && <a className="btn btn-secondary span-two" href={whatsappUrl(whatsAppMessage)} target="_blank" rel="noreferrer" style={{justifySelf:'start'}}>Continue on WhatsApp <span aria-hidden>↗</span></a>}
   </form>;
 }
