@@ -31,13 +31,13 @@ export function Header() {
         <Image src="/images/axivy-logo-transparent.png" alt="Axivy Digital Solutions & Automation" width={1774} height={888} sizes="170px" priority />
       </Link>
       <nav className="desktop-nav" aria-label="Main navigation">{nav.map(([label, href]) => <Link href={href} key={href}>{label}</Link>)}<Link href="/insights">Insights</Link></nav>
-      <Link href="/contact" className="btn btn-primary header-cta">Let's Talk <span aria-hidden>↗</span></Link>
+      <Link href="/services#request-audit" className="btn btn-primary header-cta">Get a free audit <span aria-hidden>↗</span></Link>
       <button className="mobile-menu-button" type="button" aria-label={open ? 'Close navigation' : 'Open navigation'} aria-expanded={open} aria-controls="mobile-navigation" onClick={() => setOpen(value => !value)}>{open ? '×' : '☰'}</button>
     </div>
     {open && <nav className="mobile-nav" id="mobile-navigation" aria-label="Mobile navigation">
       {nav.map(([label, href]) => <Link href={href} key={href} onClick={() => setOpen(false)}>{label}</Link>)}
       <Link href="/insights" onClick={() => setOpen(false)}>Insights</Link>
-      <Link href="/contact" className="btn btn-primary" onClick={() => setOpen(false)}>Let's Talk <span aria-hidden>↗</span></Link>
+      <Link href="/services#request-audit" className="btn btn-primary" onClick={() => setOpen(false)}>Get a free audit <span aria-hidden>↗</span></Link>
     </nav>}
   </header>;
 }
