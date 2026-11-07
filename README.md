@@ -1,6 +1,7 @@
 # Axivy
 
-Axivy's digital solutions and automation website, built with Next.js App Router, React, JavaScript, and Tailwind CSS.
+Axivy builds websites and WhatsApp enquiry systems for businesses in Qatar.
+Built with Next.js App Router, React, JavaScript, and Tailwind CSS.
 
 ## Development
 
