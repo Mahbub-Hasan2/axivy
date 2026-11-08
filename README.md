@@ -32,7 +32,7 @@ Copy `.env.example` to `.env.local` and fill in the values you need.
 - `GOOGLE_SHEET_WEBHOOK_URL` — optional Google Apps Script web app URL for storing leads in a sheet.
 - `NEXT_PUBLIC_SCHEDULING_LINK` — optional Calendly or Cal.com booking link shown after an audit request.
 
-Keep real credentials in `.env.local` or the hosting provider's environment settings. Never commit them.
+Keep real credentials in `.env.local` or the hosting provider's environment settings. Do not commit them.
 
 ## Content and contact details
 

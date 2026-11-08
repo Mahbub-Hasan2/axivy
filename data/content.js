@@ -125,7 +125,7 @@ export const solutions = [
     ],
     whyAxivy: 'Axivy is founder-led, so your setup is planned and built around the way your business handles orders, enquiries and repeat customers.',
     benefits: [
-      'Orders and enquiries are never missed',
+      'Orders and enquiries are easier to track',
       'Less manual back-and-forth during busy hours',
       'A clearer picture of customer demand',
       'A smoother, more professional customer experience',
