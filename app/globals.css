@@ -306,3 +306,4 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
   .legal-content p{font-size:14px;line-height:1.75}
   .legal-contact{padding:20px}
 }
+ .media-figure{margin:0}.media-figure-image{display:block;width:100%;height:auto;border-radius:14px}.media-figure figcaption{margin-top:.65rem;color:var(--muted);font-size:.875rem;line-height:1.5}.media-gallery{display:grid;gap:1rem;grid-template-columns:repeat(auto-fit,minmax(min(100%,18rem),1fr))}.browser-frame{overflow:hidden;border:1px solid var(--line);border-radius:16px;background:#fff}.browser-frame-bar{display:flex;gap:6px;padding:10px 12px;background:#111a23}.browser-frame-bar i{width:8px;height:8px;border-radius:50%;background:#91df2e}.phone-frame{max-width:22rem;margin:auto;padding:10px;border:8px solid #111a23;border-radius:28px;background:#111a23}.phone-frame-speaker{width:4rem;height:5px;margin:0 auto 8px;border-radius:999px;background:#e1f4dc}
