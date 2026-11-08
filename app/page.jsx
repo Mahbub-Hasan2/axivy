@@ -10,11 +10,11 @@ import { PackageCards, packageSteps, PricingNotes } from '../components/Packages
 
 export const metadata = {
   title: { absolute: 'Axivy | Website & WhatsApp Enquiry Systems in Qatar' },
-  description: 'Axivy builds websites and WhatsApp enquiry systems for small businesses in Qatar, so every customer message is saved, answered and followed up. Packages from QAR 2,500. Free audit.',
+  description: 'Axivy builds websites, WhatsApp enquiry systems and practical workflows for small businesses in Qatar. Packages start from QAR 2,500; request a free audit.',
   alternates: { canonical: '/' },
   openGraph: {
     title: 'Axivy | Website & WhatsApp Enquiry Systems in Qatar',
-    description: 'Axivy builds websites and WhatsApp enquiry systems for small businesses in Qatar, so every customer message is saved, answered and followed up. Packages from QAR 2,500. Free audit.',
+    description: 'Axivy builds websites, WhatsApp enquiry systems and practical workflows for small businesses in Qatar. Packages start from QAR 2,500; request a free audit.',
     url: SITE_URL,
     siteName: 'Axivy',
     locale: 'en_QA',
@@ -24,7 +24,7 @@ export const metadata = {
   twitter: {
     card: 'summary_large_image',
     title: 'Axivy | Website & WhatsApp Enquiry Systems in Qatar',
-    description: 'Axivy builds websites and WhatsApp enquiry systems for small businesses in Qatar, so every customer message is saved, answered and followed up. Packages from QAR 2,500. Free audit.',
+    description: 'Axivy builds websites, WhatsApp enquiry systems and practical workflows for small businesses in Qatar. Packages start from QAR 2,500; request a free audit.',
     images: ['/og-image.png'],
   },
 };
