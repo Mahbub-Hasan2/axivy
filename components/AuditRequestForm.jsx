@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { whatsappUrl } from '../data/contact';
 
 const schedulingLink = process.env.NEXT_PUBLIC_SCHEDULING_LINK || null;
@@ -14,12 +14,21 @@ const initialFields = {
   website: '',
 };
 
-export default function AuditRequestForm({ industry }) {
+const packageByHash = { '#audit-starter': 'Starter (Enquiry Ready)', '#audit-growth': 'Growth (Enquiry to Booking)', '#audit-care': 'Monthly Care' };
+
+export default function AuditRequestForm({ industry = 'Any other business', packageChoice = false, title }) {
   const [fields, setFields] = useState(initialFields);
   const [status, setStatus] = useState('');
   const [statusType, setStatusType] = useState('success');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [selectedPackage, setSelectedPackage] = useState('Not sure yet');
+
+  useEffect(() => {
+    const updatePackage = () => setSelectedPackage(packageByHash[window.location.hash] || 'Not sure yet');
+    updatePackage(); window.addEventListener('hashchange', updatePackage);
+    return () => window.removeEventListener('hashchange', updatePackage);
+  }, []);
 
   async function handleSubmit(event) {
     event.preventDefault();
@@ -30,7 +39,7 @@ export default function AuditRequestForm({ industry }) {
       const response = await fetch('/api/audit', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ...fields, industry }),
+        body: JSON.stringify({ ...fields, challenge: packageChoice ? `[Package interest: ${selectedPackage}]${fields.challenge ? ` ${fields.challenge}` : ''}` : fields.challenge, industry }),
       });
 
       let result = null;
@@ -71,7 +80,7 @@ export default function AuditRequestForm({ industry }) {
     <div className="shell audit-form-layout">
       <div className="audit-intro">
         <p className="eyebrow">A simple first step</p>
-        <h2 className="section-heading">Get a free {industry} workflow audit.</h2>
+        <h2 className="section-heading">{title || `Get a free ${industry} workflow audit.`}</h2>
         <p className="section-copy">Share just three details. We’ll review your current customer journey and send a practical next-step recommendation—no obligation or generic sales pitch.</p>
         <ul className="audit-promises">
           <li><strong>2 minutes</strong> to request</li>
@@ -83,6 +92,7 @@ export default function AuditRequestForm({ industry }) {
         <label>Name<input name="name" autoComplete="name" required maxLength={120} value={fields.name} onChange={event => handleChange('name', event.target.value)} /></label>
         <label>Business name<input name="business" autoComplete="organization" required maxLength={160} value={fields.business} onChange={event => handleChange('business', event.target.value)} /></label>
         <label className="span-two">WhatsApp number<input name="whatsapp" type="tel" autoComplete="tel" required maxLength={40} placeholder="So we can send your next steps" value={fields.whatsapp} onChange={event => handleChange('whatsapp', event.target.value)} /></label>
+        {packageChoice && <label className="span-two">Which package interests you?<select value={selectedPackage} onChange={event => setSelectedPackage(event.target.value)}><option>Not sure yet</option><option>Starter (Enquiry Ready)</option><option>Growth (Enquiry to Booking)</option><option>Monthly Care</option></select></label>}
         <details className="audit-more-fields span-two">
           <summary>Add more context (optional)</summary>
           <div className="audit-more-fields-content">
