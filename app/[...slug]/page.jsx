@@ -8,9 +8,12 @@ import { Layout } from '../../components/SiteShell';
 import ContactForm from '../../components/ContactForm';
 import AuditRequestForm from '../../components/AuditRequestForm';
 import ServiceCardActions from '../../components/ServiceCardActions';
+import { AddOns, NotSureBlock, PackageCards, PackageComparison, PackageFaq, packageSteps, PricingNotes } from '../../components/Packages';
 import { AXIVY_LOCATION, AXIVY_PHONE, AXIVY_WHATSAPP, whatsappUrl } from '../../data/contact';
 import { articles, businessSituations, caseDetails, cases, demoVideoUrl, services, solutions } from '../../data/content';
 import { DEFAULT_OG_IMAGE, SITE_URL } from '../../lib/site';
+import { packageFaqs, packages } from '../../data/packages';
+import { searchPages } from '../../data/searchPages';
 
 const Arrow = () => <span aria-hidden>↗</span>;
 
@@ -23,8 +26,8 @@ const insightMetaTitles = {
 
 const staticPageMetadata = {
   services: {
-    title: 'Digital Services in Qatar',
-    description: 'Websites, lead management, CRM, WhatsApp systems, business automation and AI solutions for Qatar businesses, with clear scope and indicative QAR pricing.',
+    title: 'Website & WhatsApp Packages Qatar',
+    description: 'Website and WhatsApp enquiry packages in Qatar: Starter from QAR 2,500, Growth from QAR 4,500, and Monthly Care from QAR 300 per month.',
     canonical: '/services',
   },
   solutions: {
@@ -74,6 +77,11 @@ const staticPageMetadata = {
 function resolvePage(slug) {
   if (!Array.isArray(slug) || slug.length === 0 || slug.length > 2) notFound();
   const [page, id] = slug;
+
+  if (!id) {
+    const searchPage = searchPages.find(item => item.slug === page);
+    if (searchPage) return { kind: 'search-landing', data: { searchPage }, meta: { title: searchPage.title, description: searchPage.description, canonical: `/${searchPage.slug}` } };
+  }
 
   if (id) {
     if (page === 'services') {
@@ -145,6 +153,7 @@ export async function generateStaticParams() {
     ...solutions.map(({ slug }) => ({ slug: ['solutions', slug] })),
     ...cases.map(([slug]) => ({ slug: ['case-studies', slug] })),
     ...articles.map(({ slug }) => ({ slug: ['insights', slug] })),
+    ...searchPages.map(({ slug }) => ({ slug: [slug] })),
   ];
 }
 
@@ -211,8 +220,25 @@ function CardGrid({ items }) {
     <h2>{item.title}</h2>
     <p className="service-offer-description">{item.description}</p>
     <div className="service-offer-includes"><p>What’s included</p><ul className="service-included">{item.included.map(point => <li key={point}>{point}</li>)}</ul></div>
-    <div className="service-offer-bottom"><div><span className="service-price-label">Indicative project range</span><strong className="service-price-range">{item.priceRange}</strong><span className="service-price-start">Starting from {item.startingPrice}</span></div><Link className="service-details-link" href={`/services/${item.slug}`}>Explore details <Arrow/></Link></div>
+    <div className="service-offer-bottom"><Link className="service-details-link" href={`/services/${item.slug}`}>Explore details <Arrow/></Link></div>
   </article>)}</div>;
+}
+
+function ServicesPackagesPage() {
+  const breadcrumb = [{ label: 'Home', href: '/' }, { label: 'Services' }];
+  const problems = [['Enquiries get answered late', 'When a message has no owner or next step, a customer can wait longer than expected.'], ['Details are scattered', 'Useful context can end up split between chats, forms, inboxes and notes.'], ['Follow-ups slip', 'Without a reminder or shared list, a promising enquiry can be hard to return to.'], ['You look smaller than you are', 'Clear pages and a consistent contact path help customers understand how to reach you.']];
+  return <><JsonLd data={{ '@context': 'https://schema.org', '@graph': [breadcrumbSchema(breadcrumb), { '@type': 'FAQPage', mainEntity: packageFaqs.map(([name, text]) => ({ '@type': 'Question', name, acceptedAnswer: { '@type': 'Answer', text } })) }, ...packages.map(pkg => ({ '@type': 'Service', name: pkg.name, provider: { '@id': `${SITE_URL}/#organization` }, areaServed: { '@type': 'Country', name: 'Qatar' }, offers: { '@type': 'Offer', priceCurrency: 'QAR', description: pkg.price } }))] }} />
+    <PageHero eyebrow="Services · Doha, Qatar" title="Simple packages that make sure every customer enquiry is answered." copy="Pick a package, or start with a free audit and we will recommend the smallest one that solves your problem. Clear deliverables, fixed prices, no jargon." breadcrumb={breadcrumb}/>
+    <section className="page-content"><div className="shell"><div className="plain-grid">{problems.map(([title, text]) => <article className="plain-card" key={title}><h2>{title}</h2><p>{text}</p></article>)}</div></div></section>
+    <section className="page-content" style={{ paddingTop: 0 }}><div className="shell"><PackageCards/><PricingNotes/></div></section>
+    <section className="page-content" style={{ paddingTop: 0 }}><div className="shell"><p className="eyebrow">Compare packages</p><h2 className="section-heading">What each package includes.</h2><PackageComparison/></div></section>
+    <section className="page-content" style={{ paddingTop: 0 }}><div className="shell"><p className="eyebrow">Add-ons</p><h2 className="section-heading">Extra help where it fits.</h2><AddOns/></div></section>
+    <section className="page-content" style={{ paddingTop: 0 }}><div className="shell"><p className="eyebrow">How it works</p><h2 className="section-heading">A straightforward way to get started.</h2><ol className="plain-grid">{packageSteps.map(([title, text], index) => <li className="plain-card" key={title}><span className="service-number">{String(index + 1).padStart(2, '0')}</span><h3>{title}</h3><p>{text}</p></li>)}</ol><p className="section-copy" style={{ marginTop: 18 }}>Pay 50% to start and 50% on delivery.</p></div></section>
+    <section className="page-content" style={{ paddingTop: 0 }}><div className="shell"><p className="eyebrow">What is inside the packages</p><h2 className="section-heading">Services combined around your enquiry journey.</h2><CardGrid items={services}/></div></section>
+    <section className="page-content" style={{ paddingTop: 0 }}><div className="shell"><NotSureBlock/></div></section>
+    <section className="page-content" style={{ paddingTop: 0 }}><div className="shell"><p className="eyebrow">Package questions</p><h2 className="section-heading">Useful answers before you choose.</h2><PackageFaq/></div></section>
+    <span id="audit-starter" /><span id="audit-growth" /><span id="audit-care" /><AuditRequestForm industry="Any other business" packageChoice title="Get your free audit and a fixed quote." />
+  </>;
 }
 
 function ServiceDetail({ service, index }) {
@@ -243,12 +269,6 @@ function ServiceDetail({ service, index }) {
           url: `${SITE_URL}/services/${service.slug}`,
           provider: { '@id': `${SITE_URL}/#organization` },
           areaServed: { '@type': 'Country', name: 'Qatar' },
-          offers: {
-            '@type': 'Offer',
-            priceCurrency: 'QAR',
-            description: `${service.priceRange} indicative project range`,
-            url: `${SITE_URL}/services/${service.slug}`,
-          },
         },
       ],
     }} />
@@ -261,7 +281,7 @@ function ServiceDetail({ service, index }) {
       <div><p className="eyebrow">Clear scope</p><h2 className="section-heading">What you can expect to receive.</h2><p className="section-copy">We confirm the exact scope together before work begins. A typical {service.title.toLowerCase()} engagement can include:</p></div>
       <ol className="service-deliverable-list">{service.included.map((item, itemIndex) => <li key={item}><span>{String(itemIndex + 1).padStart(2, '0')}</span><p>{item}</p></li>)}</ol>
     </div></section>
-    <section className="service-pricing-section"><div className="shell service-pricing-panel"><div><p className="eyebrow">Planning estimate</p><h2>{service.priceRange}</h2><p>Projects start from {service.startingPrice}. This is an indicative QAR range, not a fixed quote. Final pricing depends on scope, integrations, content and any third-party subscriptions.</p></div><div className="service-pricing-actions"><ServiceCardActions service={service.title} number={String(index + 1).padStart(2, '0')} whatsappHref={whatsappHref}/></div></div></section>
+    <section className="service-pricing-section"><div className="shell service-pricing-panel"><div><p className="eyebrow">How it fits our packages</p><h2>{service.inPackages}</h2><p>Choose a package for a clear starting point, then agree the final scope and fixed quote before work begins.</p></div><div className="service-pricing-actions"><Link className="btn btn-primary" href="/services">Compare packages <Arrow/></Link><a className="btn btn-secondary" href={whatsappHref} target="_blank" rel="noreferrer">Ask on WhatsApp <Arrow/></a></div></div></section>
     <section className="service-next-step"><div className="shell service-next-step-inner"><div><p className="eyebrow">Start with a conversation</p><h2>Let’s scope the right next step.</h2><p>Tell us what you are trying to improve. We’ll discuss your workflow and help clarify a practical scope.</p></div><div className="service-next-step-actions"><a className="btn btn-primary" href={whatsappHref} target="_blank" rel="noreferrer">Discuss on WhatsApp <Arrow/></a><Link className="btn btn-secondary" href="/contact">Send an enquiry <Arrow/></Link></div></div></section>
   </>;
 }
@@ -558,7 +578,7 @@ export default async function Page({ params }) {
   } else if (resolved.kind === 'insight-detail') {
     content = <InsightDetail article={resolved.data.article}/>;
   } else if (resolved.kind === 'services') {
-    content = <><PageHero eyebrow="Services · Doha, Qatar" title="Choose what you want to make easier." copy="See the services that can help you handle enquiries, customer details and repeat tasks."/><section className="service-index-intro"><div className="shell service-index-intro-inner"><span>01 — 06</span><p>Choose a service to see what it can include and its estimated price range.</p><span className="service-estimate-note">Estimates in QAR</span></div></section><section className="page-content service-index-content"><div className="shell"><CardGrid items={services}/><p className="service-pricing-disclaimer">Pricing shown is an indicative project range, not a fixed quotation. Third-party software, subscriptions, paid APIs and hosting are not included unless specifically stated in the final scope.</p></div></section></>;
+    content = <ServicesPackagesPage/>;
   } else if (resolved.kind === 'solutions') {
     content = <><PageHero eyebrow="Solutions" title="Solutions for any business" copy="Start with the customer or admin problem you want to make easier."/><section className="page-content"><div className="shell"><SituationCards/><p className="section-copy" style={{ marginTop: 24 }}>Works for any business that gets enquiries, for example workshops, cafés, cleaning companies, shops and service providers.</p></div></section><section className="page-content" style={{ paddingTop: 0 }}><div className="shell"><p className="eyebrow">Examples</p><h2 className="section-heading">Examples for specific types of business.</h2><p className="section-copy">These pages show how the same services can fit different businesses.</p><SolutionList/></div></section></>;
   } else if (resolved.kind === 'case-studies') {

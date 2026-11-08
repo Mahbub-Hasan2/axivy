@@ -8,6 +8,7 @@ export default function ContactForm() {
   const [statusType, setStatusType] = useState('success');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [showSentLabel, setShowSentLabel] = useState(false);
   const [whatsAppMessage, setWhatsAppMessage] = useState('');
 
   async function handleSubmit(event) {
@@ -47,9 +48,10 @@ export default function ContactForm() {
       setStatus('Your enquiry was sent to Axivy.');
       setWhatsAppMessage(lines.join('\n'));
       setIsSubmitted(true);
+      setShowSentLabel(true);
       form.reset();
       setTimeout(() => {
-        setIsSubmitted(false);
+        setShowSentLabel(false);
       }, 4000);
     } catch (error) {
       setStatusType('error');
@@ -59,7 +61,7 @@ export default function ContactForm() {
     }
   }
 
-  return <form onSubmit={handleSubmit} className="contact-form">
+  return <form onSubmit={handleSubmit} onChange={() => { if (isSubmitted) setIsSubmitted(false); }} onReset={() => setIsSubmitted(false)} className="contact-form">
     <label>Name<input name="name" required maxLength={120} autoComplete="name" placeholder="Your name" /></label>
     <label>Business Name<input name="business" maxLength={160} autoComplete="organization" placeholder="Business name" /></label>
     <label>WhatsApp Number<input name="phone" type="tel" maxLength={40} autoComplete="tel" placeholder="Your number" /></label>
@@ -67,7 +69,7 @@ export default function ContactForm() {
     <label className="span-two">What do you need help with?<select name="service" defaultValue="Not Sure">{['Website','Lead Management','CRM','WhatsApp','Automation','AI','Analytics','Custom Solution','Not Sure'].map(x=><option key={x}>{x}</option>)}</select></label>
     <label className="span-two">Message<textarea name="message" maxLength={2000} placeholder="Tell us a little about your business and the challenge." /></label>
     <input className="hp-field" type="text" name="website" tabIndex={-1} autoComplete="off" aria-hidden="true" />
-    <button className="btn btn-primary span-two" type="submit" disabled={isSubmitting} style={{justifySelf:'start'}}>{isSubmitting ? 'Sending…' : isSubmitted ? 'Enquiry Sent ✓' : 'Send Enquiry'} <span aria-hidden>→</span></button>
+    <button className="btn btn-primary span-two" type="submit" disabled={isSubmitting} style={{justifySelf:'start'}}>{isSubmitting ? 'Sending…' : showSentLabel ? 'Enquiry Sent ✓' : 'Send Enquiry'} <span aria-hidden>→</span></button>
     <p className="audit-form-note span-two">We only use your details to reply to this request.</p>
     {status && <p role="status" aria-live="polite" className={`status-message span-two ${statusType === 'error' ? 'status-message-error' : ''}`}>{status}</p>}
     {isSubmitted && <a className="btn btn-secondary span-two" href={whatsappUrl(whatsAppMessage)} target="_blank" rel="noreferrer" style={{justifySelf:'start'}}>Continue on WhatsApp <span aria-hidden>↗</span></a>}

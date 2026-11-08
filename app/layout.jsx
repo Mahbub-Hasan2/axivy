@@ -66,7 +66,7 @@ const organizationSchema = {
       image: `${SITE_URL}/og-image.png`,
       description: DEFAULT_DESCRIPTION,
       telephone: AXIVY_PHONE,
-      priceRange: 'QAR 1,500–20,000',
+      priceRange: 'From QAR 2,500',
       areaServed: { '@type': 'Country', name: 'Qatar' },
       address: { '@type': 'PostalAddress', addressLocality: 'Doha', addressCountry: 'QA' },
       founder: { '@type': 'Person', name: 'Munir Uddin Mahbub' },

@@ -6,14 +6,15 @@ import { Layout } from '../components/SiteShell';
 import { businessSituations, cases, demoVideoUrl, services } from '../data/content';
 import { whatsappUrl } from '../data/contact';
 import { DEFAULT_OG_IMAGE, SITE_URL } from '../lib/site';
+import { PackageCards, packageSteps, PricingNotes } from '../components/Packages';
 
 export const metadata = {
-  title: { absolute: 'Axivy | Digital Solutions & Automation for Qatar Businesses' },
-  description: 'Axivy helps Qatar businesses build websites, CRM systems, WhatsApp workflows and practical automation to capture enquiries, improve customer management and reduce repetitive work.',
+  title: { absolute: 'Axivy | Website & WhatsApp Enquiry Systems in Qatar' },
+  description: 'Axivy builds websites and WhatsApp enquiry systems for small businesses in Qatar, so every customer message is saved, answered and followed up. Packages from QAR 2,500. Free audit.',
   alternates: { canonical: '/' },
   openGraph: {
-    title: 'Axivy | Digital Solutions & Automation for Qatar Businesses',
-    description: 'Axivy helps Qatar businesses build websites, CRM systems, WhatsApp workflows and practical automation to capture enquiries, improve customer management and reduce repetitive work.',
+    title: 'Axivy | Website & WhatsApp Enquiry Systems in Qatar',
+    description: 'Axivy builds websites and WhatsApp enquiry systems for small businesses in Qatar, so every customer message is saved, answered and followed up. Packages from QAR 2,500. Free audit.',
     url: SITE_URL,
     siteName: 'Axivy',
     locale: 'en_QA',
@@ -22,8 +23,8 @@ export const metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Axivy | Digital Solutions & Automation for Qatar Businesses',
-    description: 'Axivy helps Qatar businesses build websites, CRM systems, WhatsApp workflows and practical automation to capture enquiries, improve customer management and reduce repetitive work.',
+    title: 'Axivy | Website & WhatsApp Enquiry Systems in Qatar',
+    description: 'Axivy builds websites and WhatsApp enquiry systems for small businesses in Qatar, so every customer message is saved, answered and followed up. Packages from QAR 2,500. Free audit.',
     images: ['/og-image.png'],
   },
 };
@@ -44,17 +45,11 @@ const serviceDescriptions = {
   'ai-solutions': 'Apply AI to useful tasks like answering common questions and collecting enquiry details.',
 };
 
-const process = [
-  ['Discover', 'Understand your business, customers and current workflow.'],
-  ['Define', 'Agree on a clear scope, priorities and practical plan.'],
-  ['Design', 'Shape the experience around your customers and team.'],
-  ['Build', 'Create and connect the digital tools your business needs.'],
-  ['Launch', 'Test the details and prepare the solution for real use.'],
-  ['Improve', 'Review how it works and make useful refinements over time.'],
-];
+const process = packageSteps;
 
 const faqs = [
-  ['What are the costs?', 'Pricing depends on the scope and features. We confirm exact costs after understanding your requirements, with transparent QAR ranges and no hidden fees.'],
+  ['What are the costs?', 'Starter from QAR 2,500, Growth from QAR 4,500 and Monthly Care from QAR 300 a month. You get a fixed price before we start, and pay 50% to begin and 50% on delivery.'],
+  ['Is there a free audit?', 'Yes. We review how enquiries reach you today and send a one-page suggestion. There is no obligation to buy anything.'],
   ['Can you connect our website with WhatsApp?', 'Yes. We make it seamless for customers to move from a website enquiry into a relevant WhatsApp conversation and an organized team follow-up.'],
   ['Can you work with the tools we already use?', 'Often, yes. We first audit your current tools and workflow, then identify what can be connected, automated or improved.'],
   ['Do you provide ongoing support?', 'Ongoing support and continuous improvements can be arranged around the solution and what your team needs to run smoothly.'],
@@ -133,16 +128,16 @@ export default function Home() {
           </div>
 
           <h1 id="home-title" className="max-w-3xl text-[clamp(2.5rem,5.5vw,4.8rem)] font-bold leading-[1.02] tracking-[-.05em] text-white">
-            Every enquiry deserves a <span className="text-[var(--lime)]">fast, personal reply.</span>
+            Make sure every customer enquiry gets answered.
           </h1>
 
           <p className="mt-5 max-w-xl text-base leading-7 text-white/80 sm:text-lg sm:leading-8">
-            Axivy builds high-performing websites, centralized CRM systems, and automated WhatsApp workflows that help Qatar businesses answer customers instantly and stop losing leads.
+            Axivy builds simple websites and WhatsApp enquiry systems for small businesses in Qatar, so every customer message is saved, answered and followed up. Based in Doha.
           </p>
 
           <div className="mt-7 flex flex-col gap-3.5 min-[420px]:flex-row">
-            <Link href="/contact" className="inline-flex min-h-13 items-center justify-center gap-3 rounded-xl bg-[var(--lime)] px-6 text-sm font-bold text-[var(--ink)] shadow-lg transition-transform hover:-translate-y-0.5 hover:bg-[#a3f03b] focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-white">
-              Start a Conversation <span aria-hidden>↗</span>
+            <Link href="/services#request-audit" className="inline-flex min-h-13 items-center justify-center gap-3 rounded-xl bg-[var(--lime)] px-6 text-sm font-bold text-[var(--ink)] shadow-lg transition-transform hover:-translate-y-0.5 hover:bg-[#a3f03b] focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-white">
+              Get a free workflow audit <span aria-hidden>↗</span>
             </Link>
             <a href={whatsappUrl("Hi Axivy, I'd like to discuss a business solution.")} target="_blank" rel="noreferrer" className="inline-flex min-h-13 items-center justify-center gap-3 rounded-xl border border-white/30 bg-white/[.05] px-6 text-sm font-bold text-white transition-colors hover:border-white hover:bg-white/[.1] focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-white">
               Chat on WhatsApp <span aria-hidden>↗</span>
@@ -153,7 +148,7 @@ export default function Home() {
           <p className="mt-8 border-t border-white/15 pt-5 text-sm font-semibold text-white/80">Based in Doha · Founder-led · Free 1-page audit · Fixed price agreed upfront</p>
         </div>
 
-        <div className="hidden md:block">
+        <div className="hidden md:block"><p className="mb-2 text-xs font-bold uppercase tracking-[.14em] text-white/60">Example</p>
           <HomeExperience mode="phone" />
         </div>
       </div>
@@ -188,30 +183,13 @@ export default function Home() {
       </div>
     </section>
 
-    {/* WHAT WE BUILD (SERVICES) */}
+    {/* PACKAGE PREVIEW */}
     <section className="bg-[var(--paper)] py-12 sm:py-16 lg:py-20" aria-labelledby="services-title">
       <div className="mx-auto w-[min(1200px,calc(100%-2rem))] sm:w-[min(1200px,calc(100%-3rem))]">
-        <SectionHeading eyebrow="Practical digital systems" title="What we build for you" copy="Choose the part of your customer journey or daily workflow that needs an upgrade." id="services-title" />
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {services.map((service, index) => (
-            <article key={service.slug} className="group flex flex-col justify-between rounded-2xl border border-[var(--line)] bg-white p-6 transition-all hover:-translate-y-1 hover:border-[var(--brand-green)] hover:shadow-lg">
-              <div>
-                <div className="flex items-center justify-between">
-                  <span aria-hidden className="grid h-10 w-10 place-items-center rounded-xl bg-[var(--sage)] text-lg font-bold text-[var(--brand-green-dark)]">{service.icon}</span>
-                  <span className="text-xs font-bold text-[var(--brand-green-dark)]">0{index + 1}</span>
-                </div>
-                <h3 className="mt-4 text-xl font-semibold tracking-tight text-[var(--ink)] group-hover:text-[var(--brand-green-dark)]">{service.title}</h3>
-                <p className="mt-2 text-sm leading-6 text-[var(--muted)]">{serviceDescriptions[service.slug] || service.description}</p>
-              </div>
-              <div className="mt-6 flex items-center justify-between border-t border-[var(--line)] pt-4">
-                <span className="text-xs font-bold text-[var(--brand-green-dark)]">{service.startingPrice}</span>
-                <Link href={`/services/${service.slug}`} className="inline-flex items-center gap-1.5 text-sm font-bold text-[var(--brand-green-dark)] hover:underline">
-                  Explore details <span aria-hidden className="transition-transform group-hover:translate-x-1">→</span>
-                </Link>
-              </div>
-            </article>
-          ))}
-        </div>
+        <SectionHeading eyebrow="Simple packages" title="A clear starting point for better enquiry handling" copy="Choose a package, then see the exact scope and fixed quote before work starts." id="services-title" />
+        <PackageCards compact />
+        <PricingNotes />
+        <Link href="/services" className="mt-5 inline-flex text-sm font-bold text-[var(--brand-green-dark)] hover:underline">Compare packages and add-ons <span aria-hidden>→</span></Link>
       </div>
     </section>
 
@@ -293,8 +271,8 @@ export default function Home() {
           <p className="mt-3 max-w-2xl text-sm leading-7 text-white/75 sm:text-base">Tell us what is slowing your business down and we'll suggest a practical digital or automation solution.</p>
         </div>
         <div className="flex flex-col gap-3.5 min-[420px]:flex-row md:flex-col">
-          <Link href="/contact" className="inline-flex min-h-13 items-center justify-center gap-3 rounded-xl bg-[var(--lime)] px-6 text-sm font-bold text-[var(--ink)] transition-colors hover:bg-[var(--brand-green-dark)] hover:text-white focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-white">
-            Let's Talk <span aria-hidden>↗</span>
+          <Link href="/services#request-audit" className="inline-flex min-h-13 items-center justify-center gap-3 rounded-xl bg-[var(--lime)] px-6 text-sm font-bold text-[var(--ink)] transition-colors hover:bg-[var(--brand-green-dark)] hover:text-white focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-white">
+            Get a free audit <span aria-hidden>↗</span>
           </Link>
           <a href={whatsappUrl("Hi Axivy, I'd like to discuss a business solution.")} target="_blank" rel="noreferrer" className="inline-flex min-h-13 items-center justify-center gap-3 rounded-xl border border-white/30 px-6 text-sm font-bold text-white transition-colors hover:border-white focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-white">
             Chat on WhatsApp <span aria-hidden>↗</span>
