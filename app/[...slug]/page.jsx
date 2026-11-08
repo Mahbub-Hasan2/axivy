@@ -11,7 +11,7 @@ import ServiceCardActions from '../../components/ServiceCardActions';
 import ServicesInPageNav from '../../components/ServicesInPageNav';
 import { AddOns, NotSureBlock, PackageCards, PackageComparison, PackageFaq, packageSteps, PricingNotes } from '../../components/Packages';
 import { AXIVY_LOCATION, AXIVY_PHONE, AXIVY_WHATSAPP, whatsappUrl } from '../../data/contact';
-import { articles, businessSituations, caseDetails, cases, demoVideoUrl, services, solutions } from '../../data/content';
+import { articles, businessSituations, caseDetails, cases, demoVideoUrl, serviceDetailExtras, services, solutionDetailExtras, solutions } from '../../data/content';
 import { DEFAULT_OG_IMAGE, SITE_URL } from '../../lib/site';
 import { packageFaqs, packages } from '../../data/packages';
 import { searchPages } from '../../data/searchPages';
@@ -297,6 +297,7 @@ function ServiceDetail({ service, index }) {
           provider: { '@id': `${SITE_URL}/#organization` },
           areaServed: { '@type': 'Country', name: 'Qatar' },
         },
+        { '@type': 'FAQPage', mainEntity: extra.faqs.map(([name, text]) => ({ '@type': 'Question', name, acceptedAnswer: { '@type': 'Answer', text } })) },
       ],
     }} />
     <PageHero eyebrow={`Service ${String(index + 1).padStart(2, '0')}`} title={serviceIntro[0]} copy={serviceIntro[1]} breadcrumb={breadcrumb}/>
@@ -309,6 +310,9 @@ function ServiceDetail({ service, index }) {
       <ol className="service-deliverable-list">{service.included.map((item, itemIndex) => <li key={item}><span>{String(itemIndex + 1).padStart(2, '0')}</span><p>{item}</p></li>)}</ol>
     </div></section>
     <section className="service-pricing-section"><div className="shell service-pricing-panel"><div><p className="eyebrow">How it fits our packages</p><h2>{service.inPackages}</h2><p>Choose a package for a clear starting point, then agree the final scope and fixed quote before work begins.</p></div><div className="service-pricing-actions"><Link className="btn btn-primary" href="/services">Compare packages <Arrow/></Link><a className="btn btn-secondary" href={whatsappHref} target="_blank" rel="noreferrer">Ask on WhatsApp <Arrow/></a></div></div></section>
+    <section className="page-content"><div className="shell plain-grid"><article className="plain-card"><p className="eyebrow">Who this is for</p><h2>When this service is a useful next step.</h2><ul className="service-included">{extra.whoFor.map(item => <li key={item}>{item}</li>)}</ul></article><article className="plain-card"><p className="eyebrow">How it works</p><h2>A focused three-step approach.</h2><ol className="service-included">{extra.howItWorks.map((item, itemIndex) => <li key={item}>{`${itemIndex + 1}. ${item}`}</li>)}</ol></article><article className="plain-card"><p className="eyebrow">What we need from you</p><h2>Enough context to shape the right scope.</h2><ul className="service-included">{extra.needs.map(item => <li key={item}>{item}</li>)}</ul></article></div></section>
+    <section className="page-content" style={{ paddingTop: 0 }}><div className="shell"><p className="eyebrow">Related guide</p><h2 className="section-heading">A useful place to continue your research.</h2><Link className="work-link" href={extra.related}>{extra.relatedLabel} <Arrow/></Link></div></section>
+    <section className="page-content" style={{ paddingTop: 0 }}><div className="shell"><p className="eyebrow">Common questions</p><h2 className="section-heading">Before you decide.</h2><div className="divide-y divide-[var(--line)] border-y border-[var(--line)]">{extra.faqs.map(([question, answer]) => <details key={question} className="group py-5"><summary className="flex cursor-pointer list-none items-center justify-between gap-4 font-semibold marker:hidden"><span>{question}</span><span aria-hidden className="text-xl text-[var(--brand-green-dark)] group-open:rotate-45">+</span></summary><p className="pt-3 text-sm leading-7 text-[var(--muted)]">{answer}</p></details>)}</div></div></section>
     <section className="service-next-step"><div className="shell service-next-step-inner"><div><p className="eyebrow">Start with a conversation</p><h2>Let’s scope the right next step.</h2><p>Tell us what you are trying to improve. We’ll discuss your workflow and help clarify a practical scope.</p></div><div className="service-next-step-actions"><a className="btn btn-primary" href={whatsappHref} target="_blank" rel="noreferrer">Discuss on WhatsApp <Arrow/></a><Link className="btn btn-secondary" href="/contact">Send an enquiry <Arrow/></Link></div></div></section>
     {relatedGuides.length > 0 && <section className="page-content"><div className="shell"><p className="eyebrow">Practical guides</p><h2 className="section-heading">Read before choosing your next step.</h2><div className="plain-grid">{relatedGuides.map(guide => <Link className="plain-card" href={`/${guide.slug}`} key={guide.slug}><h3>{guide.h1}</h3><p>{guide.description}</p><span className="work-link">Read guide <Arrow/></span></Link>)}</div></div></section>}
   </>;
