@@ -8,6 +8,7 @@ import { Layout } from '../../components/SiteShell';
 import ContactForm from '../../components/ContactForm';
 import AuditRequestForm from '../../components/AuditRequestForm';
 import ServiceCardActions from '../../components/ServiceCardActions';
+import ServicesInPageNav from '../../components/ServicesInPageNav';
 import { AddOns, NotSureBlock, PackageCards, PackageComparison, PackageFaq, packageSteps, PricingNotes } from '../../components/Packages';
 import { AXIVY_LOCATION, AXIVY_PHONE, AXIVY_WHATSAPP, whatsappUrl } from '../../data/contact';
 import { articles, businessSituations, caseDetails, cases, demoVideoUrl, services, solutions } from '../../data/content';
@@ -253,15 +254,15 @@ function ServicesPackagesPage() {
   const breadcrumb = [{ label: 'Home', href: '/' }, { label: 'Services' }];
   const problems = [['Enquiries get answered late', 'When a message has no owner or next step, a customer can wait longer than expected.'], ['Details are scattered', 'Useful context can end up split between chats, forms, inboxes and notes.'], ['Follow-ups slip', 'Without a reminder or shared list, a promising enquiry can be hard to return to.'], ['You look smaller than you are', 'Clear pages and a consistent contact path help customers understand how to reach you.']];
   return <><JsonLd data={{ '@context': 'https://schema.org', '@graph': [breadcrumbSchema(breadcrumb), { '@type': 'FAQPage', mainEntity: packageFaqs.map(([name, text]) => ({ '@type': 'Question', name, acceptedAnswer: { '@type': 'Answer', text } })) }, ...packages.map(pkg => ({ '@type': 'Service', name: pkg.name, provider: { '@id': `${SITE_URL}/#organization` }, areaServed: { '@type': 'Country', name: 'Qatar' }, offers: { '@type': 'Offer', priceCurrency: 'QAR', description: pkg.price } }))] }} />
-    <PageHero eyebrow="Services · Doha, Qatar" title="Simple packages that make sure every customer enquiry is answered." copy="Pick a package, or start with a free audit and we will recommend the smallest one that solves your problem. Clear deliverables, fixed prices, no jargon." breadcrumb={breadcrumb}/>
-    <section className="page-content"><div className="shell"><div className="plain-grid">{problems.map(([title, text]) => <article className="plain-card" key={title}><h2>{title}</h2><p>{text}</p></article>)}</div></div></section>
-    <section className="page-content" style={{ paddingTop: 0 }}><div className="shell"><PackageCards/><PricingNotes/></div></section>
-    <section className="page-content" style={{ paddingTop: 0 }}><div className="shell"><p className="eyebrow">Compare packages</p><h2 className="section-heading">What each package includes.</h2><PackageComparison/></div></section>
-    <section className="page-content" style={{ paddingTop: 0 }}><div className="shell"><p className="eyebrow">Add-ons</p><h2 className="section-heading">Extra help where it fits.</h2><AddOns/></div></section>
-    <section className="page-content" style={{ paddingTop: 0 }}><div className="shell"><p className="eyebrow">How it works</p><h2 className="section-heading">A straightforward way to get started.</h2><ol className="plain-grid">{packageSteps.map(([title, text], index) => <li className="plain-card" key={title}><span className="service-number">{String(index + 1).padStart(2, '0')}</span><h3>{title}</h3><p>{text}</p></li>)}</ol><p className="section-copy" style={{ marginTop: 18 }}>Pay 50% to start and 50% on delivery.</p></div></section>
+    <PageHero eyebrow="Services · Doha, Qatar" title="Simple packages that make sure every customer enquiry is answered." copy="Pick a package, or start with a free audit and we will recommend the smallest one that solves your problem. Clear deliverables, fixed prices, no jargon." breadcrumb={breadcrumb}/><ServicesInPageNav/>
+    <section id="packages" className="page-content"><div className="shell"><PackageCards/><PricingNotes/></div></section>
+    <section className="services-familiar-strip"><div className="shell"><strong>If this sounds familiar:</strong>{problems.map(([title]) => <span key={title}>{title}</span>)}</div></section>
+    <section id="compare" className="page-content"><div className="shell"><p className="eyebrow">Compare packages</p><h2 className="section-heading">What each package includes.</h2><PackageComparison/></div></section>
+    <section id="addons" className="page-content"><div className="shell"><p className="eyebrow">Add-ons</p><h2 className="section-heading">Extra help where it fits.</h2><AddOns/></div></section>
+    <section id="how-it-works" className="page-content"><div className="shell"><p className="eyebrow">How it works</p><h2 className="section-heading">A straightforward way to get started.</h2><ol className="plain-grid">{packageSteps.map(([title, text], index) => <li className="plain-card" key={title}><span className="service-number">{String(index + 1).padStart(2, '0')}</span><h3>{title}</h3><p>{text}</p></li>)}</ol><p className="section-copy" style={{ marginTop: 18 }}>Pay 50% to start and 50% on delivery.</p></div></section>
     <section className="page-content" style={{ paddingTop: 0 }}><div className="shell"><p className="eyebrow">What is inside the packages</p><h2 className="section-heading">Services combined around your enquiry journey.</h2><CardGrid items={services}/></div></section>
     <section className="page-content" style={{ paddingTop: 0 }}><div className="shell"><NotSureBlock/></div></section>
-    <section className="page-content" style={{ paddingTop: 0 }}><div className="shell"><p className="eyebrow">Package questions</p><h2 className="section-heading">Useful answers before you choose.</h2><PackageFaq/></div></section>
+    <section id="faq" className="page-content" style={{ paddingTop: 0 }}><div className="shell"><p className="eyebrow">Package questions</p><h2 className="section-heading">Useful answers before you choose.</h2><PackageFaq/></div></section>
     <span id="audit-starter" /><span id="audit-growth" /><span id="audit-care" /><AuditRequestForm industry="Any other business" packageChoice title="Get your free audit and a fixed quote." />
   </>;
 }
