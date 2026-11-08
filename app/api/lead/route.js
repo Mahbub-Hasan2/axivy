@@ -1,5 +1,6 @@
 import nodemailer from 'nodemailer';
 import { SITE_HOST, SITE_URL } from '../../../lib/site';
+import { AXIVY_PHONE, AXIVY_WHATSAPP } from '../../../data/contact';
 
 export const runtime = 'nodejs';
 
@@ -164,7 +165,7 @@ export async function POST(request) {
       'If you have any urgent questions, feel free to reply directly to this email or message us on WhatsApp.',
       'Need an urgent answer or want to chat with us right away?',
       'You can reach us directly on WhatsApp:',
-      'WhatsApp: +974 7108 3700 (https://wa.me/97471083700)',
+      `WhatsApp: ${AXIVY_PHONE} (${AXIVY_WHATSAPP})`,
       '',
       'Best regards,',
       'The Axivy Team',
@@ -197,10 +198,10 @@ export async function POST(request) {
             Need a quick answer or want to discuss right away?
           </p>
           <p style="margin: 0 0 12px; font-size: 13px; color: #555;">
-            Our team is available on WhatsApp. You can message us directly at <strong>+974 7108 3700</strong>:
+            Our team is available on WhatsApp. You can message us directly at <strong>${AXIVY_PHONE}</strong>:
           </p>
-          <a href="https://wa.me/97471083700" style="display: inline-block; background: #25d366; color: #ffffff; text-decoration: none; font-size: 13px; font-weight: 700; padding: 10px 18px; border-radius: 7px;">
-            💬 Chat on WhatsApp (+974 7108 3700)
+          <a href="${AXIVY_WHATSAPP}" style="display: inline-block; background: #25d366; color: #ffffff; text-decoration: none; font-size: 13px; font-weight: 700; padding: 10px 18px; border-radius: 7px;">
+            💬 Chat on WhatsApp (${AXIVY_PHONE})
           </a>
         </div>
 
@@ -210,7 +211,7 @@ export async function POST(request) {
 
         <div style="margin-top: 28px; padding-top: 18px; border-top: 1px solid #e8e8e3; font-size: 12px; color: #777; line-height: 1.6;">
           <p style="margin: 0 0 4px;"><strong style="color: #333;">Axivy Digital Solutions</strong> — Doha, Qatar</p>
-          <p style="margin: 0 0 4px;">Phone / WhatsApp: <a href="https://wa.me/97471083700" style="color: #69784e; text-decoration: none;">+974 7108 3700</a> | Web: <a href="${SITE_URL}" style="color: #69784e; text-decoration: none;">${SITE_HOST}</a></p>
+          <p style="margin: 0 0 4px;">Phone / WhatsApp: <a href="${AXIVY_WHATSAPP}" style="color: #69784e; text-decoration: none;">${AXIVY_PHONE}</a> | Web: <a href="${SITE_URL}" style="color: #69784e; text-decoration: none;">${SITE_HOST}</a></p>
           <p style="margin: 6px 0 0; color: #999; font-size: 11px;">You received this confirmation because a request was submitted on ${SITE_HOST}.</p>
         </div>
       </div>
