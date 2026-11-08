@@ -11,6 +11,7 @@ const allowedIndustries = new Set([
   'Restaurants & Cafés',
   'Cleaning & Maintenance',
   'Other SMEs',
+  'Any other business',
 ]);
 
 export async function POST(request) {

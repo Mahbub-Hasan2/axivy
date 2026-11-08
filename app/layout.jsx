@@ -6,6 +6,7 @@ import { DEFAULT_DESCRIPTION, DEFAULT_OG_IMAGE, DEFAULT_TITLE, SITE_URL } from '
 
 const gaMeasurementId = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID;
 const validGaMeasurementId = gaMeasurementId && /^G-[A-Z0-9]+$/i.test(gaMeasurementId) ? gaMeasurementId : null;
+const googleSiteVerification = process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION?.trim();
 
 export const metadata = {
   metadataBase: new URL(SITE_URL),
@@ -43,6 +44,7 @@ export const metadata = {
     },
   },
   formatDetection: { email: false, address: false, telephone: false },
+  ...(googleSiteVerification ? { verification: { google: googleSiteVerification } } : {}),
 };
 
 export const viewport = {

@@ -1,8 +1,9 @@
 import Link from 'next/link';
 import HomeExperience from '../components/HomeExperience';
 import JsonLd from '../components/JsonLd';
+import DemoVideo from '../components/DemoVideo';
 import { Layout } from '../components/SiteShell';
-import { cases, services, solutions } from '../data/content';
+import { businessSituations, cases, demoVideoUrl, services } from '../data/content';
 import { whatsappUrl } from '../data/contact';
 import { DEFAULT_OG_IMAGE, SITE_URL } from '../lib/site';
 
@@ -42,8 +43,6 @@ const serviceDescriptions = {
   'business-automation': 'Reduce repetitive admin by connecting the tools and steps your team uses every day.',
   'ai-solutions': 'Apply AI to useful tasks like answering common questions and collecting enquiry details.',
 };
-
-const industrySlugs = ['automotive', 'restaurants-cafes', 'cleaning-maintenance', 'other-smes'];
 
 const process = [
   ['Discover', 'Understand your business, customers and current workflow.'],
@@ -149,12 +148,9 @@ export default function Home() {
               Chat on WhatsApp <span aria-hidden>↗</span>
             </a>
           </div>
+          <Link href="/demo" className="mt-4 inline-flex text-sm font-bold text-[var(--lime)] hover:underline">See a live demo <span aria-hidden className="ml-1">→</span></Link>
 
-          <div className="mt-8 grid grid-cols-3 gap-4 border-t border-white/15 pt-6 text-xs text-white/70 sm:text-sm">
-            <div><strong className="block text-lg font-bold text-white">24h</strong> Fast Response</div>
-            <div><strong className="block text-lg font-bold text-white">100%</strong> Tailored Scope</div>
-            <div><strong className="block text-lg font-bold text-white">QAR</strong> Transparent Pricing</div>
-          </div>
+          <p className="mt-8 border-t border-white/15 pt-5 text-sm font-semibold text-white/80">Based in Doha · Founder-led · Free 1-page audit · Fixed price agreed upfront</p>
         </div>
 
         <div className="hidden md:block">
@@ -162,6 +158,8 @@ export default function Home() {
         </div>
       </div>
     </section>
+
+    <DemoVideo url={demoVideoUrl} />
 
     {/* QUICK INFO STRIP FOR FAST ACCESS */}
     <section className="border-b border-[var(--line)] bg-[var(--sage)] py-4 text-xs font-bold uppercase tracking-wider text-[var(--brand-green-dark)]" aria-label="Core Capabilities">
@@ -225,25 +223,18 @@ export default function Home() {
       </div>
     </section>
 
-    {/* SOLUTIONS FOR YOUR SECTOR */}
-    <section className="bg-white py-12 sm:py-16 lg:py-20" aria-labelledby="industries-title">
+    {/* BUSINESS SITUATIONS */}
+    <section className="bg-white py-12 sm:py-16 lg:py-20" aria-labelledby="situations-title">
       <div className="mx-auto w-[min(1200px,calc(100%-2rem))] sm:w-[min(1200px,calc(100%-3rem))]">
-        <SectionHeading eyebrow="Solutions for your sector" title="Built around how your business works" copy="Every industry has its own pace and customer expectations. The right systems fit your operational reality." id="industries-title" />
-        <div className="grid gap-4 sm:grid-cols-2">
-          {industrySlugs.map(slug => {
-            const industry = solutions.find(item => item.slug === slug);
-            if (!industry) return null;
-            return (
-              <Link key={slug} href={`/solutions/${slug}`} className="group flex items-center justify-between gap-5 rounded-2xl border border-[var(--line)] bg-[var(--paper)] p-6 transition-all hover:border-[var(--brand-green)] hover:bg-white hover:shadow-md">
-                <div>
-                  <h3 className="text-lg font-semibold tracking-tight text-[var(--ink)] group-hover:text-[var(--brand-green-dark)]">{industry.name}</h3>
-                  <p className="mt-1 text-sm leading-6 text-[var(--muted)]">{industry.summary}</p>
-                </div>
-                <span aria-hidden className="shrink-0 rounded-full bg-white p-3 text-lg text-[var(--brand-green-dark)] shadow-sm transition-transform group-hover:translate-x-1">↗</span>
-              </Link>
-            );
-          })}
+        <SectionHeading eyebrow="Start with your situation" title="Does this sound like your business?" copy="Pick the issue you want to make easier." id="situations-title" />
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {businessSituations.map(({ situation, fix, href, link }) => <article key={situation} className="rounded-2xl border border-[var(--line)] bg-[var(--paper)] p-6">
+            <h3 className="text-lg font-semibold tracking-tight text-[var(--ink)]">{situation}</h3>
+            <p className="mt-3 text-sm leading-6 text-[var(--muted)]">{fix}</p>
+            <Link href={href} className="mt-5 inline-flex items-center gap-1.5 text-sm font-bold text-[var(--brand-green-dark)] hover:underline">{link} <span aria-hidden>→</span></Link>
+          </article>)}
         </div>
+        <p className="mt-6 text-sm leading-6 text-[var(--muted)]">Works for any business that gets enquiries, for example workshops, cafés, cleaning companies, shops and service providers.</p>
       </div>
     </section>
 

@@ -3,15 +3,23 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { notFound } from 'next/navigation';
 import JsonLd from '../../components/JsonLd';
+import DemoVideo from '../../components/DemoVideo';
 import { Layout } from '../../components/SiteShell';
 import ContactForm from '../../components/ContactForm';
 import AuditRequestForm from '../../components/AuditRequestForm';
 import ServiceCardActions from '../../components/ServiceCardActions';
 import { AXIVY_LOCATION, AXIVY_PHONE, AXIVY_WHATSAPP, whatsappUrl } from '../../data/contact';
-import { articles, caseDetails, cases, services, solutions } from '../../data/content';
+import { articles, businessSituations, caseDetails, cases, demoVideoUrl, services, solutions } from '../../data/content';
 import { DEFAULT_OG_IMAGE, SITE_URL } from '../../lib/site';
 
 const Arrow = () => <span aria-hidden>↗</span>;
+
+const insightMetaTitles = {
+  'website-vs-whatsapp': 'Website and WhatsApp for Business',
+  'do-i-need-website-instagram-whatsapp': 'Website, Instagram & WhatsApp',
+  'whatsapp-business-app-vs-api': 'WhatsApp Business App vs API',
+  'spreadsheet-vs-crm-small-business': 'Spreadsheet vs CRM for Small Business',
+};
 
 const staticPageMetadata = {
   services: {
@@ -20,8 +28,8 @@ const staticPageMetadata = {
     canonical: '/services',
   },
   solutions: {
-    title: 'Industry Solutions',
-    description: 'Practical websites, CRM systems and automation for automotive, restaurants and cafés, cleaning and maintenance, and other SMEs in Qatar.',
+    title: 'Solutions for any business',
+    description: 'Practical ways to manage customer enquiries, bookings, information and repetitive admin for any business in Qatar.',
     canonical: '/solutions',
   },
   'case-studies': {
@@ -108,17 +116,17 @@ function resolvePage(slug) {
       };
     }
     if (page === 'insights') {
-      const article = articles.find(entry => entry[0] === id);
+      const article = articles.find(entry => entry.slug === id);
       if (!article) notFound();
       return {
         kind: 'insight-detail',
         data: { article },
         meta: {
-          title: article[1],
-          description: article[2],
+          title: insightMetaTitles[article.slug] || article.metaTitle || article.title,
+          description: article.metaDescription,
           canonical: `/insights/${id}`,
           type: 'article',
-          date: article[4],
+          date: article.date,
         },
       };
     }
@@ -136,7 +144,7 @@ export async function generateStaticParams() {
     ...services.map(({ slug }) => ({ slug: ['services', slug] })),
     ...solutions.map(({ slug }) => ({ slug: ['solutions', slug] })),
     ...cases.map(([slug]) => ({ slug: ['case-studies', slug] })),
-    ...articles.map(([slug]) => ({ slug: ['insights', slug] })),
+    ...articles.map(({ slug }) => ({ slug: ['insights', slug] })),
   ];
 }
 
@@ -209,6 +217,14 @@ function CardGrid({ items }) {
 
 function ServiceDetail({ service, index }) {
   const whatsappHref = whatsappUrl(`Hi Axivy, I'd like to discuss a ${service.title.toLowerCase()} project for my business.`);
+  const serviceIntro = {
+    'website-development': ['Help more visitors contact you.', 'Build a clear website that explains what you do and makes it easy to send an enquiry.'],
+    'lead-management': ['Keep every enquiry in view.', 'Collect customer enquiries in one place so you can see who needs a reply.'],
+    'crm-systems': ['Keep customer details in one place.', 'A CRM is a shared place for customer details, conversations and next steps.'],
+    'whatsapp-systems': ['Make WhatsApp enquiries easier to manage.', 'Connect WhatsApp messages with the details and follow-up steps you need.'],
+    'business-automation': ['Spend less time on repeat admin.', 'Automation means making repeat steps happen automatically, such as copying enquiry details or sending a reminder.'],
+    'ai-solutions': ['Use AI for suitable repeat questions.', 'Use AI to handle approved common questions or collect basic details before a person takes over.'],
+  }[service.slug] || [service.title, service.description];
   const breadcrumb = [
     { label: 'Home', href: '/' },
     { label: 'Services', href: '/services' },
@@ -236,7 +252,7 @@ function ServiceDetail({ service, index }) {
         },
       ],
     }} />
-    <PageHero eyebrow={`Service ${String(index + 1).padStart(2, '0')}`} title={service.title} copy={service.description} breadcrumb={breadcrumb}/>
+    <PageHero eyebrow={`Service ${String(index + 1).padStart(2, '0')}`} title={serviceIntro[0]} copy={serviceIntro[1]} breadcrumb={breadcrumb}/>
     <section className="service-detail-overview"><div className="shell service-detail-overview-grid">
       <div><p className="eyebrow">A practical solution</p><h2 className="section-heading">Built around what your business needs next.</h2><p className="service-detail-copy">{service.detail}</p></div>
       <aside className="service-fit-card"><span className="service-fit-label">A good fit if</span><p>{service.idealFor}</p><a href="#included" className="work-link">See what’s included <span aria-hidden>↓</span></a></aside>
@@ -259,6 +275,12 @@ function SolutionList() {
   </Link>)}</div>;
 }
 
+function SituationCards() {
+  return <div className="plain-grid">{businessSituations.map(({ situation, fix, href, link }) => <article className="plain-card" key={situation}>
+    <h2>{situation}</h2><p>{fix}</p><Link className="work-link" href={href}>{link} <Arrow/></Link>
+  </article>)}</div>;
+}
+
 function WorkList() {
   return <div className="plain-grid">{cases.map(([slug, name, category, status, description]) => <article className="plain-card" key={slug}><div className="work-meta"><span>{category}</span><span className="work-tag">{status}</span></div><h2>{name}</h2><p>{description}</p><Link className="work-link" href={`/case-studies/${slug}`}>View case study <Arrow/></Link></article>)}</div>;
 }
@@ -274,12 +296,14 @@ function ProcessList() {
   ];
   return <>
     <div className="process-page-intro"><p>Every project is tailored, but the working relationship stays simple: understand the problem, build the right next step, then improve it with real use.</p><span>From first conversation to ongoing improvement</span></div>
+    <section className="process-expectations"><div><p className="eyebrow">Before we start</p><h2>What we need from you.</h2></div><div className="process-expectations-list"><p><span>01</span>Your logo and photos</p><p><span>02</span>A list of your services</p><p><span>03</span>Access to your existing accounts, if you have them</p></div></section>
     <div className="process-journey" aria-label="Axivy project process">{steps.map(([number, title, copy, outcome, involvement]) => <article className="process-journey-step" key={number}>
       <div className="process-journey-marker"><span>{number}</span><i aria-hidden>↓</i></div>
       <div className="process-journey-main"><p className="eyebrow">{title}</p><h2>{title}</h2><p>{copy}</p></div>
       <div className="process-journey-detail"><p><strong>You get</strong>{outcome}</p><p><strong>Your part</strong>{involvement}</p></div>
     </article>)}</div>
     <section className="process-expectations"><div><p className="eyebrow">What to expect</p><h2>Clear communication, thoughtful scope and practical progress.</h2></div><div className="process-expectations-list"><p><span>01</span>No unnecessary complexity</p><p><span>02</span>Feedback at the moments that matter</p><p><span>03</span>A solution your team can actually use</p></div></section>
+    <section className="process-expectations"><div><p className="eyebrow">How payment works</p><h2>Agree the price before work begins.</h2></div><div className="process-expectations-list"><p><span>01</span>Fixed price agreed first</p><p><span>02</span>50% to start, 50% on delivery</p><p><span>03</span>Domain, hosting and paid software fees are paid directly by you</p></div></section>
     <div className="process-page-cta"><div><p className="eyebrow">Start with your workflow</p><h2>Tell us what you want to make easier.</h2></div><Link className="btn btn-primary" href="/contact">Start a conversation <Arrow/></Link></div>
   </>;
 }
@@ -288,9 +312,9 @@ function AboutContent() {
   return <div className="about-page">
     <section className="about-intro-grid">
       <div className="about-photo-wrap"><Image src="/images/munir-uddin-mahbub.jpeg" alt="Munir Uddin Mahbub, founder of Axivy" width={1101} height={1448} sizes="(max-width: 820px) 500px, 400px" priority /><span>Founder-led, practical by design</span></div>
-      <div className="about-intro-copy"><p className="eyebrow">The person behind Axivy</p><h2>Technology should make the next business day easier.</h2><p>Axivy is led by Munir Uddin Mahbub, a full-stack developer focused on turning everyday business problems into useful digital systems.</p><p>Instead of beginning with a platform or a feature list, we begin with the customer journey, the work your team repeats and the point where important details are getting missed.</p><div className="about-founder-signoff"><strong>Munir Uddin Mahbub</strong><span>Founder &amp; Full-Stack Developer</span></div></div>
+      <div className="about-intro-copy"><p className="eyebrow">The person behind Axivy</p><h2>Make your day-to-day work easier.</h2><p>Axivy is led by Munir Uddin Mahbub, a full-stack developer who helps businesses make their websites and customer enquiries easier to manage.</p><p>We start with where customers contact you, which tasks take up time and where details get missed.</p><div className="about-founder-signoff"><strong>Munir Uddin Mahbub</strong><span>Founder &amp; Full-Stack Developer</span></div></div>
     </section>
-    <section className="about-principles"><div><p className="eyebrow">How we think</p><h2>Good systems are clear for your customers and easy for your team.</h2></div><div className="about-principles-list"><article><span>01</span><div><h3>Start with the real workflow</h3><p>We map what already happens—from the first enquiry to the next follow-up—before recommending technology.</p></div></article><article><span>02</span><div><h3>Build only what helps</h3><p>Every website, automation and integration should remove friction, save time or make the customer experience clearer.</p></div></article><article><span>03</span><div><h3>Keep the next step visible</h3><p>Useful systems help your team know who needs a reply, what has happened and what should happen next.</p></div></article></div></section>
+    <section className="about-principles"><div><p className="eyebrow">How we think</p><h2>Make things clear for your customers and easier for you to run.</h2></div><div className="about-principles-list"><article><span>01</span><div><h3>Start with what happens now</h3><p>We look at the path from the first enquiry to the next follow-up before suggesting a tool.</p></div></article><article><span>02</span><div><h3>Build what helps</h3><p>A website, automation or connection should save time or make the next step clearer.</p></div></article><article><span>03</span><div><h3>Keep track of the next step</h3><p>You should be able to see who needs a reply, what has happened and what comes next.</p></div></article></div></section>
     <section className="about-statement"><p>“The goal is not more technology. It is a better way to serve customers and run the business.”</p><span>Axivy · Doha, Qatar</span></section>
     <section className="about-close"><div><p className="eyebrow">Let’s make work easier</p><h2>Tell us where your current process feels difficult.</h2></div><Link className="btn btn-primary" href="/contact">Start a conversation <Arrow/></Link></section>
   </div>;
@@ -340,6 +364,12 @@ function CaseDetail({ item }) {
           <ul className="case-study-list">{details.built.map(point => <li key={point}>{point}</li>)}</ul>
         </div>}
 
+        {details.screenshots?.length > 0 && <div className="case-study-block">
+          <h3>Screenshots</h3>
+          {/* Add screenshot files under public/images/cases/ and reference each as { path: '/images/cases/file.png', alt: 'Description' } in data/content.js. */}
+          <div className="grid gap-4 sm:grid-cols-2">{details.screenshots.map(({ path, alt }) => <Image key={path} src={path} alt={alt} width={1200} height={675} className="h-auto w-full rounded-xl border border-[var(--line)]" sizes="(max-width: 640px) calc(100vw - 2rem), 50vw" />)}</div>
+        </div>}
+
         {details.focus && <blockquote className="case-study-quote">{details.focus}</blockquote>}
       </article>
 
@@ -366,10 +396,11 @@ function CaseDetail({ item }) {
 }
 
 function InsightDetail({ article }) {
-  const [slug, title, description, paragraphs = [], date] = article;
-  const related = articles.filter(entry => entry[0] !== slug).slice(0, 2);
+  const { slug, title, description, answer, focus, steps, checklist, faqs: articleFaqs, closing, date, landing, related: relatedSlugs } = article;
+  const related = relatedSlugs.map(relatedSlug => articles.find(entry => entry.slug === relatedSlug)).filter(Boolean);
   const published = date ? new Date(date).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' }) : null;
-  const readMinutes = Math.max(2, Math.ceil(paragraphs.join(' ').split(/\s+/).filter(Boolean).length / 220));
+  const articleWords = [answer, focus, closing, ...steps.flatMap(([, copy]) => copy.split('\n\n')), ...checklist, ...articleFaqs.flat()].join(' ').split(/\s+/).filter(Boolean).length;
+  const readMinutes = Math.max(3, Math.ceil(articleWords / 220));
   const breadcrumb = [
     { label: 'Home', href: '/' },
     { label: 'Insights', href: '/insights' },
@@ -393,6 +424,14 @@ function InsightDetail({ article }) {
           image: [`${SITE_URL}/og-image.png`],
           mainEntityOfPage: { '@type': 'WebPage', '@id': `${SITE_URL}/insights/${slug}` },
         },
+        {
+          '@type': 'FAQPage',
+          mainEntity: articleFaqs.map(([question, acceptedAnswer]) => ({
+            '@type': 'Question',
+            name: question,
+            acceptedAnswer: { '@type': 'Answer', text: acceptedAnswer },
+          })),
+        },
       ],
     }} />
     <PageHero eyebrow="Axivy insights" title={title} copy={description} breadcrumb={breadcrumb}/>
@@ -405,12 +444,17 @@ function InsightDetail({ article }) {
             <span aria-hidden>·</span>
             <span>{readMinutes} min read</span>
           </div>
-          <p className="eyebrow">A practical perspective</p>
-          <h2 className="section-heading">Better systems start with a clear view of the customer journey.</h2>
-          <div className="article-body">{(paragraphs || []).map((paragraph, index) => <p key={index}>{paragraph}</p>)}</div>
+          <div className="article-body">
+            <p className="article-direct-answer"><strong>Short answer:</strong> {answer}</p>
+            <p>{focus}</p>
+            {steps.map(([heading, copy]) => <section key={heading}><h2>{heading}</h2>{copy.split('\n\n').map(paragraph => <p key={paragraph}>{paragraph}</p>)}</section>)}
+            <section><h2>Quick checklist</h2><ul>{checklist.map(item => <li key={item}>{item}</li>)}</ul></section>
+            <section><h2>Frequently asked questions</h2>{articleFaqs.map(([question, response]) => <div key={question}><h3>{question}</h3><p>{response}</p></div>)}</section>
+            <section><h2>Put the plan into practice</h2>{closing.split('\n\n').map(paragraph => <p key={paragraph}>{paragraph}</p>)}</section>
+          </div>
           <div className="article-cta">
-            <p>Want to apply this to your business?</p>
-            <div><Link className="btn btn-primary" href="/contact">Discuss your workflow <Arrow/></Link><Link className="btn btn-secondary" href="/services">Explore services <span aria-hidden>→</span></Link></div>
+            <p>Want a practical view of the next step for your business?</p>
+            <div><Link className="btn btn-primary" href="/contact">Request a free audit <Arrow/></Link><Link className="btn btn-secondary" href={landing[0]}>Explore {landing[1]} <span aria-hidden>→</span></Link></div>
           </div>
         </div>
         <aside className="article-aside">
@@ -421,8 +465,8 @@ function InsightDetail({ article }) {
             <Link className="work-link" href="/contact">Talk through your workflow <Arrow/></Link>
           </div>
           <div className="article-related">
-            <h2>Related insights</h2>
-            {related.map(([relatedSlug, relatedTitle, relatedDescription]) => <Link key={relatedSlug} href={`/insights/${relatedSlug}`}>
+            <h2>Related reading</h2>
+            {related.map(({ slug: relatedSlug, title: relatedTitle, description: relatedDescription }) => <Link key={relatedSlug} href={`/insights/${relatedSlug}`}>
               <span>{relatedTitle}</span>
               <p>{relatedDescription}</p>
             </Link>)}
@@ -456,13 +500,13 @@ function SolutionDetail({ solution }) {
         },
       ],
     }} />
-    <PageHero eyebrow="Solutions" title={solution.name} copy={solution.summary} breadcrumb={breadcrumb}/>
+    <PageHero eyebrow="Solutions" title="Make your customer enquiries easier to manage." copy={`See practical ways to handle enquiries, bookings and customer details for your ${solution.name.toLowerCase()} business.`} breadcrumb={breadcrumb}/>
     <section className="solution-quick-start"><div className="shell solution-quick-start-inner"><p>Not sure which system is right for you?</p><div><a className="work-link" href="#request-audit">Start with a free workflow audit <Arrow/></a><a className="work-link" href={whatsappUrl(message)} target="_blank" rel="noreferrer">Ask a question on WhatsApp <Arrow/></a></div></div></section>
     <section className="page-content solution-story"><div className="shell">
       <div className="solution-problem"><div><p className="eyebrow">The challenge</p><h2 className="section-heading">Your customer journey should not depend on memory.</h2></div><p className="solution-problem-copy">{solution.problem}</p></div>
       <div className="solution-build-section"><div className="solution-build-heading"><span>01</span><div><p className="eyebrow">What we build</p><h2 className="section-heading">A system shaped around the way you already work.</h2></div></div><ol className="solution-build-list">{solution.whatWeBuild.map((item, index) => <li key={item}><span>{String(index + 1).padStart(2, '0')}</span><p>{item}</p></li>)}</ol></div>
     </div></section>
-    <section className="solution-why"><div className="shell solution-why-grid"><div><p className="eyebrow">Why Axivy</p><h2>Practical technology, built around real operations.</h2></div><p>{solution.whyAxivy}</p></div></section>
+    <section className="solution-why"><div className="shell solution-why-grid"><div><p className="eyebrow">Why Axivy</p><h2>Founder-led work, shaped around your business.</h2></div><p>{solution.whyAxivy}</p></div></section>
     <section className="page-content solution-outcomes"><div className="shell"><p className="eyebrow">What this gives you</p><div className="solution-outcomes-grid">{solution.benefits.map((benefit, index) => <div key={benefit}><span>{String(index + 1).padStart(2, '0')}</span><p>{benefit}</p></div>)}</div></div></section>
     <AuditRequestForm industry={solution.name}/>
   </>;
@@ -514,19 +558,20 @@ export default async function Page({ params }) {
   } else if (resolved.kind === 'insight-detail') {
     content = <InsightDetail article={resolved.data.article}/>;
   } else if (resolved.kind === 'services') {
-    content = <><PageHero eyebrow="Services · Doha, Qatar" title="The right digital system for your next stage." copy="Explore practical services for clearer customer journeys, better follow-up and less repetitive work. Compare typical deliverables and indicative QAR pricing before choosing a place to start."/><section className="service-index-intro"><div className="shell service-index-intro-inner"><span>01 — 06</span><p>Every engagement is scoped around your business. Choose a service to explore what’s included and how the estimate is structured.</p><span className="service-estimate-note">Planning estimates in QAR</span></div></section><section className="page-content service-index-content"><div className="shell"><CardGrid items={services}/><p className="service-pricing-disclaimer">Pricing shown is an indicative project range, not a fixed quotation. Third-party software, subscriptions, paid APIs and hosting are not included unless specifically stated in the final scope.</p></div></section></>;
+    content = <><PageHero eyebrow="Services · Doha, Qatar" title="Choose what you want to make easier." copy="See the services that can help you handle enquiries, customer details and repeat tasks."/><section className="service-index-intro"><div className="shell service-index-intro-inner"><span>01 — 06</span><p>Choose a service to see what it can include and its estimated price range.</p><span className="service-estimate-note">Estimates in QAR</span></div></section><section className="page-content service-index-content"><div className="shell"><CardGrid items={services}/><p className="service-pricing-disclaimer">Pricing shown is an indicative project range, not a fixed quotation. Third-party software, subscriptions, paid APIs and hosting are not included unless specifically stated in the final scope.</p></div></section></>;
   } else if (resolved.kind === 'solutions') {
-    content = <><PageHero eyebrow="Solutions" title="Built around the way your business works." copy="Choose a practical starting point for clearer customer journeys and less repetitive work."/><section className="page-content"><div className="shell"><SolutionList/></div></section></>;
+    content = <><PageHero eyebrow="Solutions" title="Solutions for any business" copy="Start with the customer or admin problem you want to make easier."/><section className="page-content"><div className="shell"><SituationCards/><p className="section-copy" style={{ marginTop: 24 }}>Works for any business that gets enquiries, for example workshops, cafés, cleaning companies, shops and service providers.</p></div></section><section className="page-content" style={{ paddingTop: 0 }}><div className="shell"><p className="eyebrow">Examples</p><h2 className="section-heading">Examples for specific types of business.</h2><p className="section-copy">These pages show how the same services can fit different businesses.</p><SolutionList/></div></section></>;
   } else if (resolved.kind === 'case-studies') {
-    content = <><PageHero eyebrow="Selected work" title="Work with a practical point of view." copy="Real projects are labelled clearly. Concepts show possible workflows without making business claims."/><section className="page-content"><div className="shell"><WorkList/></div></section></>;
+    content = <><PageHero eyebrow="Selected work" title="Work with a practical point of view." copy="Real projects are labelled clearly. Concepts show possible workflows without making business claims."/><DemoVideo url={demoVideoUrl}/><section className="page-content"><div className="shell"><WorkList/></div></section></>;
   } else if (resolved.kind === 'process') {
     content = <><PageHero eyebrow="Our process" title="A clear path from idea to launch." copy="Thoughtful discovery, clear scope and a practical focus through each step."/><section className="page-content"><div className="shell"><ProcessList/></div></section></>;
   } else if (resolved.kind === 'about') {
     content = <><PageHero eyebrow="About Axivy" title="Building practical technology for real businesses." copy="Axivy focuses on useful digital systems for businesses in Qatar and beyond."/><section className="page-content"><div className="shell"><AboutContent/></div></section></>;
   } else if (resolved.kind === 'insights') {
-    content = <><PageHero eyebrow="Insights" title="Ideas for better business systems." copy="Useful perspectives on websites, customer management and automation."/><section className="page-content"><div className="shell insight-grid">{articles.map(([slugValue, title, description, paragraphs, date]) => {
+    content = <><PageHero eyebrow="Insights" title="Ideas for better business systems." copy="Useful perspectives on websites, customer management and automation."/><section className="page-content"><div className="shell insight-grid">{articles.map(({ slug: slugValue, title, description, answer, focus, closing, steps, checklist, faqs: articleFaqs, date }) => {
       const published = date ? new Date(date).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }) : null;
-      return <Link key={slugValue} href={`/insights/${slugValue}`} className="insight-card"><span className="insight-category">Business systems</span><h2 className="insight-title">{title}</h2><p className="insight-description">{description}</p><span className="insight-meta">{published ? <time dateTime={date}>{published}</time> : 'Practical guide'}<span aria-hidden>·</span>{Math.max(2, Math.ceil((paragraphs || []).join(' ').split(/\s+/).filter(Boolean).length / 220))} min read</span><span className="insight-read">Read insight <span aria-hidden>→</span></span></Link>;
+      const wordCount = [answer, focus, closing, ...steps.flatMap(([, copy]) => copy.split('\n\n')), ...checklist, ...articleFaqs.flat()].join(' ').split(/\s+/).filter(Boolean).length;
+      return <Link key={slugValue} href={`/insights/${slugValue}`} className="insight-card"><span className="insight-category">Business systems</span><h2 className="insight-title">{title}</h2><p className="insight-description">{description}</p><span className="insight-meta">{published ? <time dateTime={date}>{published}</time> : 'Practical guide'}<span aria-hidden>·</span>{Math.max(3, Math.ceil(wordCount / 220))} min read</span><span className="insight-read">Read insight <span aria-hidden>→</span></span></Link>;
     })}</div></section></>;
   } else if (resolved.kind === 'contact') {
     content = <ContactPage/>;

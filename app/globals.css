@@ -236,6 +236,10 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
 .article-body{max-width:760px}
 .article-body p{margin:0 0 20px;color:#3e5750;font-size:16px;line-height:1.82}
 .article-body p:first-child{color:#29463d;font-size:18px;line-height:1.75}
+.article-body h2{margin:38px 0 12px;color:#17372f;font-size:clamp(1.35rem,2vw,1.75rem);line-height:1.25}
+.article-body h3{margin:22px 0 8px;color:#17372f;font-size:1.05rem;line-height:1.4}
+.article-body ul{margin:0 0 24px;padding-left:22px;color:#3e5750}
+.article-body li{margin:0 0 9px;line-height:1.7}
 .article-cta{margin-top:38px;padding:26px;border:1px solid #d4e8ce;border-radius:15px;background:#f2faf0}
 .article-cta p{margin:0 0 15px;color:var(--brand-navy);font-size:18px;font-weight:700;letter-spacing:-.02em}
 .article-cta>div{display:flex;flex-wrap:wrap;gap:9px}
