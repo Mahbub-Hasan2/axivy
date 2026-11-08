@@ -268,6 +268,7 @@ function ServicesPackagesPage() {
 }
 
 function ServiceDetail({ service, index }) {
+  const extra = serviceDetailExtras[service.slug];
   const whatsappHref = whatsappUrl(`Hi Axivy, I'd like to discuss a ${service.title.toLowerCase()} project for my business.`);
   const serviceIntro = {
     'website-development': ['Help more visitors contact you.', 'Build a clear website that explains what you do and makes it easy to send an enquiry.'],
@@ -532,6 +533,7 @@ function InsightDetail({ article }) {
 }
 
 function SolutionDetail({ solution }) {
+  const extra = solutionDetailExtras[solution.slug];
   const message = `Hi Axivy, I'd like to discuss a solution for my ${solution.name.toLowerCase()} business.`;
   const breadcrumb = [
     { label: 'Home', href: '/' },
@@ -552,6 +554,7 @@ function SolutionDetail({ solution }) {
           provider: { '@id': `${SITE_URL}/#organization` },
           areaServed: { '@type': 'Country', name: 'Qatar' },
         },
+        { '@type': 'FAQPage', mainEntity: extra.faqs.map(([name, text]) => ({ '@type': 'Question', name, acceptedAnswer: { '@type': 'Answer', text } })) },
       ],
     }} />
     <PageHero eyebrow="Solutions" title="Make your customer enquiries easier to manage." copy={`See practical ways to handle enquiries, bookings and customer details for your ${solution.name.toLowerCase()} business.`} breadcrumb={breadcrumb}/>
@@ -562,6 +565,8 @@ function SolutionDetail({ solution }) {
     </div></section>
     <section className="solution-why"><div className="shell solution-why-grid"><div><p className="eyebrow">Why Axivy</p><h2>Founder-led work, shaped around your business.</h2></div><p>{solution.whyAxivy}</p></div></section>
     <section className="page-content solution-outcomes"><div className="shell"><p className="eyebrow">What this gives you</p><div className="solution-outcomes-grid">{solution.benefits.map((benefit, index) => <div key={benefit}><span>{String(index + 1).padStart(2, '0')}</span><p>{benefit}</p></div>)}</div></div></section>
+    <section className="page-content"><div className="shell plain-grid"><article className="plain-card"><p className="eyebrow">Common situations</p><h2>Places where the journey can become unclear.</h2><ul className="service-included">{extra.commonSituations.map(item => <li key={item}>{item}</li>)}</ul></article><article className="plain-card"><p className="eyebrow">How Axivy can help</p><h2>Start with the real workflow.</h2><p>{extra.help}</p></article><article className="plain-card"><p className="eyebrow">A sensible first step</p><h2>Begin with a free audit.</h2><p>Share how enquiries, bookings or customer details move through the business today. The audit gives you a one-page suggestion for the first practical improvement, with no obligation.</p><a className="work-link" href="#request-audit">Request a free audit <Arrow/></a></article></div></section>
+    <section className="page-content" style={{ paddingTop: 0 }}><div className="shell"><p className="eyebrow">Common questions</p><h2 className="section-heading">Before you choose a direction.</h2><div className="divide-y divide-[var(--line)] border-y border-[var(--line)]">{extra.faqs.map(([question, answer]) => <details key={question} className="group py-5"><summary className="flex cursor-pointer list-none items-center justify-between gap-4 font-semibold marker:hidden"><span>{question}</span><span aria-hidden className="text-xl text-[var(--brand-green-dark)] group-open:rotate-45">+</span></summary><p className="pt-3 text-sm leading-7 text-[var(--muted)]">{answer}</p></details>)}</div></div></section>
     <AuditRequestForm industry={solution.name}/>
   </>;
 }
