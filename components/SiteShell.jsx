@@ -49,6 +49,9 @@ export function Footer() {
       <div><h2 className="footer-heading">Explore</h2><nav className="footer-links" aria-label="Footer navigation">
         {[['Services', '/services'], ['Solutions', '/solutions'], ['Work', '/case-studies'], ['Demo', '/demo'], ['Process', '/process'], ['About', '/about'], ['Insights', '/insights'], ['Contact', '/contact']].map(([label, href]) => <Link href={href} key={href}>{label}</Link>)}
       </nav></div>
+      <div><h2 className="footer-heading">Guides</h2><nav className="footer-links" aria-label="Guides">
+        {[['Small business websites', '/website-for-small-business-qatar'], ['WhatsApp enquiries', '/whatsapp-enquiry-system-qatar'], ['CRM for small business', '/crm-for-small-business-qatar'], ['Website cost', '/website-cost-qatar'], ['Business automation', '/business-automation-qatar']].map(([label, href]) => <Link href={href} key={href}>{label}</Link>)}
+      </nav></div>
       <div><h2 className="footer-heading">Based in Qatar</h2><p className="footer-tagline">Supporting teams in Qatar and working with businesses remotely.</p><a className="footer-social-link" href="https://www.linkedin.com/company/axivy" target="_blank" rel="noopener noreferrer" aria-label="Axivy on LinkedIn">LinkedIn <span aria-hidden>↗</span></a><nav className="footer-legal" aria-label="Legal links"><Link href="/privacy">Privacy</Link><Link href="/terms">Terms</Link></nav></div>
     </div>
     <div className="footer-bottom"><span>© {new Date().getFullYear()} Axivy. All rights reserved.</span><span>{AXIVY_LOCATION}</span></div>

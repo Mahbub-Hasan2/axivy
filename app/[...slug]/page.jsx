@@ -281,6 +281,7 @@ function ServiceDetail({ service, index }) {
     { label: 'Services', href: '/services' },
     { label: service.title },
   ];
+  const relatedGuides = searchPages.filter(page => page.serviceSlug === service.slug);
   return <>
     <JsonLd data={{
       '@context': 'https://schema.org',
@@ -308,6 +309,7 @@ function ServiceDetail({ service, index }) {
     </div></section>
     <section className="service-pricing-section"><div className="shell service-pricing-panel"><div><p className="eyebrow">How it fits our packages</p><h2>{service.inPackages}</h2><p>Choose a package for a clear starting point, then agree the final scope and fixed quote before work begins.</p></div><div className="service-pricing-actions"><Link className="btn btn-primary" href="/services">Compare packages <Arrow/></Link><a className="btn btn-secondary" href={whatsappHref} target="_blank" rel="noreferrer">Ask on WhatsApp <Arrow/></a></div></div></section>
     <section className="service-next-step"><div className="shell service-next-step-inner"><div><p className="eyebrow">Start with a conversation</p><h2>Let’s scope the right next step.</h2><p>Tell us what you are trying to improve. We’ll discuss your workflow and help clarify a practical scope.</p></div><div className="service-next-step-actions"><a className="btn btn-primary" href={whatsappHref} target="_blank" rel="noreferrer">Discuss on WhatsApp <Arrow/></a><Link className="btn btn-secondary" href="/contact">Send an enquiry <Arrow/></Link></div></div></section>
+    {relatedGuides.length > 0 && <section className="page-content"><div className="shell"><p className="eyebrow">Practical guides</p><h2 className="section-heading">Read before choosing your next step.</h2><div className="plain-grid">{relatedGuides.map(guide => <Link className="plain-card" href={`/${guide.slug}`} key={guide.slug}><h3>{guide.h1}</h3><p>{guide.description}</p><span className="work-link">Read guide <Arrow/></span></Link>)}</div></div></section>}
   </>;
 }
 
@@ -443,6 +445,7 @@ function CaseDetail({ item }) {
 function InsightDetail({ article }) {
   const { slug, title, description, answer, focus, steps, checklist, faqs: articleFaqs, closing, date, landing, related: relatedSlugs } = article;
   const related = relatedSlugs.map(relatedSlug => articles.find(entry => entry.slug === relatedSlug)).filter(Boolean);
+  const relatedGuides = searchPages.filter(page => page.related.includes(slug));
   const published = date ? new Date(date).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' }) : null;
   const articleWords = [answer, focus, closing, ...steps.flatMap(([, copy]) => copy.split('\n\n')), ...checklist, ...articleFaqs.flat()].join(' ').split(/\s+/).filter(Boolean).length;
   const readMinutes = Math.max(3, Math.ceil(articleWords / 220));
@@ -501,6 +504,7 @@ function InsightDetail({ article }) {
             <p>Want a practical view of the next step for your business?</p>
             <div><Link className="btn btn-primary" href="/contact">Request a free audit <Arrow/></Link><Link className="btn btn-secondary" href={landing[0]}>Explore {landing[1]} <span aria-hidden>→</span></Link></div>
           </div>
+          {relatedGuides.length > 0 && <section className="article-related"><h2>Related guides</h2>{relatedGuides.map(guide => <Link key={guide.slug} href={`/${guide.slug}`}><span>{guide.h1}</span><p>{guide.description}</p></Link>)}</section>}
         </div>
         <aside className="article-aside">
           <div className="plain-card">
