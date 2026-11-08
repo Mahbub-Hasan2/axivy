@@ -1,5 +1,6 @@
 import './globals.css';
 import Script from 'next/script';
+import { Inter } from 'next/font/google';
 import JsonLd from '../components/JsonLd';
 import { AXIVY_LOCATION, AXIVY_PHONE } from '../data/contact';
 import { DEFAULT_DESCRIPTION, DEFAULT_OG_IMAGE, DEFAULT_TITLE, SITE_URL } from '../lib/site';
@@ -7,6 +8,7 @@ import { DEFAULT_DESCRIPTION, DEFAULT_OG_IMAGE, DEFAULT_TITLE, SITE_URL } from '
 const gaMeasurementId = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID;
 const validGaMeasurementId = gaMeasurementId && /^G-[A-Z0-9]+$/i.test(gaMeasurementId) ? gaMeasurementId : null;
 const googleSiteVerification = process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION?.trim();
+const inter = Inter({ subsets: ['latin'], display: 'swap', variable: '--font-inter' });
 
 export const metadata = {
   metadataBase: new URL(SITE_URL),
@@ -103,7 +105,7 @@ const organizationSchema = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en" dir="ltr">
+    <html lang="en" dir="ltr" className={inter.variable}>
       <body>
         {children}
         <JsonLd data={organizationSchema} />

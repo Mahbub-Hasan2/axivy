@@ -3,7 +3,7 @@
 :root{--paper:#f6fbf4;--white:#fff;--ink:#111a23;--muted:#52616a;--line:#d6e8d2;--dark:#111a23;--lime:#91df2e;--sage:#e1f4dc;--brand-green:#48b937;--brand-green-dark:#237c35;--brand-navy:#111a23;--container:1200px}
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
-body{margin:0;background:var(--paper);color:var(--ink);font-family:Inter,"Helvetica Neue",Arial,sans-serif;font-size:16px;-webkit-font-smoothing:antialiased}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-inter),"Helvetica Neue",Arial,sans-serif;font-size:16px;-webkit-font-smoothing:antialiased}
 a{text-decoration:none}
 button,input,select,textarea{font:inherit}
 button,a{-webkit-tap-highlight-color:transparent}
