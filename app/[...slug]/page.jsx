@@ -214,6 +214,32 @@ function PageHero({ eyebrow, title, copy, breadcrumb }) {
   </div></section>;
 }
 
+function SearchLandingPage({ searchPage }) {
+  const related = searchPage.related.map(slug => articles.find(article => article.slug === slug)).filter(Boolean);
+  const serviceSlug = {
+    Starter: 'website-development',
+    Growth: searchPage.slug === 'whatsapp-enquiry-system-qatar' ? 'whatsapp-systems' : searchPage.slug === 'crm-for-small-business-qatar' ? 'crm-systems' : 'business-automation',
+  }[searchPage.package];
+  const breadcrumb = [{ label: 'Home', href: '/' }, { label: searchPage.h1 }];
+
+  return <>
+    <JsonLd data={{
+      '@context': 'https://schema.org',
+      '@graph': [
+        breadcrumbSchema(breadcrumb),
+        { '@type': 'FAQPage', mainEntity: searchPage.faqs.map(([name, text]) => ({ '@type': 'Question', name, acceptedAnswer: { '@type': 'Answer', text } })) },
+      ],
+    }} />
+    <PageHero eyebrow="Practical guide" title={searchPage.h1} copy={searchPage.intro} breadcrumb={breadcrumb}/>
+    <article className="page-content"><div className="shell article-layout"><div className="article-main article-body">
+      <section><h2>Common challenges</h2><ul>{searchPage.problems.map(problem => <li key={problem}>{problem}</li>)}</ul></section>
+      <section><h2>What a useful setup can include</h2><ul>{searchPage.gets.map(item => <li key={item}>{item}</li>)}</ul></section>
+      <section><h2>Frequently asked questions</h2>{searchPage.faqs.map(([question, answer]) => <div key={question}><h3>{question}</h3><p>{answer}</p></div>)}</section>
+      <section><h2>Choose a practical next step</h2><p>The {searchPage.package} package is a useful starting point when it fits your current workflow. We confirm the scope and fixed quote before work begins.</p><div className="hero-actions"><Link className="btn btn-primary" href={`/services#${searchPage.hash}`}>Explore {searchPage.package} <Arrow/></Link><Link className="btn btn-secondary" href={`/services/${serviceSlug}`}>Explore the related service <Arrow/></Link></div></section>
+    </div><aside className="article-aside"><div className="plain-card"><p className="eyebrow">Explore services</p><h2>Start with what your customers need.</h2><p>Compare packages or look at the service that supports this journey.</p><Link className="work-link" href="/services">View services <Arrow/></Link></div><div className="article-related"><h2>Related reading</h2>{related.map(article => <Link key={article.slug} href={`/insights/${article.slug}`}><span>{article.title}</span><p>{article.description}</p></Link>)}</div></aside></div></article>
+  </>;
+}
+
 function CardGrid({ items }) {
   return <div className="service-offer-grid">{items.map((item, index) => <article className="service-offer-card" key={item.slug}>
     <div className="service-offer-top"><ServiceCardActions service={item.title} number={String(index + 1).padStart(2, '0')} whatsappHref={whatsappUrl(`Hi Axivy, I'd like to discuss a ${item.title.toLowerCase()} project.`)} /><span className="service-offer-kicker">SERVICE {String(index + 1).padStart(2, '0')}</span></div>
@@ -577,6 +603,8 @@ export default async function Page({ params }) {
     content = <CaseDetail item={resolved.data.item}/>;
   } else if (resolved.kind === 'insight-detail') {
     content = <InsightDetail article={resolved.data.article}/>;
+  } else if (resolved.kind === 'search-landing') {
+    content = <SearchLandingPage searchPage={resolved.data.searchPage}/>;
   } else if (resolved.kind === 'services') {
     content = <ServicesPackagesPage/>;
   } else if (resolved.kind === 'solutions') {
