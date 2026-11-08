@@ -154,8 +154,6 @@ export default function Home() {
       </div>
     </section>
 
-    <DemoVideo url={demoVideoUrl} />
-
     {/* QUICK INFO STRIP FOR FAST ACCESS */}
     <section className="border-b border-[var(--line)] bg-[var(--sage)] py-4 text-xs font-bold uppercase tracking-wider text-[var(--brand-green-dark)]" aria-label="Core Capabilities">
       <div className="mx-auto flex w-[min(1200px,calc(100%-2rem))] flex-wrap items-center justify-center gap-6 sm:w-[min(1200px,calc(100%-3rem))] sm:justify-between">
@@ -167,19 +165,10 @@ export default function Home() {
       </div>
     </section>
 
-    {/* THE EVERYDAY FRICTION */}
-    <section className="bg-white py-12 sm:py-16 lg:py-20" aria-labelledby="problem-title">
+    <section className="bg-white py-12 sm:py-16 lg:py-20" aria-labelledby="situations-title">
       <div className="mx-auto w-[min(1200px,calc(100%-2rem))] sm:w-[min(1200px,calc(100%-3rem))]">
-        <SectionHeading eyebrow="The everyday friction" title="Good businesses lose customers when their systems fall behind." copy="See why manual follow-ups and scattered inboxes cost revenue every single week." id="problem-title" />
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          {problems.map(([title, description], index) => (
-            <article key={title} className="group rounded-2xl border border-[var(--line)] bg-[var(--paper)] p-6 transition-transform hover:-translate-y-1 hover:border-[var(--brand-green)]">
-              <span className="mb-4 block text-xs font-bold tracking-widest text-[var(--brand-green-dark)]">0{index + 1}</span>
-              <h3 className="text-lg font-semibold tracking-tight text-[var(--ink)]">{title}</h3>
-              <p className="mt-2 text-sm leading-6 text-[var(--muted)]">{description}</p>
-            </article>
-          ))}
-        </div>
+        <SectionHeading eyebrow="Start with your situation" title="Does this sound like your business?" copy="Choose the issue you want to make easier, from missed messages to scattered customer details." id="situations-title" />
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">{businessSituations.map(({ situation, fix, href, link }) => <article key={situation} className="rounded-2xl border border-[var(--line)] bg-[var(--paper)] p-6"><h3 className="text-lg font-semibold tracking-tight text-[var(--ink)]">{situation}</h3><p className="mt-3 text-sm leading-6 text-[var(--muted)]">{fix}</p><Link href={href} className="mt-5 inline-flex min-h-11 items-center gap-1.5 text-sm font-bold text-[var(--brand-green-dark)] hover:underline">{link} <span aria-hidden>→</span></Link></article>)}</div>
       </div>
     </section>
 
@@ -201,24 +190,11 @@ export default function Home() {
       </div>
     </section>
 
-    {/* BUSINESS SITUATIONS */}
-    <section className="bg-white py-12 sm:py-16 lg:py-20" aria-labelledby="situations-title">
-      <div className="mx-auto w-[min(1200px,calc(100%-2rem))] sm:w-[min(1200px,calc(100%-3rem))]">
-        <SectionHeading eyebrow="Start with your situation" title="Does this sound like your business?" copy="Pick the issue you want to make easier." id="situations-title" />
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {businessSituations.map(({ situation, fix, href, link }) => <article key={situation} className="rounded-2xl border border-[var(--line)] bg-[var(--paper)] p-6">
-            <h3 className="text-lg font-semibold tracking-tight text-[var(--ink)]">{situation}</h3>
-            <p className="mt-3 text-sm leading-6 text-[var(--muted)]">{fix}</p>
-            <Link href={href} className="mt-5 inline-flex items-center gap-1.5 text-sm font-bold text-[var(--brand-green-dark)] hover:underline">{link} <span aria-hidden>→</span></Link>
-          </article>)}
-        </div>
-        <p className="mt-6 text-sm leading-6 text-[var(--muted)]">Works for any business that gets enquiries, for example workshops, cafés, cleaning companies, shops and service providers.</p>
-      </div>
-    </section>
 
     {/* SELECTED WORK */}
     <section className="bg-[var(--paper)] py-12 sm:py-16 lg:py-20" aria-labelledby="work-title">
       <div className="mx-auto w-[min(1200px,calc(100%-2rem))] sm:w-[min(1200px,calc(100%-3rem))]">
+        {demoVideoUrl && <DemoVideo url={demoVideoUrl} />}
         <SectionHeading eyebrow="Selected work" title="Made for real business needs" copy="Explore completed projects, online stores, and clearly labelled system concepts." id="work-title" />
         <div className="grid gap-6 md:grid-cols-2">
           <WorkCard item={selectedCases[0]} featured />
