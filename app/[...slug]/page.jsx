@@ -582,6 +582,9 @@ function LegalPage({ type }) {
     sections: [
       ['Website information', 'The website provides general information about Axivy and its services. Content is provided in good faith and may change as services, pricing and availability evolve.'],
       ['Quotes and project scope', 'Prices shown on the website are indicative ranges, not fixed quotations. A project begins only after the scope, deliverables, timeline and commercial terms are confirmed in writing.'],
+      ['Pricing and payment', 'Prices on this site are from prices. A fixed quote is agreed before work starts. Payment is 50% to start and 50% on delivery.'],
+      // TODO(owner): replace with final ownership terms
+      ['Ownership and data', 'Ownership of the domain, content and customer data is agreed in writing before work starts.'],
       ['Intellectual property', 'The Axivy name, logo, website content and original materials belong to Axivy unless stated otherwise. You may not copy or republish them for commercial use without permission.'],
       ['Third-party links and tools', 'The website may link to third-party services. Axivy is not responsible for their content, availability or terms. Projects may rely on third-party platforms and subscriptions, which are subject to those providers’ terms.'],
       ['Limitations', 'We aim to keep the website accurate and available, but we do not guarantee uninterrupted access or that every page is free from errors. To the extent permitted by law, Axivy is not liable for losses arising from reliance on general website information.'],
