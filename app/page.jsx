@@ -7,6 +7,7 @@ import { businessSituations, cases, demoVideoUrl, faqs as contentFaqs, services,
 import { whatsappUrl } from '../data/contact';
 import { DEFAULT_OG_IMAGE, SITE_URL } from '../lib/site';
 import { PackageCards, packageSteps, PricingNotes } from '../components/Packages';
+import Gallery from '../components/media/Gallery';
 
 export const metadata = {
   title: { absolute: 'Axivy | Website & WhatsApp Enquiry Systems in Qatar' },
@@ -192,6 +193,7 @@ export default function Home() {
         <HomeExperience mode="journey" />
       </div>
     </section>
+    {(demoVideoUrl || services.some(service => service.screenshots?.length)) && <section className="bg-white py-12 sm:py-16"><div className="mx-auto w-[min(1200px,calc(100%-2rem))] sm:w-[min(1200px,calc(100%-3rem))]"><SectionHeading eyebrow="See it in action" title="Optional workflow examples" /><Gallery items={services.flatMap(service => service.screenshots || [])} /><DemoVideo url={demoVideoUrl} /></div></section>}
 
 
     {/* SELECTED WORK */}

@@ -15,6 +15,8 @@ import { articles, businessSituations, caseDetails, cases, demoVideoUrl, service
 import { DEFAULT_OG_IMAGE, SITE_URL } from '../../lib/site';
 import { packageFaqs, packages } from '../../data/packages';
 import { searchPages } from '../../data/searchPages';
+import Gallery from '../../components/media/Gallery';
+import { EnquiryJourneyDiagram, ServiceDiagram } from '../../components/media/Diagrams';
 
 const Arrow = () => <span aria-hidden>↗</span>;
 
@@ -229,6 +231,7 @@ function SearchLandingPage({ searchPage }) {
       ],
     }} />
     <PageHero eyebrow="Practical guide" title={searchPage.h1} copy={searchPage.intro} breadcrumb={breadcrumb}/>
+    <section className="page-content" style={{ paddingBottom: 0 }}><div className="shell"><EnquiryJourneyDiagram /></div></section>
     <article className="page-content"><div className="shell article-layout"><div className="article-main article-body">
       <section><h2>Common challenges</h2><ul>{searchPage.problems.map(problem => <li key={problem}>{problem}</li>)}</ul></section>
       <section><h2>What a useful setup can include</h2><ul>{searchPage.gets.map(item => <li key={item}>{item}</li>)}</ul></section>
@@ -302,6 +305,7 @@ function ServiceDetail({ service, index }) {
       ],
     }} />
     <PageHero eyebrow={`Service ${String(index + 1).padStart(2, '0')}`} title={serviceIntro[0]} copy={serviceIntro[1]} breadcrumb={breadcrumb}/>
+    <section className="page-content" style={{ paddingBottom: 0 }}><div className="shell"><ServiceDiagram service={service.slug} /></div></section>
     <section className="service-detail-overview"><div className="shell service-detail-overview-grid">
       <div><p className="eyebrow">A practical solution</p><h2 className="section-heading">Built around what your business needs next.</h2><p className="service-detail-copy">{service.detail}</p></div>
       <aside className="service-fit-card"><span className="service-fit-label">A good fit if</span><p>{service.idealFor}</p><a href="#included" className="work-link">See what’s included <span aria-hidden>↓</span></a></aside>
@@ -311,6 +315,7 @@ function ServiceDetail({ service, index }) {
       <ol className="service-deliverable-list">{service.included.map((item, itemIndex) => <li key={item}><span>{String(itemIndex + 1).padStart(2, '0')}</span><p>{item}</p></li>)}</ol>
     </div></section>
     <section className="service-pricing-section"><div className="shell service-pricing-panel"><div><p className="eyebrow">How it fits our packages</p><h2>{service.inPackages}</h2><p>Choose a package for a clear starting point, then agree the final scope and fixed quote before work begins.</p></div><div className="service-pricing-actions"><Link className="btn btn-primary" href="/services">Compare packages <Arrow/></Link><a className="btn btn-secondary" href={whatsappHref} target="_blank" rel="noreferrer">Ask on WhatsApp <Arrow/></a></div></div></section>
+    {(service.screenshots?.length || service.videoUrl) && <section className="page-content"><div className="shell"><p className="eyebrow">See it in action</p><h2 className="section-heading">Optional examples from this workflow.</h2><Gallery items={service.screenshots} /><DemoVideo url={service.videoUrl} /></div></section>}
     <section className="page-content"><div className="shell plain-grid"><article className="plain-card"><p className="eyebrow">Who this is for</p><h2>When this service is a useful next step.</h2><ul className="service-included">{extra.whoFor.map(item => <li key={item}>{item}</li>)}</ul></article><article className="plain-card"><p className="eyebrow">How it works</p><h2>A focused three-step approach.</h2><ol className="service-included">{extra.howItWorks.map((item, itemIndex) => <li key={item}>{`${itemIndex + 1}. ${item}`}</li>)}</ol></article><article className="plain-card"><p className="eyebrow">What we need from you</p><h2>Enough context to shape the right scope.</h2><ul className="service-included">{extra.needs.map(item => <li key={item}>{item}</li>)}</ul></article></div></section>
     <section className="page-content" style={{ paddingTop: 0 }}><div className="shell"><p className="eyebrow">Related guide</p><h2 className="section-heading">A useful place to continue your research.</h2><Link className="work-link" href={extra.related}>{extra.relatedLabel} <Arrow/></Link></div></section>
     <section className="page-content" style={{ paddingTop: 0 }}><div className="shell"><p className="eyebrow">Common questions</p><h2 className="section-heading">Before you decide.</h2><div className="divide-y divide-[var(--line)] border-y border-[var(--line)]">{extra.faqs.map(([question, answer]) => <details key={question} className="group py-5"><summary className="flex cursor-pointer list-none items-center justify-between gap-4 font-semibold marker:hidden"><span>{question}</span><span aria-hidden className="text-xl text-[var(--brand-green-dark)] group-open:rotate-45">+</span></summary><p className="pt-3 text-sm leading-7 text-[var(--muted)]">{answer}</p></details>)}</div></div></section>
@@ -488,7 +493,7 @@ function InsightDetail({ article }) {
         },
       ],
     }} />
-    <PageHero eyebrow="Axivy insights" title={title} copy={description} breadcrumb={breadcrumb}/>
+    <PageHero eyebrow="Axivy insights" title={title} copy={description} breadcrumb={breadcrumb}/><section className="page-content" style={{ paddingBottom: 0 }}><div className="shell"><EnquiryJourneyDiagram /></div></section>
     <article className="page-content"><div className="shell">
       <div className="article-layout">
         <div className="article-main">

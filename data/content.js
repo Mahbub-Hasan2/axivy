@@ -90,6 +90,7 @@ export const services = [
     idealFor: 'Businesses with repeatable enquiries or information tasks where an AI-assisted first step can help, while keeping people available for exceptions.',
   },
 ];
+services.forEach(service => { service.screenshots = []; service.videoUrl = ''; });
 export const solutions = [
   {
     slug: 'automotive',

@@ -103,7 +103,7 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
 @media(max-width:600px){.solution-detail-grid{grid-template-columns:1fr;gap:10px}.solution-cta{align-items:stretch;flex-direction:column;padding:19px}.solution-cta .btn{width:100%}.audit-form-layout{grid-template-columns:1fr;gap:24px}}
 
 /* Axivy brand palette: navy and greens sampled from the logo. */
-a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible,summary:focus-visible{outline-color:var(--brand-green)}
+a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible,summary:focus-visible{outline-color:var(--brand-green-dark)}
 .btn-primary{background:var(--lime);color:var(--brand-navy)}.btn-primary:hover{background:#78cf23}.btn-secondary{border-color:#9ed58c;color:var(--brand-navy);background:#fff}.btn-secondary:hover{border-color:var(--brand-green);background:#edf9e9}.btn-dark{background:var(--brand-navy)}.btn-dark:hover{background:#1c2b35}
 .site-header{border-bottom-color:rgba(214,232,210,.95);background:rgba(246,251,244,.93)}.desktop-nav{color:#3c525c}.desktop-nav a:hover,.footer-links a:hover{color:var(--brand-green-dark)}.mobile-menu-button{border-color:var(--line);color:var(--brand-navy);background:#fff}.mobile-nav{background:var(--paper)}.mobile-nav a:not(.btn){color:#38505a}
 .eyebrow{color:#397047}.hero-note,.capability-label,.workflow-foot{color:#557065}.note-dot,.capability-item::before,.process-step::before{background:var(--brand-green)}.capability-item{color:#263e47}

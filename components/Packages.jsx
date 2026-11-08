@@ -1,11 +1,12 @@
 import Link from 'next/link';
 import { addOns, packageFaqs, packages } from '../data/packages';
 import { whatsappUrl } from '../data/contact';
+import { PackageIllustration } from './media/Diagrams';
 
 export function PackageCards({ compact = false }) {
   return <div className="grid gap-5 lg:grid-cols-3">{packages.map(pkg => <article key={pkg.key} className="relative flex flex-col rounded-2xl border border-[var(--line)] bg-white p-6 shadow-sm">
     {pkg.badge && <span className="absolute right-5 top-5 rounded-full bg-[var(--lime)] px-3 py-1 text-xs font-bold text-[var(--ink)]">{pkg.badge}</span>}
-    <p className="text-xs font-bold uppercase tracking-[.14em] text-[var(--brand-green-dark)]">{pkg.label}</p><h2 className="mt-2 text-2xl font-semibold tracking-tight text-[var(--ink)]">{pkg.name}</h2>
+    <PackageIllustration packageKey={pkg.key} /><p className="text-xs font-bold uppercase tracking-[.14em] text-[var(--brand-green-dark)]">{pkg.label}</p><h2 className="mt-2 text-2xl font-semibold tracking-tight text-[var(--ink)]">{pkg.name}</h2>
     <p className="mt-2 text-2xl font-bold text-[var(--brand-green-dark)]">{pkg.price}</p><p className="text-sm text-[var(--muted)]">{pkg.cadence}</p><p className="mt-5 text-sm leading-6 text-[var(--muted)]">{pkg.tagline}</p>
     {!compact && <><div className="mt-5 rounded-xl bg-[var(--paper)] p-4"><strong className="text-sm text-[var(--ink)]">Best for</strong><p className="mt-1 text-sm leading-6 text-[var(--muted)]">{pkg.bestFor}</p></div><p className="mt-4 text-sm leading-6 text-[var(--muted)]"><strong className="text-[var(--ink)]">Problem it solves:</strong> {pkg.problem}</p></>}
     <ul className="mt-5 space-y-2 text-sm leading-6 text-[var(--muted)]">{pkg.includes.slice(0, compact ? 3 : undefined).map((item, index) => <li key={item} className={item.endsWith(':') ? 'font-semibold text-[var(--ink)]' : ''}>{item.endsWith(':') ? item : <><span aria-hidden>✓</span> {item}</>}</li>)}</ul>
