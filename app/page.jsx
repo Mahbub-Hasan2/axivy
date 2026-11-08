@@ -3,7 +3,7 @@ import HomeExperience from '../components/HomeExperience';
 import JsonLd from '../components/JsonLd';
 import DemoVideo from '../components/DemoVideo';
 import { Layout } from '../components/SiteShell';
-import { businessSituations, cases, demoVideoUrl, services } from '../data/content';
+import { businessSituations, cases, demoVideoUrl, faqs as contentFaqs, services, solutions } from '../data/content';
 import { whatsappUrl } from '../data/contact';
 import { DEFAULT_OG_IMAGE, SITE_URL } from '../lib/site';
 import { PackageCards, packageSteps, PricingNotes } from '../components/Packages';
@@ -48,12 +48,13 @@ const serviceDescriptions = {
 const process = packageSteps;
 
 const faqs = [
-  ['What are the costs?', 'Starter from QAR 2,500, Growth from QAR 4,500 and Monthly Care from QAR 300 a month. You get a fixed price before we start, and pay 50% to begin and 50% on delivery.'],
+  ['What are the costs?', 'The right scope depends on what your business needs. You get a fixed price before we start, and pay 50% to begin and 50% on delivery.'],
   ['Is there a free audit?', 'Yes. We review how enquiries reach you today and send a one-page suggestion. There is no obligation to buy anything.'],
   ['Can you connect our website with WhatsApp?', 'Yes. We make it seamless for customers to move from a website enquiry into a relevant WhatsApp conversation and an organized team follow-up.'],
   ['Can you work with the tools we already use?', 'Often, yes. We first audit your current tools and workflow, then identify what can be connected, automated or improved.'],
   ['Do you provide ongoing support?', 'Ongoing support and continuous improvements can be arranged around the solution and what your team needs to run smoothly.'],
 ];
+const homeFaqs = [...faqs, ...contentFaqs.filter(([question]) => !faqs.some(([existing]) => existing.toLowerCase() === question.toLowerCase()))].slice(0, 8);
 
 function SectionHeading({ eyebrow, title, copy, id, dark = false }) {
   return <div className="mb-6 grid gap-3 sm:mb-8 md:grid-cols-[1fr_.72fr] md:items-end md:gap-8">
@@ -113,7 +114,7 @@ function WorkCard({ item, featured = false }) {
 export default function Home() {
   const selectedCases = ['gari-qatar', 'sahara', 'auto-workshop-system'].map(slug => cases.find(item => item[0] === slug)).filter(Boolean);
 
-  return <Layout><div className="overflow-hidden">
+  return <Layout><JsonLd data={{ '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: homeFaqs.map(([name, text]) => ({ '@type': 'Question', name, acceptedAnswer: { '@type': 'Answer', text } })) }} /><div className="overflow-hidden">
 
     {/* HERO SECTION */}
     <section className="relative isolate overflow-hidden bg-[var(--dark)] py-12 text-white sm:py-16 lg:py-20" aria-labelledby="home-title">
@@ -169,6 +170,7 @@ export default function Home() {
       <div className="mx-auto w-[min(1200px,calc(100%-2rem))] sm:w-[min(1200px,calc(100%-3rem))]">
         <SectionHeading eyebrow="Start with your situation" title="Does this sound like your business?" copy="Choose the issue you want to make easier, from missed messages to scattered customer details." id="situations-title" />
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">{businessSituations.map(({ situation, fix, href, link }) => <article key={situation} className="rounded-2xl border border-[var(--line)] bg-[var(--paper)] p-6"><h3 className="text-lg font-semibold tracking-tight text-[var(--ink)]">{situation}</h3><p className="mt-3 text-sm leading-6 text-[var(--muted)]">{fix}</p><Link href={href} className="mt-5 inline-flex min-h-11 items-center gap-1.5 text-sm font-bold text-[var(--brand-green-dark)] hover:underline">{link} <span aria-hidden>→</span></Link></article>)}</div>
+        <p className="mt-6 text-sm leading-7 text-[var(--muted)]">Works for any business that gets customer enquiries, for example workshops, cafés, cleaning companies, shops and service providers.</p><div className="mt-4 flex flex-wrap gap-2">{solutions.map(solution => <Link key={solution.slug} href={`/solutions/${solution.slug}`} className="rounded-full border border-[var(--line)] bg-white px-3 py-2 text-sm font-semibold text-[var(--brand-green-dark)] hover:bg-[var(--sage)]">{solution.name}</Link>)}</div>
       </div>
     </section>
 
@@ -178,6 +180,7 @@ export default function Home() {
         <SectionHeading eyebrow="Simple packages" title="A clear starting point for better enquiry handling" copy="Choose a package, then see the exact scope and fixed quote before work starts." id="services-title" />
         <PackageCards compact />
         <PricingNotes />
+        <div className="mt-8"><p className="mb-3 text-xs font-bold uppercase tracking-[.14em] text-[var(--brand-green-dark)]">What is inside the packages</p><div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">{services.map(service => <Link key={service.slug} href={`/services/${service.slug}`} className="rounded-xl border border-[var(--line)] bg-white p-4 hover:bg-[var(--sage)]"><h3 className="font-semibold text-[var(--ink)]">{service.title}</h3><p className="mt-1 text-sm leading-6 text-[var(--muted)]">{service.description}</p></Link>)}</div></div>
         <Link href="/services" className="mt-5 inline-flex text-sm font-bold text-[var(--brand-green-dark)] hover:underline">Compare packages and add-ons <span aria-hidden>→</span></Link>
       </div>
     </section>
@@ -217,6 +220,7 @@ export default function Home() {
             </li>
           ))}
         </ol>
+        <Link href="/process" className="mt-6 inline-flex text-sm font-bold text-[var(--brand-green-dark)] hover:underline">See the detailed process <span aria-hidden>→</span></Link>
       </div>
     </section>
 
@@ -225,7 +229,7 @@ export default function Home() {
       <div className="mx-auto w-[min(860px,calc(100%-2rem))] sm:w-[min(860px,calc(100%-3rem))]">
         <SectionHeading eyebrow="Frequently asked" title="A few useful answers" id="faq-title" />
         <div className="divide-y divide-[var(--line)] border-y border-[var(--line)]">
-          {faqs.map(([question, answer]) => (
+          {homeFaqs.map(([question, answer]) => (
             <details key={question} className="group py-5">
               <summary className="flex cursor-pointer list-none items-center justify-between gap-4 text-base font-semibold text-[var(--ink)] marker:hidden focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[var(--brand-green-dark)] sm:text-lg">
                 <span>{question}</span>
