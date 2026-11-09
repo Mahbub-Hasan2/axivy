@@ -2,21 +2,21 @@ import Link from 'next/link';
 import { addOns, packageFaqs, packages } from '../data/packages';
 import { whatsappUrl } from '../data/contact';
 import { PackageIllustration } from './media/Diagrams';
-import { Globe2, Workflow, Wrench, Check } from 'lucide-react';
+import { Globe2, Workflow, Wrench, Check, CircleDollarSign, HandCoins, Landmark } from 'lucide-react';
 
 const icons = { starter: Globe2, growth: Workflow, care: Wrench };
 
 export function PackageCards({ compact = false }) {
   return <div className="package-cards grid gap-5 lg:grid-cols-3">{packages.map(pkg => { const Icon = icons[pkg.key]; const primary = pkg.includes.slice(0, 5); const rest = pkg.includes.slice(5); return <article id={`package-${pkg.key}`} key={pkg.key} className={`package-card relative flex flex-col rounded-2xl border border-[var(--line)] bg-white p-6 shadow-sm ${pkg.badge ? 'package-card-featured' : ''}`}>
-    {pkg.badge && <span className="package-badge">{pkg.badge}</span>}<span className="package-icon"><Icon size={22} aria-hidden /></span>
+    {pkg.badge && <span className="package-badge">{pkg.badge}</span>}<span className="package-icon"><Icon size={24} strokeWidth={1.8} aria-hidden /></span>
     <p className="package-label">{pkg.label}</p><h2>{pkg.name}</h2><p className="package-price">{pkg.price}</p><p className="package-cadence">{pkg.cadence}</p><p className="package-tagline">{pkg.tagline}</p>
     {!compact && <p className="package-best"><strong>Best for</strong> {pkg.bestFor}</p>}
-    <div className="package-includes"><p>What you get</p><ul>{primary.map(item => <li key={item}>{item.endsWith(':') ? item : <><Check size={15} aria-hidden />{item}</>}</li>)}</ul>{rest.length > 0 && <details><summary>See everything included</summary><ul>{rest.map(item => <li key={item}><Check size={15} aria-hidden />{item}</li>)}</ul></details>}</div>
+    <div className="package-includes"><p>What you get</p><ul>{primary.map(item => <li key={item}><Check size={15} aria-hidden />{item}</li>)}</ul>{rest.length > 0 && <details><summary>See everything included</summary><ul>{rest.map(item => <li key={item}><Check size={15} aria-hidden />{item}</li>)}</ul></details>}</div>
     <div className="mt-auto pt-6"><Link className="btn btn-primary w-full justify-center" href={`/services${pkg.auditHash}`}>{pkg.button}</Link><a className="mt-3 inline-flex w-full justify-center text-sm font-bold text-[var(--brand-green-dark)] hover:underline" href={whatsappUrl(pkg.whatsappMessage)} target="_blank" rel="noreferrer">Ask on WhatsApp <span aria-hidden>↗</span></a></div>
   </article>})}</div>;
 }
 
-export function PricingNotes() { return <ul className="mt-6 space-y-1 text-sm leading-6 text-[var(--muted)]"><li>Prices start from the amounts shown. You receive a fixed quote before we begin.</li><li>50% to start, 50% on delivery.</li><li>Domain, hosting and any WhatsApp API or paid-software fees are paid directly by you to those providers.</li></ul>; }
+export function PricingNotes() { const notes = [[CircleDollarSign, 'Prices start from the amounts shown. You receive a fixed quote before we begin.'], [HandCoins, '50% to start, 50% on delivery.'], [Landmark, 'Domain, hosting and any WhatsApp API or paid-software fees are paid directly by you to those providers.']]; return <ul className="pricing-notes mt-8 grid gap-3 rounded-2xl border border-[var(--line)] bg-white p-4 text-sm leading-6 text-[var(--muted)] sm:grid-cols-3">{notes.map(([Icon, text]) => <li key={text} className="flex gap-3"><span className="pricing-note-icon"><Icon size={16} aria-hidden /></span><span>{text}</span></li>)}</ul>; }
 
 export function PackageComparison() { const rows = [['Website (1 to 5 pages)', '✓','✓','–'], ['WhatsApp button with ready-written message','✓','✓','–'], ['Enquiries saved to Google Sheet','✓','✓','–'], ['Email alert for every enquiry','✓','✓','–'], ['Basic SEO and Search Console setup','✓','✓','–'], ['HubSpot CRM setup','–','✓','–'], ['Follow-up reminders','–','✓','–'], ['Booking or appointment form','–','✓','–'], ['Monthly summary or report','–','✓','✓'], ['Updates, upkeep and support','–','–','✓']]; return <div className="package-comparison overflow-x-auto"><table className="w-full min-w-[640px] border-collapse text-left text-sm"><caption className="sr-only">Package comparison</caption><thead><tr className="border-b border-[var(--line)]"><th scope="col" className="p-3">Included</th>{packages.map(pkg => <th scope="col" className="p-3" key={pkg.key}>{pkg.name}<span className="block font-normal text-[var(--muted)]">{pkg.price}</span></th>)}</tr></thead><tbody>{rows.map(([feature, ...marks]) => <tr className="border-b border-[var(--line)]" key={feature}><th scope="row" className="p-3 font-medium">{feature}</th>{marks.map((mark, index) => <td key={`${feature}-${index}`} className="p-3 text-center" aria-label={mark === '✓' ? 'Included' : 'Not included'}>{mark}</td>)}</tr>)}</tbody></table></div>; }
 
