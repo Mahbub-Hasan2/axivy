@@ -160,11 +160,11 @@ export default function Home() {
     {/* QUICK INFO STRIP FOR FAST ACCESS */}
     <section className="home-capability-strip border-b border-[var(--line)] bg-white py-4" aria-label="Core Capabilities">
       <div className="mx-auto flex w-[min(1200px,calc(100%-2rem))] flex-wrap items-center justify-center gap-3 sm:w-[min(1200px,calc(100%-3rem))] sm:justify-between">
-        <span className="flex items-center gap-2"><span className="h-1.5 w-1.5 rounded-full bg-[var(--brand-green-dark)]" /> Websites &amp; Web Apps</span>
-        <span className="flex items-center gap-2"><span className="h-1.5 w-1.5 rounded-full bg-[var(--brand-green-dark)]" /> Lead Management</span>
-        <span className="flex items-center gap-2"><span className="h-1.5 w-1.5 rounded-full bg-[var(--brand-green-dark)]" /> CRM Systems</span>
-        <span className="flex items-center gap-2"><span className="h-1.5 w-1.5 rounded-full bg-[var(--brand-green-dark)]" /> WhatsApp Workflows</span>
-        <span className="flex items-center gap-2"><span className="h-1.5 w-1.5 rounded-full bg-[var(--brand-green-dark)]" /> Business Automation</span>
+        <Link href="/services/website-development" className="flex items-center gap-2"><span className="h-1.5 w-1.5 rounded-full bg-[var(--brand-green-dark)]" /> Websites &amp; Web Apps</Link>
+        <Link href="/services/lead-management" className="flex items-center gap-2"><span className="h-1.5 w-1.5 rounded-full bg-[var(--brand-green-dark)]" /> Lead Management</Link>
+        <Link href="/services/crm-systems" className="flex items-center gap-2"><span className="h-1.5 w-1.5 rounded-full bg-[var(--brand-green-dark)]" /> CRM Systems</Link>
+        <Link href="/services/whatsapp-systems" className="flex items-center gap-2"><span className="h-1.5 w-1.5 rounded-full bg-[var(--brand-green-dark)]" /> WhatsApp Workflows</Link>
+        <Link href="/services/business-automation" className="flex items-center gap-2"><span className="h-1.5 w-1.5 rounded-full bg-[var(--brand-green-dark)]" /> Business Automation</Link>
       </div>
     </section>
 
