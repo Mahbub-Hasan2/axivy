@@ -118,22 +118,21 @@ export default function Home() {
   return <Layout><JsonLd data={{ '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: homeFaqs.map(([name, text]) => ({ '@type': 'Question', name, acceptedAnswer: { '@type': 'Answer', text } })) }} /><div className="overflow-hidden">
 
     {/* HERO SECTION */}
-    <section className="relative isolate overflow-hidden bg-[var(--dark)] py-12 text-white sm:py-16 lg:py-20" aria-labelledby="home-title">
-      <div aria-hidden className="pointer-events-none absolute -right-32 -top-40 -z-10 h-[38rem] w-[38rem] rounded-full bg-[var(--brand-green-dark)] opacity-40 blur-[120px]" />
-      <div aria-hidden className="pointer-events-none absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[var(--brand-green)]/60 to-transparent" />
+    <section className="home-premium-hero relative isolate overflow-hidden py-12 sm:py-16 lg:py-20" aria-labelledby="home-title">
+      <div aria-hidden className="pointer-events-none absolute -right-32 -top-40 -z-10 h-[38rem] w-[38rem] rounded-full bg-[var(--sage)] opacity-90 blur-[120px]" />
 
       <div className="mx-auto grid w-[min(1200px,calc(100%-2rem))] items-center gap-8 sm:w-[min(1200px,calc(100%-3rem))] lg:grid-cols-[1.05fr_.95fr] lg:gap-12">
         <div>
-          <div className="mb-4 inline-flex items-center gap-2.5 rounded-full border border-white/20 bg-white/[.06] px-3.5 py-1.5 text-xs font-semibold text-[var(--lime)]">
-            <span aria-hidden className="h-2 w-2 rounded-full bg-[var(--lime)] animate-pulse" />
+          <div className="home-hero-eyebrow mb-4 inline-flex items-center gap-2.5 rounded-full px-3.5 py-1.5 text-xs font-semibold">
+            <span aria-hidden className="h-2 w-2 rounded-full" />
             Doha, Qatar · Digital Solutions &amp; Automation
           </div>
 
-          <h1 id="home-title" className="max-w-3xl text-[clamp(2.5rem,5.5vw,4.8rem)] font-bold leading-[1.02] tracking-[-.05em] text-white">
+          <h1 id="home-title" className="home-hero-title max-w-3xl text-[clamp(2.5rem,5.5vw,4.8rem)] font-bold leading-[1.02] tracking-[-.05em]">
             Make sure every customer enquiry gets answered.
           </h1>
 
-          <p className="mt-5 max-w-xl text-base leading-7 text-white/80 sm:text-lg sm:leading-8">
+          <p className="home-hero-copy mt-5 max-w-xl text-base leading-7 sm:text-lg sm:leading-8">
             Axivy builds simple websites and WhatsApp enquiry systems for small businesses in Qatar, so every customer message is saved, answered and followed up. Based in Doha.
           </p>
 
@@ -141,24 +140,23 @@ export default function Home() {
             <Link href="/services#request-audit" className="inline-flex min-h-13 items-center justify-center gap-3 rounded-xl bg-[var(--lime)] px-6 text-sm font-bold text-[var(--ink)] shadow-lg transition-transform hover:-translate-y-0.5 hover:bg-[#a3f03b] focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-white">
               Get a free workflow audit <span aria-hidden>↗</span>
             </Link>
-            <a href={whatsappUrl("Hi Axivy, I'd like to discuss a business solution.")} target="_blank" rel="noreferrer" className="inline-flex min-h-13 items-center justify-center gap-3 rounded-xl border border-white/30 bg-white/[.05] px-6 text-sm font-bold text-white transition-colors hover:border-white hover:bg-white/[.1] focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-white">
+            <a href={whatsappUrl("Hi Axivy, I'd like to discuss a business solution.")} target="_blank" rel="noreferrer" className="home-hero-secondary inline-flex min-h-13 items-center justify-center gap-3 rounded-xl px-6 text-sm font-bold transition-colors">
               Chat on WhatsApp <span aria-hidden>↗</span>
             </a>
           </div>
-          <Link href="/demo" className="mt-4 inline-flex text-sm font-bold text-[var(--lime)] hover:underline">See a live demo <span aria-hidden className="ml-1">→</span></Link>
+          <Link href="/demo" className="home-hero-demo mt-4 inline-flex text-sm font-bold hover:underline">See a live demo <span aria-hidden className="ml-1">→</span></Link>
 
-          <p className="mt-8 border-t border-white/15 pt-5 text-sm font-semibold text-white/80">Based in Doha · Founder-led · Free 1-page audit · Fixed price agreed upfront</p>
+          <p className="home-hero-trust mt-8 border-t pt-5 text-sm font-semibold">Based in Doha · Founder-led · Free 1-page audit · Fixed price agreed upfront</p>
         </div>
 
-        <div className="hidden md:block"><p className="mb-2 text-xs font-bold uppercase tracking-[.14em] text-white/60">Example</p>
-          <HomeExperience mode="phone" />
+        <div className="home-phone-wrap hidden md:block"><span className="home-phone-label">Example</span><HomeExperience mode="phone" />
         </div>
       </div>
     </section>
 
     {/* QUICK INFO STRIP FOR FAST ACCESS */}
-    <section className="border-b border-[var(--line)] bg-[var(--sage)] py-4 text-xs font-bold uppercase tracking-wider text-[var(--brand-green-dark)]" aria-label="Core Capabilities">
-      <div className="mx-auto flex w-[min(1200px,calc(100%-2rem))] flex-wrap items-center justify-center gap-6 sm:w-[min(1200px,calc(100%-3rem))] sm:justify-between">
+    <section className="home-capability-strip border-b border-[var(--line)] bg-white py-4" aria-label="Core Capabilities">
+      <div className="mx-auto flex w-[min(1200px,calc(100%-2rem))] flex-wrap items-center justify-center gap-3 sm:w-[min(1200px,calc(100%-3rem))] sm:justify-between">
         <span className="flex items-center gap-2"><span className="h-1.5 w-1.5 rounded-full bg-[var(--brand-green-dark)]" /> Websites &amp; Web Apps</span>
         <span className="flex items-center gap-2"><span className="h-1.5 w-1.5 rounded-full bg-[var(--brand-green-dark)]" /> Lead Management</span>
         <span className="flex items-center gap-2"><span className="h-1.5 w-1.5 rounded-full bg-[var(--brand-green-dark)]" /> CRM Systems</span>
@@ -201,8 +199,8 @@ export default function Home() {
       <div className="mx-auto w-[min(1200px,calc(100%-2rem))] sm:w-[min(1200px,calc(100%-3rem))]">
         {demoVideoUrl && <DemoVideo url={demoVideoUrl} />}
         <SectionHeading eyebrow="Selected work" title="Made for real business needs" copy="Explore completed projects, online stores, and clearly labelled system concepts." id="work-title" />
-        <div className="grid gap-6 md:grid-cols-2">
-          <WorkCard item={selectedCases[0]} featured />
+        <div className="home-work-grid grid gap-6 md:grid-cols-3">
+          <WorkCard item={selectedCases[0]} />
           <WorkCard item={selectedCases[1]} />
           <WorkCard item={selectedCases[2]} />
         </div>
@@ -213,7 +211,7 @@ export default function Home() {
     <section className="bg-white py-12 sm:py-16 lg:py-20" aria-labelledby="process-title">
       <div className="mx-auto w-[min(1200px,calc(100%-2rem))] sm:w-[min(1200px,calc(100%-3rem))]">
         <SectionHeading eyebrow="How we work" title="A clear path from idea to launch" copy="We start by understanding your business friction, then shape a clean solution your team can immediately use." id="process-title" />
-        <ol className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <ol className="home-process-grid grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {process.map(([title, description], index) => (
             <li key={title} className="rounded-2xl border border-[var(--line)] bg-[var(--paper)] p-6">
               <span className="mb-4 block text-xs font-bold tracking-widest text-[var(--brand-green-dark)]">0{index + 1}</span>
@@ -245,18 +243,18 @@ export default function Home() {
     </section>
 
     {/* FINAL CTA */}
-    <section className="bg-[var(--dark)] py-14 text-white sm:py-16 lg:py-20" aria-labelledby="contact-title">
+    <section className="home-final-cta py-14 sm:py-16 lg:py-20" aria-labelledby="contact-title">
       <div className="mx-auto grid w-[min(1200px,calc(100%-2rem))] gap-8 sm:w-[min(1200px,calc(100%-3rem))] md:grid-cols-[1fr_auto] md:items-center md:gap-12">
         <div>
-          <p className="mb-3 text-xs font-bold uppercase tracking-[.18em] text-[var(--lime)]">Start a conversation</p>
+          <p className="mb-3 text-xs font-bold uppercase tracking-[.18em] text-[var(--brand-green-dark)]">Start a conversation</p>
           <h2 id="contact-title" className="max-w-3xl text-3xl font-semibold leading-tight tracking-[-.04em] sm:text-4xl">Have a business problem worth solving?</h2>
-          <p className="mt-3 max-w-2xl text-sm leading-7 text-white/75 sm:text-base">Tell us what is slowing your business down and we'll suggest a practical digital or automation solution.</p>
+          <p className="mt-3 max-w-2xl text-sm leading-7 sm:text-base">Tell us what is slowing your business down and we'll suggest a practical digital or automation solution.</p>
         </div>
         <div className="flex flex-col gap-3.5 min-[420px]:flex-row md:flex-col">
           <Link href="/services#request-audit" className="inline-flex min-h-13 items-center justify-center gap-3 rounded-xl bg-[var(--lime)] px-6 text-sm font-bold text-[var(--ink)] transition-colors hover:bg-[var(--brand-green-dark)] hover:text-white focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-white">
             Get a free audit <span aria-hidden>↗</span>
           </Link>
-          <a href={whatsappUrl("Hi Axivy, I'd like to discuss a business solution.")} target="_blank" rel="noreferrer" className="inline-flex min-h-13 items-center justify-center gap-3 rounded-xl border border-white/30 px-6 text-sm font-bold text-white transition-colors hover:border-white focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-white">
+          <a href={whatsappUrl("Hi Axivy, I'd like to discuss a business solution.")} target="_blank" rel="noreferrer" className="home-final-secondary inline-flex min-h-13 items-center justify-center gap-3 rounded-xl px-6 text-sm font-bold transition-colors">
             Chat on WhatsApp <span aria-hidden>↗</span>
           </a>
         </div>
