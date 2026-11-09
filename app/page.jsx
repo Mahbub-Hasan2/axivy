@@ -8,6 +8,7 @@ import { whatsappUrl } from '../data/contact';
 import { DEFAULT_OG_IMAGE, SITE_URL } from '../lib/site';
 import { PackageCards, packageSteps, PricingNotes } from '../components/Packages';
 import Gallery from '../components/media/Gallery';
+import { Database, Globe2, MessageCircle, Sparkles, Users, Workflow } from 'lucide-react';
 
 export const metadata = {
   title: { absolute: 'Axivy | Website & WhatsApp Enquiry Systems in Qatar' },
@@ -55,7 +56,8 @@ const faqs = [
   ['Can you work with the tools we already use?', 'Often, yes. We first audit your current tools and workflow, then identify what can be connected, automated or improved.'],
   ['Do you provide ongoing support?', 'Ongoing support and continuous improvements can be arranged around the solution and what your team needs to run smoothly.'],
 ];
-const homeFaqs = [...faqs, ...contentFaqs.filter(([question]) => !faqs.some(([existing]) => existing.toLowerCase() === question.toLowerCase()))].slice(0, 8);
+const homeFaqs = [...faqs.map(([question, answer]) => question === 'What are the costs?' ? [question, `${answer} Pricing depends on the scope and features you need — the Services page lists a starting price for each service as a general guide. We confirm the exact cost after understanding your specific requirements, with no hidden fees.`] : [question, answer]), ...contentFaqs.filter(([question]) => question !== 'How much do your services cost?' && !faqs.some(([existing]) => existing.toLowerCase() === question.toLowerCase()))].slice(0, 8);
+const serviceIcons = { 'website-development': Globe2, 'lead-management': Users, 'crm-systems': Database, 'whatsapp-systems': MessageCircle, 'business-automation': Workflow, 'ai-solutions': Sparkles };
 
 function SectionHeading({ eyebrow, title, copy, id, dark = false }) {
   return <div className="mb-6 grid gap-3 sm:mb-8 md:grid-cols-[1fr_.72fr] md:items-end md:gap-8">
@@ -84,29 +86,30 @@ function FeaturedMockup() {
   </div>;
 }
 
-function WorkCard({ item, featured = false }) {
+function ConceptMockup({ title }) {
+  return <div aria-hidden className="work-concept-mock"><span className="work-concept-mock-bar" /><div><i /><i /><i /></div><strong>{title}</strong></div>;
+}
+
+function WorkCard({ item }) {
   if (!item) return null;
-  const [slug, title, category, status, description, journey = []] = item;
+  const [slug, title, category, status, description] = item;
   const isConcept = /concept/i.test(status);
 
-  return <article className={`group overflow-hidden rounded-2xl border border-[var(--line)] bg-white transition-all hover:shadow-lg ${featured ? 'md:row-span-2' : ''}`}>
+  return <article className="home-work-card group overflow-hidden rounded-2xl border border-[var(--line)] bg-white transition-all hover:-translate-y-1 hover:shadow-lg">
     <Link href={`/case-studies/${slug}`} className="block h-full rounded-2xl focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[var(--brand-green-dark)]">
-      <div className={`relative flex min-h-44 flex-col justify-between overflow-hidden p-5 sm:min-h-52 sm:p-6 ${featured ? 'bg-[var(--sage)] md:min-h-[23rem]' : isConcept ? 'bg-[var(--dark)] text-white' : 'bg-white'}`}>
+      <div className="home-work-visual relative aspect-video overflow-hidden bg-[var(--sage)] p-5 sm:p-6">
         <div className="flex items-start justify-between gap-3">
-          <span className={`inline-flex rounded-full px-3 py-1.5 text-[11px] font-bold ${isConcept ? 'bg-[var(--lime)] text-[var(--ink)]' : 'bg-white/80 text-[var(--brand-green-dark)]'}`}>{status}</span>
-          <span aria-hidden className={`text-lg transition-transform group-hover:translate-x-1 ${isConcept ? 'text-[var(--lime)]' : 'text-[var(--brand-green-dark)]'}`}>↗</span>
+          <span className={`work-status-chip ${isConcept ? 'work-status-concept' : 'work-status-real'}`}>{status}</span>
+          <span aria-hidden className="text-lg text-[var(--brand-green-dark)] transition-transform group-hover:translate-x-1">↗</span>
         </div>
-        {featured && <FeaturedMockup />}
-        <div>
-          <p className={`mb-2 text-xs font-semibold uppercase tracking-[.14em] ${isConcept ? 'text-white/65' : 'text-[var(--muted)]'}`}>{category}</p>
-          <h3 className={`text-2xl font-semibold tracking-[-.04em] ${isConcept ? 'text-white' : 'text-[var(--ink)]'}`}>{title}</h3>
-          {featured && <div className="mt-5 flex flex-wrap items-center gap-2" aria-label="Project journey">{journey.map((step, index) => <span key={step} className="inline-flex items-center gap-2 rounded-full border border-[var(--line)] bg-white/80 px-3 py-2 text-[11px] font-medium text-[var(--ink)]">{step}{index < journey.length - 1 && <span aria-hidden className="-mr-1 text-[var(--brand-green-dark)]">→</span>}</span>)}</div>}
-          {!featured && isConcept && <p className="mt-4 max-w-sm text-sm leading-6 text-white/75">Illustrative system concept — not a live product.</p>}
-        </div>
+        <div className="absolute inset-x-5 bottom-0 sm:inset-x-6">{slug === 'gari-qatar' ? <FeaturedMockup /> : <ConceptMockup title={title} />}</div>
       </div>
-      <div className="p-5 sm:p-6">
+      <div className="flex min-h-[14rem] flex-col p-5 sm:p-6">
+        <p className="mb-2 text-xs font-semibold uppercase tracking-[.14em] text-[var(--muted)]">{category}</p>
+        <h3 className="text-2xl font-semibold tracking-[-.04em] text-[var(--ink)]">{title}</h3>
+        {isConcept && <p className="mt-3 text-sm leading-6 text-[var(--muted)]">Illustrative system concept — not a live product.</p>}
         <p className="text-sm leading-6 text-[var(--muted)]">{description}</p>
-        <span className="mt-4 inline-flex items-center gap-2 text-sm font-bold text-[var(--brand-green-dark)]">{isConcept ? 'View concept' : 'View project'} <span aria-hidden>→</span></span>
+        <span className="mt-auto inline-flex items-center gap-2 pt-4 text-sm font-bold text-[var(--brand-green-dark)]">{isConcept ? 'View concept' : 'View project'} <span aria-hidden>→</span></span>
       </div>
     </Link>
   </article>;
@@ -125,7 +128,7 @@ export default function Home() {
         <div>
           <div className="home-hero-eyebrow mb-4 inline-flex items-center gap-2.5 rounded-full px-3.5 py-1.5 text-xs font-semibold">
             <span aria-hidden className="h-2 w-2 rounded-full" />
-            Doha, Qatar · Digital Solutions &amp; Automation
+            Digital Solutions &amp; Automation
           </div>
 
           <h1 id="home-title" className="home-hero-title max-w-3xl text-[clamp(2.5rem,5.5vw,4.8rem)] font-bold leading-[1.02] tracking-[-.05em]">
@@ -146,7 +149,7 @@ export default function Home() {
           </div>
           <Link href="/demo" className="home-hero-demo mt-4 inline-flex text-sm font-bold hover:underline">See a live demo <span aria-hidden className="ml-1">→</span></Link>
 
-          <p className="home-hero-trust mt-8 border-t pt-5 text-sm font-semibold">Based in Doha · Founder-led · Free 1-page audit · Fixed price agreed upfront</p>
+          <p className="home-hero-trust mt-8 border-t pt-5 text-sm font-semibold">Founder-led · Free 1-page audit · Fixed price agreed upfront</p>
         </div>
 
         <div className="home-phone-wrap hidden md:block"><span className="home-phone-label">Example</span><HomeExperience mode="phone" />
@@ -168,7 +171,7 @@ export default function Home() {
     <section className="bg-white py-12 sm:py-16 lg:py-20" aria-labelledby="situations-title">
       <div className="mx-auto w-[min(1200px,calc(100%-2rem))] sm:w-[min(1200px,calc(100%-3rem))]">
         <SectionHeading eyebrow="Start with your situation" title="Does this sound like your business?" copy="Choose the issue you want to make easier, from missed messages to scattered customer details." id="situations-title" />
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">{businessSituations.map(({ situation, fix, href, link }) => <article key={situation} className="rounded-2xl border border-[var(--line)] bg-[var(--paper)] p-6"><h3 className="text-lg font-semibold tracking-tight text-[var(--ink)]">{situation}</h3><p className="mt-3 text-sm leading-6 text-[var(--muted)]">{fix}</p><Link href={href} className="mt-5 inline-flex min-h-11 items-center gap-1.5 text-sm font-bold text-[var(--brand-green-dark)] hover:underline">{link} <span aria-hidden>→</span></Link></article>)}</div>
+        <div className="home-situation-grid grid gap-4 sm:grid-cols-2 lg:grid-cols-3">{businessSituations.map(({ situation, fix, href, link }) => <article key={situation} className="home-situation-card rounded-2xl border border-[var(--line)] bg-[var(--paper)] p-6"><h3 className="text-lg font-semibold tracking-tight text-[var(--ink)]">{situation}</h3><p className="mt-3 text-sm leading-6 text-[var(--muted)]">{fix}</p><Link href={href} className="mt-5 inline-flex min-h-11 items-center gap-1.5 text-sm font-bold text-[var(--brand-green-dark)] hover:underline">{link} <span aria-hidden>→</span></Link></article>)}</div>
         <p className="mt-6 text-sm leading-7 text-[var(--muted)]">Works for any business that gets customer enquiries, for example workshops, cafés, cleaning companies, shops and service providers.</p><div className="mt-4 flex flex-wrap gap-2">{solutions.map(solution => <Link key={solution.slug} href={`/solutions/${solution.slug}`} className="rounded-full border border-[var(--line)] bg-white px-3 py-2 text-sm font-semibold text-[var(--brand-green-dark)] hover:bg-[var(--sage)]">{solution.name}</Link>)}</div>
       </div>
     </section>
@@ -179,7 +182,7 @@ export default function Home() {
         <SectionHeading eyebrow="Simple packages" title="A clear starting point for better enquiry handling" copy="Choose a package, then see the exact scope and fixed quote before work starts." id="services-title" />
         <PackageCards compact />
         <PricingNotes />
-        <div className="mt-8"><p className="mb-3 text-xs font-bold uppercase tracking-[.14em] text-[var(--brand-green-dark)]">What is inside the packages</p><div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">{services.map(service => <Link key={service.slug} href={`/services/${service.slug}`} className="rounded-xl border border-[var(--line)] bg-white p-4 hover:bg-[var(--sage)]"><h3 className="font-semibold text-[var(--ink)]">{service.title}</h3><p className="mt-1 text-sm leading-6 text-[var(--muted)]">{service.description}</p></Link>)}</div></div>
+        <div className="mt-8"><p className="mb-3 text-xs font-bold uppercase tracking-[.14em] text-[var(--brand-green-dark)]">What is inside the packages</p><div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">{services.map(service => { const Icon = serviceIcons[service.slug]; return <Link key={service.slug} href={`/services/${service.slug}`} className="home-service-tile group rounded-xl border border-[var(--line)] bg-white p-4 focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-[var(--brand-green-dark)]"><span className="home-service-tile-icon"><Icon size={19} strokeWidth={1.8} aria-hidden /></span><div><h3 className="font-semibold text-[var(--ink)]">{service.title}</h3><p className="mt-1 text-sm leading-6 text-[var(--muted)]">{service.description}</p><span className="mt-3 inline-flex items-center gap-1 text-sm font-bold text-[var(--brand-green-dark)]">Learn more <span aria-hidden>→</span></span></div></Link>; })}</div></div>
         <Link href="/services" className="mt-5 inline-flex text-sm font-bold text-[var(--brand-green-dark)] hover:underline">Compare packages and add-ons <span aria-hidden>→</span></Link>
       </div>
     </section>
@@ -265,7 +268,7 @@ export default function Home() {
   <JsonLd data={{
     '@context': 'https://schema.org',
     '@type': 'FAQPage',
-    mainEntity: faqs.map(([question, answer]) => ({
+    mainEntity: homeFaqs.map(([question, answer]) => ({
       '@type': 'Question',
       name: question,
       acceptedAnswer: { '@type': 'Answer', text: answer },
